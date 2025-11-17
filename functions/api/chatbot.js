@@ -3,6 +3,65 @@
  * Este archivo debe colocarse en /functions/api/chatbot.js para funcionar con Cloudflare Pages
  */
 
+// Función para llamar a la API de Gemini
+async function callGeminiService(history, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+
+  // Ajustar el historial para que coincida con el formato de la API de Gemini
+  const contents = history.map(item => {
+    // Asegurarse de que 'parts' sea siempre un array
+    const parts = Array.isArray(item.parts) ? item.parts : [{ text: item.parts[0]?.text || '' }];
+    return {
+      role: item.role,
+      parts: parts
+    };
+  });
+
+  const payload = {
+    contents: contents,
+    generationConfig: {
+      temperature: 0.7,
+      topK: 1,
+      topP: 1,
+      maxOutputTokens: 2048,
+    },
+    safetySettings: [
+      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+    ],
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error en la API de Gemini:", errorData);
+      throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Error desconocido'}`);
+    }
+
+    const data = await response.json();
+    
+    // Devolver la respuesta en el formato esperado, con un fallback
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || 
+           "Lo siento, no pude generar una respuesta. Por favor, intenta de nuevo.";
+
+  } catch (error) {
+    console.error("Error al llamar a la API de Gemini:", error.message);
+    // Devolver un mensaje de error claro para depuración en el frontend
+    return `Error al contactar al asistente. Por favor, contacta por WhatsApp al 55 3541 2631. (Detalle: ${error.message})`;
+  }
+}
+
+
 export async function onRequest(context) {
   // Manejar CORS para solicitudes preflight
   if (context.request.method === "OPTIONS") {
@@ -56,13 +115,8 @@ export async function onRequest(context) {
       });
     }
 
-    // Procesar la solicitud - Dos opciones:
-    
-    // 1. Llamar a un servicio de IA externo como OpenAI
-    // const response = await callExternalAIService(requestData.history, apiKey);
-    
-    // 2. O usar un sistema de reglas local para respuestas predefinidas
-    const botResponse = generateLocalResponse(requestData.history);
+    // 1. Llamar a la API de Gemini
+    const botResponse = await callGeminiService(requestData.history, apiKey);
     
     // Devolver la respuesta en el formato esperado por el frontend
     return new Response(JSON.stringify({
@@ -94,88 +148,16 @@ export async function onRequest(context) {
 }
 
 /**
- * Función para generar respuestas locales basadas en reglas
+ * Función para generar respuestas locales basadas en reglas (dejada como referencia)
  */
 function generateLocalResponse(history) {
-  // Obtener el último mensaje del usuario
-  let lastUserMessage = "";
-  for (let i = history.length - 1; i >= 0; i--) {
-    if (history[i].role === "user") {
-      lastUserMessage = history[i].parts[0].text;
-      break;
-    }
-  }
-  
-  // Convertir a minúsculas para hacer coincidencias insensibles a mayúsculas
-  const userMessageLower = lastUserMessage.toLowerCase();
-  
-  // Patrones para detectar intenciones específicas
-  const patterns = {
-    // Preguntas sobre servicios y paquetes
-    'servicios|paquetes|ofrecen|tienen': [
-      "¡Claro! 🎵 En **Grupo Musical La Célula** ofrecemos 3 paquetes principales:\n\n" +
-      "1. **Paquete Event Plus**: Ideal para grandes eventos (50-2000 invitados), incluye 5 horas de música en vivo, iluminación, pantalla y animadores.\n\n" +
-      "2. **Paquete Party**: Perfecto para eventos medianos (30-250 invitados), con 5 horas de música, iluminación y efectos especiales.\n\n" +
-      "3. **Paquete Live**: Para eventos masivos o corporativos, con show temático personalizado y capacidad hasta 10,000 personas.\n\n" +
-      "¿Cuál te interesa más para tu evento? 😊"
-    ],
-    
-    // Preguntas sobre precios o cotizaciones
-    'precio|costo|cotiz|cuanto|cuánto': [
-      "Para ofrecerte una **cotización personalizada** 💰 necesitamos conocer algunos detalles de tu evento:\n\n" +
-      "- ¿Qué tipo de evento estás planeando? (boda, XV años, corporativo, etc.)\n" +
-      "- ¿Cuántos invitados aproximadamente tendrás?\n" +
-      "- ¿Ya tienes fecha y lugar definidos?\n\n" +
-      "Puedes proporcionarnos esta información aquí o contactarnos directamente por WhatsApp al **55 3541 2631** para una atención más rápida. ¡Estaremos encantados de ayudarte!"
-    ],
-    
-    // Preguntas sobre música o repertorio
-    'musica|cancion|repertorio|tocan|generos': [
-      "¡Nuestra **versatilidad musical** es nuestra mayor fortaleza! 🎸🎹🎺\n\n" +
-      "Nuestro repertorio incluye prácticamente todos los géneros:\n" +
-      "- Cumbia, Salsa y música tropical\n" +
-      "- Rock clásico y contemporáneo\n" +
-      "- Pop en español e inglés\n" +
-      "- Baladas y música romántica\n" +
-      "- Música regional mexicana\n" +
-      "- Jazz, Swing y música para ambientar\n" +
-      "- Éxitos actuales y clásicos de todos los tiempos\n\n" +
-      "Además, diseñamos bloques musicales personalizados para cada momento de tu evento. ¿Hay algún género en particular que te interese?"
-    ],
-    
-    // Preguntas sobre bodas
-    'boda|matrimonio|novia': [
-      "¡Las **bodas** son nuestra especialidad! 💍✨\n\n" +
-      "Ofrecemos experiencias musicales completas para cada momento de tu celebración:\n\n" +
-      "- **Ceremonia**: Música elegante y emotiva\n" +
-      "- **Recepción y coctel**: Ambientación sofisticada\n" +
-      "- **Banquete**: Música suave de fondo\n" +
-      "- **Fiesta**: ¡Todos a la pista de baile!\n\n" +
-      "Nuestro **Paquete Party** es muy popular para bodas, pero podemos personalizar según tus necesidades y número de invitados. ¿Ya tienes fecha para tu boda? Me encantaría ayudarte a planificar la música perfecta."
-    ],
-    
-    // Preguntas sobre XV años
-    'xv|quince|quinceañera': [
-      "¡Para **XV Años** creamos momentos inolvidables! 🎂👗\n\n" +
-      "Nuestro servicio incluye:\n" +
-      "- Música especial para el vals y ceremonias tradicionales\n" +
-      "- Show 80's o temático a elección\n" +
-      "- Dinámicas y animación para que todos tus invitados participen\n" +
-      "- Efectos especiales y luces\n" +
-      "- ¡Batucada para el momento de máxima diversión!\n\n" +
-      "El **Paquete Party** es perfecto para la mayoría de las fiestas de XV años. ¿Ya tienes idea de qué tipo de música te gustaría para tu fiesta?"
-    ],
-    
-    // Preguntas sobre eventos corporativos
-    'corporativo|empresa|convención': [
-      "Para **eventos corporativos** ofrecemos soluciones profesionales y versátiles. 🏢✨\n\n" +
-      "Nuestros servicios incluyen:\n" +
-      "- Música adaptada a la imagen de su empresa\n" +
-      "- Shows temáticos personalizados\n" +
-      "- Equipo técnico de primer nivel\n" +
-      "- Puntualidad y profesionalismo\n" +
-      "- Repertorio adecuado para cada momento del evento\n\n" +
-      "El **Paquete Live** está diseñado especialmente para eventos corporativos grandes. ¿Podría contarme más sobre el tipo de evento que está organizando?"
+  // ... (el resto de la función se puede dejar aquí por si se necesita en el futuro o eliminar)
+  const fallbackResponses = [
+    "Respuesta de fallback: No se pudo conectar con el servicio de IA.",
+    "Respuesta de fallback: Por favor contacta a soporte."
+  ];
+  return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+}"El **Paquete Live** está diseñado especialmente para eventos corporativos grandes. ¿Podría contarme más sobre el tipo de evento que está organizando?"
     ],
     
     // Preguntas sobre disponibilidad o fechas
