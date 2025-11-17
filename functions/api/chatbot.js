@@ -5,6 +5,7 @@
 
 // Función para llamar a la API de Gemini
 async function callGeminiService(history, apiKey) {
+  // Ensure the Gemini API model is up-to-date
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
   // Ajustar el historial para que coincida con el formato de la API de Gemini
