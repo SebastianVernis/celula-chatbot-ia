@@ -14,3 +14,7 @@ mode = "smart"
 
 [env.production.vars]
 ENVIRONMENT = "production"
+
+[env.production.secrets]
+GEMINI_API_KEY = "AIzaSyD-XHFNALuhUU_FPwv3xflyOS9ZlR31U48"
+
