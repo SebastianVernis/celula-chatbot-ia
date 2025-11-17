@@ -1,0 +1,34 @@
+[
+    {
+        "id": "post-32",
+        "title": "Tu Tranquilidad no Tiene Precio: Por Qué Siempre Debes Firmar un Contrato",
+        "excerpt": "Firmar un contrato al contratar una banda asegura tranquilidad y evita problemas. Grupo Musical Versátil La Célula explica su importancia.",
+        "date": "14 nov 2025",
+        "image": "assets/gallery/banda-1.jpg",
+        "url": "post-32.html"
+    },
+    {
+        "id": "post-31",
+        "title": "Lo que Nuestros Clientes Dicen de Nosotros: Historias de Eventos Inolvidables",
+        "excerpt": "Descubre testimonios reales de clientes que vivieron eventos inolvidables con Grupo Musical Versátil La Célula.",
+        "date": "11 nov 2025",
+        "image": "assets/gallery/banda-2.jpg",
+        "url": "post-31.html"
+    },
+    {
+        "id": "post-30",
+        "title": "Dale un Toque Especial a tu Posada: El Poder de la Música en Vivo",
+        "excerpt": "Convierte tu posada en un evento inolvidable con música en vivo. Grupo Musical Versátil La Célula ofrece el repertorio perfecto para celebrar.",
+        "date": "08 nov 2025",
+        "image": "assets/gallery/banda-3.jpg",
+        "url": "post-30.html"
+    },
+    {
+        "id": "post-29",
+        "title": "Propósitos para 2026: ¡Hacer Eventos Más Memorables!",
+        "excerpt": "Comienza el 2026 con el propósito de crear eventos inolvidables. Grupo Musical Versátil La Célula te ayuda a lograrlo con música en vivo.",
+        "date": "05 nov 2025",
+        "image": "assets/gallery/banda-4.jpg",
+        "url": "post-29.html"
+    }
+]
