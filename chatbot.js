@@ -49,14 +49,12 @@ class CelulaChatbotManager {
                     this.chatHistory = state.chatHistory || [];
                     this.leadData = state.leadData || {};
 
-                    if (state.isChatActive) {
-                        this.leadForm.classList.remove('active');
-                        this.chatWindowContainer.classList.add('active');
-                        this.chatInputArea.style.display = 'flex';
-                        this.repopulateChat();
-                    } else if (Object.keys(this.leadData).length > 0) {
+                    // Only pre-fill the form if leadData exists, but don't open anything automatically
+                    if (Object.keys(this.leadData).length > 0) {
                         this.fillLeadForm();
                     }
+                    // The chat window should NOT be opened automatically here.
+                    // The chatbot-toggle button will handle opening the lead form or chat.
                 } else {
                     console.log("Datos del chatbot antiguos, iniciando nueva conversación");
                     this.resetState();
