@@ -11,6 +11,7 @@ class CelulaChatbotManager {
         this.sendBtn = document.getElementById('send-btn');
         this.closeBtn = document.getElementById('chat-close');
         this.leadForm = document.getElementById('lead-form');
+        this.chatWindowContainer = document.getElementById('chat-window-container');
         this.chatInputArea = document.getElementById('chat-input-area');
         this.emailSent = false; // Flag para evitar envíos múltiples
         this.sessionStartTime = new Date().toISOString();
@@ -27,7 +28,7 @@ class CelulaChatbotManager {
         const state = {
             chatHistory: this.chatHistory,
             leadData: this.leadData,
-            isChatActive: this.leadForm.style.display === 'none',
+            isChatActive: this.chatWindowContainer.classList.contains('active'),
             lastUpdated: new Date().getTime() // Añadir timestamp para rastrear la frescura de los datos
         };
         localStorage.setItem('celulaChatbotState', JSON.stringify(state));
@@ -49,21 +50,11 @@ class CelulaChatbotManager {
                     this.leadData = state.leadData || {};
 
                     if (state.isChatActive) {
-                        // Ocultar formulario
-                        this.leadForm.style.display = 'none';
                         this.leadForm.classList.remove('active');
-
-                        // Mostrar ventana de chat
-                        const chatWindowContainer = document.getElementById('chat-window-container');
-                        chatWindowContainer.style.display = 'flex';
-                        chatWindowContainer.classList.add('active');
-
-                        this.chatWindow.style.display = 'flex';
+                        this.chatWindowContainer.classList.add('active');
                         this.chatInputArea.style.display = 'flex';
                         this.repopulateChat();
                     } else if (Object.keys(this.leadData).length > 0) {
-                        // Si tenemos datos del usuario pero el chat no estaba activo,
-                        // autorellenar el formulario pero no mostrarlo automáticamente
                         this.fillLeadForm();
                     }
                 } else {
@@ -142,42 +133,27 @@ class CelulaChatbotManager {
     setupEventListeners() {
         // Evento para el botón flotante del chatbot (abrir chatbot)
         document.getElementById('chatbot-toggle')?.addEventListener('click', () => {
-            // Si ya tenemos datos del usuario, abrir directamente el chat o mostrar formulario prelleno
             if (this.chatHistory.length > 3) {
-                // Suficiente historial para continuar conversación
-                this.leadForm.style.display = 'none';
                 this.leadForm.classList.remove('active');
-
-                const chatWindowContainer = document.getElementById('chat-window-container');
-                chatWindowContainer.style.display = 'flex';
-                chatWindowContainer.classList.add('active');
-
-                this.chatWindow.style.display = 'flex';
+                this.chatWindowContainer.classList.add('active');
                 this.chatInputArea.style.display = 'flex';
             } else if (Object.keys(this.leadData).length > 0) {
-                // Tenemos datos del usuario pero no suficiente conversación
                 this.fillLeadForm();
-                this.leadForm.style.display = 'flex';
                 this.leadForm.classList.add('active');
             } else {
-                // Nueva conversación
-                this.leadForm.style.display = 'flex';
                 this.leadForm.classList.add('active');
             }
         });
 
         // Evento para cerrar el formulario de lead
         document.getElementById('lead-form-close')?.addEventListener('click', () => {
-            this.leadForm.style.display = 'none';
             this.leadForm.classList.remove('active');
             this.saveState();
         });
 
         // Evento para cerrar la ventana de chat
         document.getElementById('chat-close')?.addEventListener('click', () => {
-            const chatWindowContainer = document.getElementById('chat-window-container');
-            chatWindowContainer.style.display = 'none';
-            chatWindowContainer.classList.remove('active');
+            this.chatWindowContainer.classList.remove('active');
             this.saveState();
         });
 
@@ -200,15 +176,9 @@ class CelulaChatbotManager {
         resetChat.addEventListener('click', () => {
             if (confirm('¿Estás seguro de borrar toda la conversación y comenzar de nuevo?')) {
                 this.resetState();
-                // Cerrar la ventana de chat
-                document.getElementById('chat-window-container').style.display = 'none';
-                document.getElementById('chat-window-container').classList.remove('active');
-                // Limpiar el chat
+                this.chatWindowContainer.classList.remove('active');
                 this.chatWindow.innerHTML = '';
-                // Restablecemos el formulario
                 document.getElementById('chatbot-lead-form').reset();
-                // Mostramos el formulario
-                this.leadForm.style.display = 'flex';
                 this.leadForm.classList.add('active');
             }
         });
@@ -265,16 +235,8 @@ class CelulaChatbotManager {
         this.leadData.eventType = eventTypeInput.value.trim();
 
         if (this.leadData.name && this.leadData.email && this.leadData.phone) {
-            // Ocultar formulario
-            this.leadForm.style.display = 'none';
             this.leadForm.classList.remove('active');
-
-            // Mostrar ventana de chat
-            const chatWindowContainer = document.getElementById('chat-window-container');
-            chatWindowContainer.style.display = 'flex';
-            chatWindowContainer.classList.add('active');
-
-            this.chatWindow.style.display = 'flex';
+            this.chatWindowContainer.classList.add('active');
             this.chatInputArea.style.display = 'flex';
 
             await this.startChat();
