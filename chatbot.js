@@ -784,25 +784,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(style);
 
     if (chatbotToggle && leadForm && chatWindowContainer) {
-        // Si existe un estado guardado, restaurarlo - esto ya se hace en loadState()
-        // pero verificamos si la ventana debería estar visible por la configuración actual
-        const savedState = localStorage.getItem('celulaChatbotState');
-        if (savedState) {
-            try {
-                const state = JSON.parse(savedState);
-                const isRecent = state.lastUpdated &&
-                                (new Date().getTime() - state.lastUpdated) < 24 * 60 * 60 * 1000;
-
-                if (isRecent && state.isChatActive) {
-                    leadForm.style.display = 'none';
-                    chatWindowContainer.style.display = 'flex';
-                    chatWindowContainer.classList.add('active');
-                }
-            } catch (error) {
-                console.error('Error al restaurar estado visual del chatbot:', error);
-            }
-        }
-
         console.log('Chatbot La Célula inicializado correctamente con persistencia entre páginas');
     } else {
         console.error('No se pudieron encontrar elementos del chatbot');
