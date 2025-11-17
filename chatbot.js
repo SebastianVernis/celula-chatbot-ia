@@ -1,250 +1,858 @@
 /**
- * Chatbot API para Grupo Musical La Célula usando Cloudflare Pages Functions
- * Este archivo debe colocarse en /functions/api/chatbot.js para funcionar con Cloudflare Pages
+ * Chatbot para Grupo Musical Versátil La Célula
+ * Proporciona atención personalizada, resuelve dudas sobre eventos y ayuda con cotizaciones
+ * Especializado en definir necesidades, identificar áreas de oportunidad y realizar cierres de venta
  */
 
-export async function onRequest(context) {
-  // Manejar CORS para solicitudes preflight
-  if (context.request.method === "OPTIONS") {
-    return new Response(null, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Max-Age": "86400"
-      },
-      status: 204
-    });
-  }
+class CelulaChatbotManager {
+    constructor() {
+        this.chatWindow = document.getElementById('chat-window');
+        this.userInput = document.getElementById('user-input');
+        this.sendBtn = document.getElementById('send-btn');
+        this.closeBtn = document.getElementById('chat-close');
+        this.leadForm = document.getElementById('lead-form');
+        this.chatInputArea = document.getElementById('chat-input-area');
+        this.emailSent = false; // Flag para evitar envíos múltiples
+        this.sessionStartTime = new Date().toISOString();
 
-  // Solo aceptar solicitudes POST
-  if (context.request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Método no permitido" }), {
-      status: 405,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      }
-    });
-  }
-
-  try {
-    // Obtener el cuerpo de la solicitud
-    const requestData = await context.request.json();
-
-    // Verificar que tenemos datos válidos
-    if (!requestData || !requestData.history) {
-      return new Response(JSON.stringify({ error: "Datos inválidos" }), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
-      });
+        this.init();
     }
 
-    // Obtener la clave API desde Cloudflare Secret
-    const apiKey = context.env.GEMINI_API_KEY;
-
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "API Key no configurada" }), {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
-      });
+    async init() {
+        this.setupEventListeners();
+        this.loadState();
     }
 
-    // Procesar la solicitud - Dos opciones:
+    saveState() {
+        const state = {
+            chatHistory: this.chatHistory,
+            leadData: this.leadData,
+            isChatActive: this.leadForm.style.display === 'none',
+            lastUpdated: new Date().getTime() // Añadir timestamp para rastrear la frescura de los datos
+        };
+        localStorage.setItem('celulaChatbotState', JSON.stringify(state));
+    }
 
-    // 1. Llamar a un servicio de IA externo como OpenAI
-    // const response = await callExternalAIService(requestData.history, apiKey);
+    loadState() {
+        const savedState = localStorage.getItem('celulaChatbotState');
+        if (savedState) {
+            try {
+                const state = JSON.parse(savedState);
 
-    // 2. O usar un sistema de reglas local para respuestas predefinidas
-    const botResponse = generateLocalResponse(requestData.history);
+                // Verificar si los datos son recientes (menos de 24 horas)
+                const isRecent = state.lastUpdated &&
+                                 (new Date().getTime() - state.lastUpdated) < 24 * 60 * 60 * 1000;
 
-    // Devolver la respuesta en el formato esperado por el frontend
-    return new Response(JSON.stringify({
-      candidates: [
-        {
-          content: {
-            parts: [
-              { text: botResponse }
-            ]
-          }
+                // Usar datos guardados solo si son recientes
+                if (isRecent) {
+                    this.chatHistory = state.chatHistory || [];
+                    this.leadData = state.leadData || {};
+
+                    if (state.isChatActive) {
+                        // Ocultar formulario
+                        this.leadForm.style.display = 'none';
+                        this.leadForm.classList.remove('active');
+
+                        // Mostrar ventana de chat
+                        const chatWindowContainer = document.getElementById('chat-window-container');
+                        chatWindowContainer.style.display = 'flex';
+                        chatWindowContainer.classList.add('active');
+
+                        this.chatWindow.style.display = 'flex';
+                        this.chatInputArea.style.display = 'flex';
+                        this.repopulateChat();
+                    } else if (Object.keys(this.leadData).length > 0) {
+                        // Si tenemos datos del usuario pero el chat no estaba activo,
+                        // autorellenar el formulario pero no mostrarlo automáticamente
+                        this.fillLeadForm();
+                    }
+                } else {
+                    console.log("Datos del chatbot antiguos, iniciando nueva conversación");
+                    this.resetState();
+                }
+            } catch (error) {
+                console.error("Error al cargar el estado del chatbot:", error);
+                this.resetState();
+            }
+        } else {
+            this.resetState();
         }
-      ]
-    }), {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      }
-    });
+    }
 
-  } catch (error) {
-    return new Response(JSON.stringify({ error: `Error al procesar la solicitud: ${error.message}` }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      }
-    });
-  }
+    resetState() {
+        this.chatHistory = [];
+        this.leadData = {};
+        localStorage.removeItem('celulaChatbotState');
+    }
+
+    fillLeadForm() {
+        // Autorellenar el formulario con datos guardados
+        if (this.leadData.name) {
+            document.getElementById('name-input').value = this.leadData.name;
+        }
+        if (this.leadData.email) {
+            document.getElementById('email-input').value = this.leadData.email;
+        }
+        if (this.leadData.phone) {
+            document.getElementById('phone-input').value = this.leadData.phone;
+        }
+        if (this.leadData.eventType) {
+            document.getElementById('event-type-input').value = this.leadData.eventType;
+        }
+    }
+
+    // Determina si un mensaje es visible para el usuario
+    isVisibleMessage(message) {
+        // No mostrar el contexto inicial de sistema
+        if (message.parts[0].text.includes('Eres el Asistente Musical Virtual') ||
+            message.parts[0].text.includes('MISIÓN PRINCIPAL:') ||
+            message.parts[0].text.includes('MÉTODO SPIN') ||
+            message.parts[0].text.includes('DIRECTRICES CRÍTICAS:')) {
+            return false;
+        }
+
+        // No mostrar la respuesta de inicialización del sistema
+        if (message.role === 'model' &&
+            message.parts[0].text.includes('¡Entendido! Soy el Asistente Musical de Grupo Musical Versátil La Célula')) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Filtra los mensajes que son visibles para el usuario
+    getVisibleMessages() {
+        return this.chatHistory.filter(message => this.isVisibleMessage(message));
+    }
+
+    repopulateChat() {
+        // Limpiar la ventana de chat
+        this.chatWindow.innerHTML = '';
+
+        // Mostrar solo los mensajes visibles para el usuario
+        this.getVisibleMessages().forEach(item => {
+            if (item.role === 'user') {
+                this.appendMessage(item.parts[0].text, 'user');
+            } else if (item.role === 'model') {
+                this.appendMessage(item.parts[0].text, 'bot');
+            }
+        });
+    }
+
+    setupEventListeners() {
+        // Evento para el botón flotante del chatbot (abrir chatbot)
+        document.getElementById('chatbot-toggle')?.addEventListener('click', () => {
+            // Si ya tenemos datos del usuario, abrir directamente el chat o mostrar formulario prelleno
+            if (this.chatHistory.length > 3) {
+                // Suficiente historial para continuar conversación
+                this.leadForm.style.display = 'none';
+                this.leadForm.classList.remove('active');
+
+                const chatWindowContainer = document.getElementById('chat-window-container');
+                chatWindowContainer.style.display = 'flex';
+                chatWindowContainer.classList.add('active');
+
+                this.chatWindow.style.display = 'flex';
+                this.chatInputArea.style.display = 'flex';
+            } else if (Object.keys(this.leadData).length > 0) {
+                // Tenemos datos del usuario pero no suficiente conversación
+                this.fillLeadForm();
+                this.leadForm.style.display = 'flex';
+                this.leadForm.classList.add('active');
+            } else {
+                // Nueva conversación
+                this.leadForm.style.display = 'flex';
+                this.leadForm.classList.add('active');
+            }
+        });
+
+        // Evento para cerrar el formulario de lead
+        document.getElementById('lead-form-close')?.addEventListener('click', () => {
+            this.leadForm.style.display = 'none';
+            this.leadForm.classList.remove('active');
+            this.saveState();
+        });
+
+        // Evento para cerrar la ventana de chat
+        document.getElementById('chat-close')?.addEventListener('click', () => {
+            const chatWindowContainer = document.getElementById('chat-window-container');
+            chatWindowContainer.style.display = 'none';
+            chatWindowContainer.classList.remove('active');
+            this.saveState();
+        });
+
+        // Evento para restablecer completamente el chat (borrar historial)
+        const resetChat = document.createElement('button');
+        resetChat.id = 'reset-chat';
+        resetChat.className = 'reset-chat';
+        resetChat.setAttribute('aria-label', 'Borrar conversación');
+        resetChat.innerHTML = '🗑️';
+        resetChat.title = 'Borrar esta conversación y comenzar de nuevo';
+        resetChat.style.cssText = 'position: absolute; right: 40px; top: 15px; background: transparent; border: none; color: white; cursor: pointer; font-size: 16px;';
+
+        // Añadir el botón al encabezado del chat
+        const chatHeader = document.querySelector('.chat-header');
+        if (chatHeader) {
+            chatHeader.appendChild(resetChat);
+        }
+
+        // Evento para el botón de restablecer chat
+        resetChat.addEventListener('click', () => {
+            if (confirm('¿Estás seguro de borrar toda la conversación y comenzar de nuevo?')) {
+                this.resetState();
+                // Cerrar la ventana de chat
+                document.getElementById('chat-window-container').style.display = 'none';
+                document.getElementById('chat-window-container').classList.remove('active');
+                // Limpiar el chat
+                this.chatWindow.innerHTML = '';
+                // Restablecemos el formulario
+                document.getElementById('chatbot-lead-form').reset();
+                // Mostramos el formulario
+                this.leadForm.style.display = 'flex';
+                this.leadForm.classList.add('active');
+            }
+        });
+
+        this.closeBtn?.addEventListener('click', () => {
+            parent.postMessage('close-chatbot', '*');
+            this.saveState();
+        });
+
+        this.sendBtn?.addEventListener('click', () => this.handleUserInput());
+
+        this.userInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.handleUserInput();
+            }
+        });
+
+        this.userInput?.addEventListener('input', this.autoResize.bind(this));
+
+        this.leadForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmission();
+        });
+
+        // Agregar detección de eventos de cierre de página para guardar estado
+        window.addEventListener('beforeunload', () => {
+            this.saveState();
+        });
+
+        // Guardar periódicamente el estado mientras se usa el chat
+        setInterval(() => {
+            if (this.chatHistory.length > 0) {
+                this.saveState();
+            }
+        }, 30000); // Guardar cada 30 segundos
+    }
+
+    autoResize(event) {
+        const element = event.target;
+        element.style.height = 'auto';
+        element.style.height = element.scrollHeight + 'px';
+    }
+
+    async handleFormSubmission() {
+        const nameInput = document.getElementById('name-input');
+        const emailInput = document.getElementById('email-input');
+        const phoneInput = document.getElementById('phone-input');
+        const eventTypeInput = document.getElementById('event-type-input');
+
+        this.leadData.name = nameInput.value.trim();
+        this.leadData.email = emailInput.value.trim();
+        this.leadData.phone = phoneInput.value.trim();
+        this.leadData.eventType = eventTypeInput.value.trim();
+
+        if (this.leadData.name && this.leadData.email && this.leadData.phone) {
+            // Ocultar formulario
+            this.leadForm.style.display = 'none';
+            this.leadForm.classList.remove('active');
+
+            // Mostrar ventana de chat
+            const chatWindowContainer = document.getElementById('chat-window-container');
+            chatWindowContainer.style.display = 'flex';
+            chatWindowContainer.classList.add('active');
+
+            this.chatWindow.style.display = 'flex';
+            this.chatInputArea.style.display = 'flex';
+
+            await this.startChat();
+            this.saveState();
+        }
+    }
+
+    async startChat() {
+        // loadInitialContext ahora devuelve true si necesita añadir saludo
+        const needsGreeting = await this.loadInitialContext();
+
+        // Solo añadir el saludo si es necesario (no existe ya en el historial)
+        if (needsGreeting) {
+            // Mensaje de saludo personalizado para La Célula con enfoque SPIN
+            const greeting = `¡Hola ${this.leadData.name}! 👋 Soy el **Asistente Musical** de Grupo Musical La Célula 🎵
+
+Estoy aquí para ayudarte a encontrar la **solución musical perfecta** para tu ${this.leadData.eventType || "evento"}. Nuestro grupo versátil puede adaptarse a cualquier:
+
+• Tipo de celebración (bodas, XV años, corporativos)
+• Estilo musical (desde cumbia y salsa hasta rock y pop)
+• Tamaño de evento (desde íntimos hasta masivos)
+
+¿Podrías contarme más detalles sobre el evento que estás planeando? 🎉`;
+
+            // Añadir al historial y mostrar al usuario
+            this.chatHistory.push({
+                role: "model",
+                parts: [{ text: greeting }]
+            });
+
+            this.appendMessage(greeting, 'bot');
+
+            // Guardar el estado para mantener la coherencia entre páginas
+            this.saveState();
+        }
+    }
+
+    async loadInitialContext() {
+        try {
+            // Verificar si ya tenemos el contexto inicial en el historial
+            const hasInitialContext = this.chatHistory.some(item =>
+                item.role === "user" &&
+                item.parts[0].text.includes("Eres el Asistente Musical Virtual")
+            );
+
+            // Solo añadir el contexto inicial si no existe ya
+            if (!hasInitialContext) {
+                const initialContext = `Eres el Asistente Musical Virtual del Grupo Musical Versátil La Célula, especializado en ventas consultivas y cierre de contratos musicales para todo tipo de eventos.
+
+MISIÓN PRINCIPAL:
+Tu misión es EXTRAER LA MAYOR CANTIDAD DE INFORMACIÓN POSIBLE sobre el evento del cliente, utilizando el método SPIN y técnicas de venta avanzadas para calificar al cliente y guiarlo hacia una cotización personalizada.
+
+DIRECTRICES CRÍTICAS:
+1. SIEMPRE destaca la versatilidad del grupo en cualquier género musical (cumbia, rock, pop, baladas, etc.)
+2. PRIORIZA entender las necesidades específicas del evento usando la técnica SPIN
+3. ORIENTA cada respuesta para descubrir problemas ocultos y avanzar hacia el cierre
+4. MANTÉN un formato consistente con listas numeradas o viñetas según corresponda
+5. Cuando no tengas información específica, DIRIGE al cliente al WhatsApp: 55 3541 2631
+
+MÉTODO SPIN (UTILIZA ESTAS PREGUNTAS ESTRATÉGICAMENTE):
+• **Situación**: "¿Para qué evento necesitas música?", "¿Cuántos invitados asistirán?", "¿Ya tienes fecha y lugar?"
+• **Problema**: "¿Te preocupa que la música no sea adecuada para todos tus invitados?", "¿Has tenido malas experiencias con otros grupos musicales?"
+• **Implicación**: "¿Cómo afectaría a tu evento si la banda no puede adaptarse a los diferentes gustos?", "¿Qué pasaría si tus invitados no disfrutan de la música?"
+• **Necesidad**: "¿Sería valioso contar con músicos que puedan tocar todos los géneros?", "¿Te ayudaría tener un grupo que mantenga la pista llena toda la noche?"
+
+INFORMACIÓN CLAVE SOBRE GRUPO MUSICAL LA CÉLULA:
+
+1. **Identidad**
+• Nombre: Grupo Musical Versátil La Célula
+• Especialización: Música para todo tipo de eventos sociales y corporativos
+• Fortaleza: Versatilidad de géneros y capacidad de adaptación a cualquier evento
+• Experiencia: Más de 10 años en eventos exclusivos y corporativos
+
+2. **Paquetes de Servicio**
+• **Paquete Event Plus**: Ideal para eventos grandes (bodas, graduaciones)
+   - 5 horas de música en vivo ininterrumpida
+   - Equipo de audio para 50 hasta 2,000 invitados
+   - Iluminación robótica y láser profesional
+   - Pantalla gigante / Led para momentos especiales
+   - Animadores / DJ para maximizar la experiencia
+   - Dinámicas y regalos para invitados
+   - Máquina de humo para efectos especiales
+
+• **Paquete Party**: Perfecto para fiestas medianas
+   - 5 horas de música en vivo de alta calidad
+   - Equipo de audio para 30-250 personas con sonido premium
+   - Iluminación robótica y LED para crear ambientes únicos
+   - Iluminación láser con máquina de humo inteligente
+   - Dinámicas, batucada y show 80's con regalos exclusivos
+   - Música grabada en descansos (sin silencios incómodos)
+
+• **Paquete Live**: Para eventos masivos y corporativos
+   - Show 80's o temático personalizado según las necesidades
+   - Equipo profesional para hasta 10,000 personas
+   - Escenario, video, luz robótica y láser de alta gama
+   - Pantallas gigantes para mayor visibilidad
+   - Animadores / DJ para complementar la experiencia
+   - Dinámicas especiales adaptadas al tipo de evento
+
+3. **Características Distintivas**
+• 6 integrantes base con posibilidad de ampliar según necesidades
+• Repertorio extenso que incluye TODOS los géneros musicales (pop, rock, cumbia, salsa, etc.)
+• Músicos multifacéticos que dominan varios instrumentos y estilos vocales
+• Diseño de bloques musicales personalizados para cada momento del evento
+• Ambiente continuo sin descansos prolongados que maten la fiesta
+• Equipo de audio de última generación para sonido cristalino
+• Puntualidad y profesionalismo garantizados
+
+4. **Eventos que cubren**
+• Bodas 💍 (ceremonia, cocktail y recepción con ambientación perfecta)
+• XV Años 🎂 (vals tradicional, show juvenil y fiesta para todas las edades)
+• Graduaciones 🎓 (ceremonias formales y celebraciones dinámicas)
+• Aniversarios 💕 (ambientes románticos y festivos)
+• Eventos corporativos 🏢 (presentaciones, cenas de gala, team buildings)
+• Fiestas privadas 🏠 (cumpleaños, reuniones exclusivas, celebraciones íntimas)
+• Conciertos y eventos masivos 🎤 (shows temáticos, festivales, lanzamientos)
+
+5. **Información de Contacto**
+• WhatsApp: 55 3541 2631 (atención inmediata)
+• Sitio Web: https://grupomusicalcelula.com (información detallada)
+• Redes: Facebook, YouTube, Twitter (@grupocelula)
+
+FORMATO CONSISTENTE PARA RESPUESTAS:
+• Usa siempre **negrita** para destacar conceptos clave y nombres de paquetes
+• Estructura tus respuestas con viñetas (•) para listas generales
+• Usa numeración (1, 2, 3) para pasos secuenciales o rankings
+• Usa guiones (-) para detallar características bajo una categoría
+• Incluye emojis relevantes al contexto (🎵 🎸 🎉 🎊 💍 🎓 🎤 🏢 🎂)
+• Mantén párrafos cortos y directos (máximo 2-3 líneas)
+• Cierra SIEMPRE con una pregunta para mantener la conversación
+
+TÉCNICAS DE VENTA AVANZADAS:
+1. **Diferenciación**: Destaca siempre qué hace único al grupo (versatilidad, cero tiempos muertos, adaptabilidad)
+2. **Storytelling**: Incluye ejemplos breves de éxito en eventos similares
+3. **Urgencia**: Menciona disponibilidad limitada en temporadas altas (diciembre-enero, mayo-junio)
+4. **Beneficios vs Características**: Enfócate en la experiencia, no solo en equipamiento técnico
+5. **Objeciones**: Anticipa y responde proactivamente a preocupaciones comunes (precio, espacio, energía)
+6. **Prueba social**: Menciona sutilmente la experiencia con otros clientes satisfechos
+
+CICLO DE CADA RESPUESTA:
+1. Reconoce la pregunta/comentario del cliente
+2. Proporciona información valiosa y relevante
+3. Incluye un elemento diferenciador del grupo
+4. Termina con una pregunta SPIN para obtener más información
+5. Guía hacia la cotización o contacto directo cuando tengas suficientes datos
+
+ESTRATEGIA PARA CIERRE:
+Cuando hayas recopilado: tipo de evento, fecha, número de invitados y estilo musical deseado, OFRECE:
+"Para brindarte una **cotización personalizada** 💰 podemos:
+1. Contactarte directamente vía WhatsApp al **55 3541 2631**
+2. Enviarte una propuesta detallada por correo electrónico
+¿Qué opción prefieres para avanzar con tu reserva?"
+
+Los datos del usuario son:
+Nombre: ${this.leadData.name || "[Sin nombre]"}
+Correo electrónico: ${this.leadData.email || "[Sin email]"}
+Número de teléfono: ${this.leadData.phone || "[Sin teléfono]"}
+Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
+
+                this.chatHistory.push({
+                    role: "user",
+                    parts: [{ text: initialContext }]
+                });
+                this.chatHistory.push({
+                    role: "model",
+                    parts: [{ text: "¡Entendido! Soy el Asistente Musical de Grupo Musical Versátil La Célula. Mi misión es usar el método SPIN y técnicas de venta avanzadas para descubrir todas las necesidades del cliente, extraer la mayor información posible sobre su evento, y presentar nuestros servicios de forma convincente. Mantendré un formato consistente en mis respuestas usando viñetas, numeración y elementos visuales para resaltar los beneficios de nuestros paquetes musicales. Cada interacción estará orientada a guiar al cliente hacia una cotización personalizada, destacando siempre nuestra versatilidad musical y adaptabilidad. 🎵🎉" }]
+                });
+            }
+
+            // Verificar si ya existe un saludo del bot
+            const hasGreeting = this.chatHistory.some(item =>
+                item.role === "model" &&
+                item.parts[0].text.includes("¡Hola") &&
+                item.parts[0].text.includes("Soy el **Asistente Musical**")
+            );
+
+            // Si no hay saludo, preparamos para añadir uno
+            return !hasGreeting;
+
+        } catch (error) {
+            console.error(error);
+            this.appendMessage('Error de configuración: No se pudo inicializar el asistente. Por favor, contacta al administrador del sitio.', 'bot');
+            this.sendBtn.disabled = true;
+            this.userInput.disabled = true;
+            return false;
+        }
+    }
+
+    async getBotResponse(message) {
+        this.chatHistory.push({
+            role: "user",
+            parts: [{ text: message }]
+        });
+
+        const payload = {
+            history: this.chatHistory,
+        };
+
+        try {
+            // Usar la función API de Cloudflare Pages (la ruta /api/ es mapeada automáticamente a /functions/api/)
+            const response = await fetch('/api/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                const errorMessage = errorData?.error || `Error: ${response.statusText}`;
+                throw new Error(errorMessage);
+            }
+
+            const result = await response.json();
+            const botMessage = result.candidates?.[0]?.content?.parts?.[0]?.text ||
+                             'Lo siento, no pude procesar tu mensaje. ¿Podrías contactarnos directamente por WhatsApp al 55 3541 2631?';
+
+            this.chatHistory.push({
+                role: "model",
+                parts: [{ text: botMessage }]
+            });
+
+            return botMessage;
+        } catch (error) {
+            console.error('Error:', error.message);
+            return `Lo siento, ocurrió un error al procesar tu mensaje. Para atención inmediata, contáctanos por WhatsApp al 55 3541 2631.`;
+        }
+    }
+
+    appendMessage(message, sender) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+
+        if (sender === 'bot') {
+            // Procesar markdown básico y emojis para mensajes del bot
+            const processedMessage = this.processMarkdown(message);
+            messageElement.innerHTML = processedMessage;
+        } else {
+            // Para mensajes del usuario, usar texto plano
+            messageElement.textContent = message;
+        }
+
+        this.chatWindow.appendChild(messageElement);
+        this.scrollToBottom();
+    }
+
+    processMarkdown(text) {
+        // Convertir saltos de línea dobles a párrafos y simples a <br>
+        let processed = text.replace(/\n\n/g, '</p><p>');
+        processed = '<p>' + processed + '</p>';
+        processed = processed.replace(/\n/g, '<br>');
+
+        // Limpiar párrafos vacíos
+        processed = processed.replace(/<p><\/p>/g, '');
+        processed = processed.replace(/<p><br><\/p>/g, '');
+
+        // Negritas
+        processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        // Cursivas (solo si no es parte de negritas)
+        processed = processed.replace(/\*([^*<>\n]+?)\*/g, function(match, content) {
+            return '<em>' + content + '</em>';
+        });
+
+        // Procesar listas
+        processed = processed.replace(/<p>[-*•]\s+(.+?)(<br>|<\/p>)/g, '<p><li>$1</li>$2');
+        processed = processed.replace(/<br>[-*•]\s+(.+?)(<br>|<\/p>)/g, '<br><li>$1</li>$2');
+        processed = processed.replace(/(<li>.*?<\/li>)(\s*<br>\s*<li>.*?<\/li>)*/gs, '<ul>$&</ul>');
+
+        // Limpiar HTML mal formado
+        processed = processed.replace(/<p>\s*<\/p>/g, '');
+        processed = processed.replace(/(<\/p>)\s*(<p>)/g, '$1$2');
+
+        // Convertir URLs a enlaces clickeables
+        processed = processed.replace(
+            /(https?:\/\/[^\s<>]+)/g,
+            '<a href="$1" target="_blank" style="color: #3D9BE9; text-decoration: underline;">$1</a>'
+        );
+
+        // Convertir número de WhatsApp de La Célula a enlace
+        processed = processed.replace(
+            /(55\s*3541\s*2631|5535412631)/g,
+            '<a href="https://wa.me/525535412631?text=Hola,%20me%20interesa%20cotizar%20mi%20evento..." target="_blank" style="color: #25D366; font-weight: bold; text-decoration: none;">📱 $1</a>'
+        );
+
+        // Resaltar tipos de eventos
+        const eventTypes = ['boda', 'bodas', 'xv años', 'quinceañera', 'graduación', 'graduaciones', 'fiesta', 'fiestas', 'corporativo', 'empresarial'];
+        eventTypes.forEach(event => {
+            const regex = new RegExp(`\\b${event}\\b`, 'gi');
+            processed = processed.replace(regex, `<span style="color: #3D9BE9; font-weight: 600;">$&</span>`);
+        });
+
+        // Resaltar paquetes
+        processed = processed.replace(/\b(Paquete Event Plus|Paquete Party|Paquete Live)\b/g,
+            '<span style="color: #000000; font-weight: 700; background-color: #f8f9fa; padding: 0 3px; border-radius: 3px;">$1</span>'
+        );
+
+        // Añadir emojis para palabras clave si no tienen ya
+        if (!processed.includes('🎵')) {
+            processed = processed.replace(/\b(música|musical|músicos)\b/gi, '🎵 $1');
+        }
+        if (!processed.includes('💍')) {
+            processed = processed.replace(/\b(boda|bodas)\b/gi, '💍 $1');
+        }
+        if (!processed.includes('🎓')) {
+            processed = processed.replace(/\b(graduación|graduaciones)\b/gi, '🎓 $1');
+        }
+        if (!processed.includes('🎉')) {
+            processed = processed.replace(/\b(fiesta|fiestas|celebración|evento)\b/gi, '🎉 $1');
+        }
+
+        return processed;
+    }
+
+    // Enviar resumen de conversación por email
+    async sendConversationSummary() {
+        try {
+            // Preparar datos de la conversación
+            const userMessages = this.chatHistory
+                .filter(msg => msg.role === 'user')
+                .map(msg => msg.parts[0].text)
+                .filter(text => text.length > 10 && !text.includes('Eres el Asistente Musical')); // Filtrar contexto inicial
+
+            const botMessages = this.chatHistory
+                .filter(msg => msg.role === 'model')
+                .map(msg => msg.parts[0].text);
+
+            // Solo enviar si hay una conversación significativa
+            if (userMessages.length < 2) {
+                console.log('Conversación muy corta, no se enviará email');
+                return false;
+            }
+
+            const conversationData = {
+                user_messages: userMessages,
+                bot_messages: botMessages,
+                full_conversation: this.chatHistory
+                    .filter(msg => !msg.parts[0].text.includes('Eres el Asistente Musical'))
+                    .map(msg => ({
+                        role: msg.role,
+                        message: msg.parts[0].text,
+                        timestamp: new Date().toLocaleString('es-MX')
+                    })),
+                conversation_length: userMessages.length + botMessages.length,
+                started_at: this.sessionStartTime || new Date().toISOString()
+            };
+
+            const emailData = {
+                action: 'send_summary',
+                leadData: this.leadData,
+                conversationData: conversationData
+            };
+
+            // Usar la función API de Cloudflare Pages (la ruta /api/ es mapeada automáticamente a /functions/api/)
+            const response = await fetch('/api/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(emailData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                console.log('✅ Resumen de conversación enviado por email');
+                this.showEmailSentNotification();
+                return true;
+            } else {
+                console.error('❌ Error enviando email:', result.error);
+                return false;
+            }
+
+        } catch (error) {
+            console.error('Error al enviar resumen de conversación:', error);
+            return false;
+        }
+    }
+
+    // Mostrar notificación de email enviado
+    showEmailSentNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'email-notification';
+        notification.innerHTML = `
+            <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; font-size: 12px;">
+                ✅ Información enviada a nuestro equipo musical
+            </div>
+        `;
+
+        this.chatWindow.appendChild(notification);
+
+        // Quitar la notificación después de 5 segundos
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+
+        this.scrollToBottom();
+    }
+
+    // Verificar si se debe enviar el resumen automáticamente
+    shouldSendSummary() {
+        const userMessages = this.chatHistory
+            .filter(msg => msg.role === 'user')
+            .map(msg => msg.parts[0].text)
+            .filter(text => text.length > 10 && !text.includes('Eres el Asistente Musical'));
+
+        // Enviar después de 3 mensajes del usuario o si menciona palabras clave
+        const keywordTriggers = ['cotizar', 'cotización', 'precio', 'costo', 'contratar', 'fecha', 'presupuesto', 'disponibilidad'];
+        const hasKeywords = userMessages.some(msg =>
+            keywordTriggers.some(keyword => msg.toLowerCase().includes(keyword))
+        );
+
+        return userMessages.length >= 3 || (userMessages.length >= 2 && hasKeywords);
+    }
+
+    scrollToBottom() {
+        this.chatWindow.scrollTop = this.chatWindow.scrollHeight;
+    }
+
+    showTypingIndicator() {
+        const typingElement = document.createElement('div');
+        typingElement.classList.add('message', 'bot-message', 'typing-indicator');
+        typingElement.innerHTML = '<span>Componiendo respuesta...</span>';
+        typingElement.id = 'typing-indicator';
+        this.chatWindow.appendChild(typingElement);
+        this.scrollToBottom();
+    }
+
+    removeTypingIndicator() {
+        const typingElement = document.getElementById('typing-indicator');
+        if (typingElement) {
+            typingElement.remove();
+        }
+    }
+
+    async handleUserInput() {
+        const message = this.userInput.value.trim();
+        if (!message || this.isLoading) return;
+
+        this.isLoading = true;
+        this.sendBtn.disabled = true;
+
+        this.appendMessage(message, 'user');
+        this.userInput.value = '';
+
+        this.showTypingIndicator();
+        try {
+            const botResponse = await this.getBotResponse(message);
+            this.removeTypingIndicator();
+            this.appendMessage(botResponse, 'bot');
+        } catch (error) {
+            this.removeTypingIndicator();
+            this.appendMessage('Lo siento, no pude procesar tu mensaje. Para atención inmediata, contáctanos por WhatsApp al 55 3541 2631.', 'bot');
+        }
+
+        this.isLoading = false;
+        this.sendBtn.disabled = false;
+        this.userInput.focus();
+        this.saveState();
+
+        // Verificar si se debe enviar resumen por email
+        if (this.shouldSendSummary() && !this.emailSent) {
+            // Esperar un poco antes de enviar para no interrumpir la UX
+            setTimeout(() => {
+                this.sendConversationSummary();
+                this.emailSent = true; // Evitar envíos múltiples
+            }, 2000);
+        }
+    }
 }
 
-/**
- * Función para generar respuestas locales basadas en reglas
- */
-function generateLocalResponse(history) {
-  // Obtener el último mensaje del usuario
-  let lastUserMessage = "";
-  for (let i = history.length - 1; i >= 0; i--) {
-    if (history[i].role === "user") {
-      lastUserMessage = history[i].parts[0].text;
-      break;
+document.addEventListener('DOMContentLoaded', () => {
+    const chatbotManager = new CelulaChatbotManager();
+
+    // Inicializar estado visual de los componentes del chatbot
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const leadForm = document.getElementById('lead-form');
+    const chatWindowContainer = document.getElementById('chat-window-container');
+
+    // Añadir estilo para el botón de restablecer chat
+    const style = document.createElement('style');
+    style.textContent = `
+        .reset-chat {
+            position: absolute;
+            right: 40px;
+            top: 15px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .reset-chat:hover {
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 600px) {
+            .reset-chat {
+                right: 35px;
+                top: 14px;
+                font-size: 14px;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    if (chatbotToggle && leadForm && chatWindowContainer) {
+        // Si existe un estado guardado, restaurarlo - esto ya se hace en loadState()
+        // pero verificamos si la ventana debería estar visible por la configuración actual
+        const savedState = localStorage.getItem('celulaChatbotState');
+        if (savedState) {
+            try {
+                const state = JSON.parse(savedState);
+                const isRecent = state.lastUpdated &&
+                                (new Date().getTime() - state.lastUpdated) < 24 * 60 * 60 * 1000;
+
+                if (isRecent && state.isChatActive) {
+                    leadForm.style.display = 'none';
+                    chatWindowContainer.style.display = 'flex';
+                    chatWindowContainer.classList.add('active');
+                }
+            } catch (error) {
+                console.error('Error al restaurar estado visual del chatbot:', error);
+            }
+        }
+
+        console.log('Chatbot La Célula inicializado correctamente con persistencia entre páginas');
+    } else {
+        console.error('No se pudieron encontrar elementos del chatbot');
     }
-  }
 
-  // Convertir a minúsculas para hacer coincidencias insensibles a mayúsculas
-  const userMessageLower = lastUserMessage.toLowerCase();
-
-  // Patrones para detectar intenciones específicas
-  const patterns = {
-    // Preguntas sobre servicios y paquetes
-    'servicios|paquetes|ofrecen|tienen': [
-      "¡Claro! 🎵 En **Grupo Musical La Célula** ofrecemos 3 paquetes principales:\n\n" +
-      "1. **Paquete Event Plus**: Ideal para grandes eventos (50-2000 invitados), incluye 5 horas de música en vivo, iluminación, pantalla y animadores.\n\n" +
-      "2. **Paquete Party**: Perfecto para eventos medianos (30-250 invitados), con 5 horas de música, iluminación y efectos especiales.\n\n" +
-      "3. **Paquete Live**: Para eventos masivos o corporativos, con show temático personalizado y capacidad hasta 10,000 personas.\n\n" +
-      "¿Cuál te interesa más para tu evento? 😊"
-    ],
-
-    // Preguntas sobre precios o cotizaciones
-    'precio|costo|cotiz|cuanto|cuánto': [
-      "Para ofrecerte una **cotización personalizada** 💰 necesitamos conocer algunos detalles de tu evento:\n\n" +
-      "- ¿Qué tipo de evento estás planeando? (boda, XV años, corporativo, etc.)\n" +
-      "- ¿Cuántos invitados aproximadamente tendrás?\n" +
-      "- ¿Ya tienes fecha y lugar definidos?\n\n" +
-      "Puedes proporcionarnos esta información aquí o contactarnos directamente por WhatsApp al **55 3541 2631** para una atención más rápida. ¡Estaremos encantados de ayudarte!"
-    ],
-
-    // Preguntas sobre música o repertorio
-    'musica|cancion|repertorio|tocan|generos': [
-      "¡Nuestra **versatilidad musical** es nuestra mayor fortaleza! 🎸🎹🎺\n\n" +
-      "Nuestro repertorio incluye prácticamente todos los géneros:\n" +
-      "- Cumbia, Salsa y música tropical\n" +
-      "- Rock clásico y contemporáneo\n" +
-      "- Pop en español e inglés\n" +
-      "- Baladas y música romántica\n" +
-      "- Música regional mexicana\n" +
-      "- Jazz, Swing y música para ambientar\n" +
-      "- Éxitos actuales y clásicos de todos los tiempos\n\n" +
-      "Además, diseñamos bloques musicales personalizados para cada momento de tu evento. ¿Hay algún género en particular que te interese?"
-    ],
-
-    // Preguntas sobre bodas
-    'boda|matrimonio|novia': [
-      "¡Las **bodas** son nuestra especialidad! 💍✨\n\n" +
-      "Ofrecemos experiencias musicales completas para cada momento de tu celebración:\n\n" +
-      "- **Ceremonia**: Música elegante y emotiva\n" +
-      "- **Recepción y coctel**: Ambientación sofisticada\n" +
-      "- **Banquete**: Música suave de fondo\n" +
-      "- **Fiesta**: ¡Todos a la pista de baile!\n\n" +
-      "Nuestro **Paquete Party** es muy popular para bodas, pero podemos personalizar según tus necesidades y número de invitados. ¿Ya tienes fecha para tu boda? Me encantaría ayudarte a planificar la música perfecta."
-    ],
-
-    // Preguntas sobre XV años
-    'xv|quince|quinceañera': [
-      "¡Para **XV Años** creamos momentos inolvidables! 🎂👗\n\n" +
-      "Nuestro servicio incluye:\n" +
-      "- Música especial para el vals y ceremonias tradicionales\n" +
-      "- Show 80's o temático a elección\n" +
-      "- Dinámicas y animación para que todos tus invitados participen\n" +
-      "- Efectos especiales y luces\n" +
-      "- ¡Batucada para el momento de máxima diversión!\n\n" +
-      "El **Paquete Party** es perfecto para la mayoría de las fiestas de XV años. ¿Ya tienes idea de qué tipo de música te gustaría para tu fiesta?"
-    ],
-
-    // Preguntas sobre eventos corporativos
-    'corporativo|empresa|convención': [
-      "Para **eventos corporativos** ofrecemos soluciones profesionales y versátiles. 🏢✨\n\n" +
-      "Nuestros servicios incluyen:\n" +
-      "- Música adaptada a la imagen de su empresa\n" +
-      "- Shows temáticos personalizados\n" +
-      "- Equipo técnico de primer nivel\n" +
-      "- Puntualidad y profesionalismo\n" +
-      "- Repertorio adecuado para cada momento del evento\n\n" +
-      "El **Paquete Live** está diseñado especialmente para eventos corporativos grandes. ¿Podría contarme más sobre el tipo de evento que está organizando?"
-    ],
-
-    // Preguntas sobre disponibilidad o fechas
-    'disponib|fecha|día|agenda|cuando|cuándo': [
-      "Para verificar nuestra **disponibilidad** para tu fecha, necesitamos que nos indiques:\n\n" +
-      "- ¿Qué día específico estás considerando?\n" +
-      "- ¿En qué horario sería tu evento?\n" +
-      "- ¿Qué tipo de evento estás planeando?\n\n" +
-      "Te recomendamos reservar con 2-3 meses de anticipación, especialmente para temporada alta (diciembre-enero y mayo-junio). Puedes consultar disponibilidad inmediata por WhatsApp al **55 3541 2631** 📱"
-    ],
-
-    // Preguntas sobre el proceso de contratación
-    'contrat|reserv|anticipo|apartado|proceso': [
-      "El **proceso de contratación** es muy sencillo: 🎵📝\n\n" +
-      "1. **Cotización personalizada** según tus necesidades\n" +
-      "2. **Reserva** con un anticipo del 30%\n" +
-      "3. **Confirmación** de detalles (horario, playlist especial, etc.)\n" +
-      "4. **Pago** del saldo restante antes del evento\n" +
-      "5. **¡Disfruta tu evento!** Nosotros nos encargamos de todo\n\n" +
-      "Para comenzar, puedes usar nuestro cotizador en línea o contactarnos directamente por WhatsApp al **55 3541 2631**. ¿Te gustaría iniciar el proceso ahora?"
-    ],
-
-    // Preguntas sobre equipo/instrumentos/montaje
-    'equipo|instrument|sonido|montaje': [
-      "Contamos con **equipo profesional** para eventos de cualquier tamaño: 🎧🎚️\n\n" +
-      "- Sistemas de sonido de alta fidelidad\n" +
-      "- Iluminación profesional robotizada y láser\n" +
-      "- Pantallas LED (según el paquete)\n" +
-      "- Instrumentos profesionales\n" +
-      "- Efectos especiales\n\n" +
-      "Realizamos el **montaje completo** con anticipación para garantizar que todo funcione perfectamente. El tiempo de montaje varía según el paquete, pero generalmente necesitamos 2-3 horas antes del evento. ¿Tienes alguna necesidad técnica específica para tu evento?"
-    ],
-
-    // Saludos o inicios de conversación
-    'hola|buenos dias|buenas tardes|buenas noches|saludos|buen día': [
-      "¡Hola! 👋 Bienvenido al asistente virtual de **Grupo Musical Versátil La Célula**. Estoy aquí para ayudarte a encontrar la música perfecta para tu evento. ¿En qué puedo ayudarte hoy? ¿Buscas información sobre nuestros paquetes, disponibilidad o tienes alguna duda específica?"
-    ],
-
-    // Despedidas o agradecimientos
-    'gracias|adios|adiós|hasta luego|bye|chao': [
-      "¡Gracias por contactarnos! 🎵 Ha sido un placer ayudarte. Si tienes más preguntas, no dudes en escribirnos por WhatsApp al **55 3541 2631** o usar nuestro cotizador en línea. ¡Esperamos ser parte de tu evento especial! 🎉"
-    ]
-  };
-
-  // Buscar coincidencias en los patrones
-  for (const pattern in patterns) {
-    const regex = new RegExp(`\\b(${pattern})\\b`, 'i');
-    if (regex.test(userMessageLower)) {
-      // Elegir una respuesta aleatoria dentro de las posibles para ese patrón
-      const responses = patterns[pattern];
-      return responses[Math.floor(Math.random() * responses.length)];
+    // Mostrar mensaje de persistencia en el chatbot (sólo en desarrollo)
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+        console.log('Persistencia del chatbot activada. Los datos se conservarán entre páginas y sesiones');
     }
-  }
+});
 
-  // Si no hay coincidencia específica, usar respuestas genéricas
-  const fallbackResponses = [
-    "Gracias por tu mensaje. En **Grupo Musical La Célula** nos especializamos en hacer tu evento inolvidable con nuestra música versátil. 🎵\n\n¿Podrías contarme más sobre el tipo de evento que estás planeando? Así podré brindarte información más específica sobre nuestros paquetes.",
+// Envio automatico de conversaciones via Web3Forms
+if (typeof window !== 'undefined') {
+    let conversationSent = false;
 
-    "¡Qué interesante! Para ofrecerte la mejor recomendación, me gustaría saber: ¿estás planeando una boda 💍, XV años 🎂, evento corporativo 🏢 u otro tipo de celebración? Cada evento tiene necesidades específicas que podemos atender.",
+    async function sendConversationViaWeb3Forms() {
+        if (conversationSent) return;
 
-    "Entiendo. Para ayudarte mejor, ¿podrías indicarme aproximadamente cuántas personas asistirán a tu evento? Esto me ayudará a recomendarte el paquete musical más adecuado para tus necesidades.",
+        const chatbotInstance = window.celulaChatbot;
+        if (!chatbotInstance || !chatbotInstance.chatHistory || chatbotInstance.chatHistory.length < 2) {
+            return;
+        }
 
-    "Gracias por compartir esa información. 😊 Si quieres una **cotización personalizada**, puedes contactarnos directamente por WhatsApp al **55 3541 2631** o proporcionarme más detalles sobre tu evento aquí mismo.",
+        conversationSent = true;
 
-    "**Grupo Musical Versátil La Célula** tiene más de 10 años de experiencia creando ambientes musicales perfectos. ¿Hay algún género musical en particular que te gustaría incluir en tu evento?",
+        const userData = {
+            name: chatbotInstance.userName || 'Usuario del Chatbot',
+            email: chatbotInstance.userEmail || 'no-proporcionado@celula.com',
+            phone: chatbotInstance.userPhone || 'No proporcionado'
+        };
 
-    "Me encantaría ayudarte a hacer tu evento especial. ¿Ya tienes una fecha definida? Podemos verificar nuestra disponibilidad y comenzar a planificar la música perfecta para tu celebración."
-  ];
+        if (typeof window.sendChatConversation === 'function') {
+            try {
+                const result = await window.sendChatConversation(chatbotInstance.chatHistory, userData);
+                console.log('Conversacion enviada:', result.success);
+            } catch (error) {
+                console.error('Error enviando conversacion:', error);
+            }
+        }
+    }
 
-  // Elegir una respuesta genérica aleatoria
-  return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+    window.addEventListener('beforeunload', sendConversationViaWeb3Forms);
+
+    let inactivityTimer;
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(sendConversationViaWeb3Forms, 300000);
+    }
+
+    document.addEventListener('click', resetInactivityTimer);
+    document.addEventListener('keypress', resetInactivityTimer);
+    resetInactivityTimer();
 }
