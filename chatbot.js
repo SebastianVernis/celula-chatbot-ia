@@ -229,7 +229,7 @@ class CelulaChatbotManager {
 
         this.userInput?.addEventListener('input', this.autoResize.bind(this));
 
-        this.leadForm?.addEventListener('submit', (e) => {
+        document.getElementById('chatbot-lead-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.handleFormSubmission();
         });
