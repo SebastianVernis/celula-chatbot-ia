@@ -52,36 +52,28 @@ class CelulaChatbotManager {
             chatHistory: this.chatHistory,
             leadData: this.leadData,
             isChatActive: this.chatWindowContainer.classList.contains('active'),
-            lastUpdated: new Date().getTime() // Añadir timestamp para rastrear la frescura de los datos
+            lastUpdated: new Date().getTime()
         };
-        localStorage.setItem('celulaChatbotState', JSON.stringify(state));
+        // Usar sessionStorage en lugar de localStorage para que solo persista durante la sesión
+        sessionStorage.setItem('celulaChatbotState', JSON.stringify(state));
     }
 
     loadState() {
-        const savedState = localStorage.getItem('celulaChatbotState');
+        // Cargar desde sessionStorage (se borra al cerrar la pestaña/ventana)
+        const savedState = sessionStorage.getItem('celulaChatbotState');
         if (savedState) {
             try {
                 const state = JSON.parse(savedState);
+                
+                this.chatHistory = state.chatHistory || [];
+                this.leadData = state.leadData || {};
 
-                // Verificar si los datos son recientes (menos de 24 horas)
-                const isRecent = state.lastUpdated &&
-                                 (new Date().getTime() - state.lastUpdated) < 24 * 60 * 60 * 1000;
-
-                // Usar datos guardados solo si son recientes
-                if (isRecent) {
-                    this.chatHistory = state.chatHistory || [];
-                    this.leadData = state.leadData || {};
-
-                    // Only pre-fill the form if leadData exists, but don't open anything automatically
-                    if (Object.keys(this.leadData).length > 0) {
-                        this.fillLeadForm();
-                    }
-                    // The chat window should NOT be opened automatically here.
-                    // The chatbot-toggle button will handle opening the lead form or chat.
-                } else {
-                    console.log("Datos del chatbot antiguos, iniciando nueva conversación");
-                    this.resetState();
+                // Only pre-fill the form if leadData exists, but don't open anything automatically
+                if (Object.keys(this.leadData).length > 0) {
+                    this.fillLeadForm();
                 }
+                // The chat window should NOT be opened automatically here.
+                // The chatbot-toggle button will handle opening the lead form or chat.
             } catch (error) {
                 console.error("Error al cargar el estado del chatbot:", error);
                 this.resetState();
@@ -94,7 +86,7 @@ class CelulaChatbotManager {
     resetState() {
         this.chatHistory = [];
         this.leadData = {};
-        localStorage.removeItem('celulaChatbotState');
+        sessionStorage.removeItem('celulaChatbotState');
     }
 
     fillLeadForm() {
