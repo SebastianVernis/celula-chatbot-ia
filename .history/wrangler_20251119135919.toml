@@ -24,3 +24,4 @@ mode = "smart"
 ENVIRONMENT = "production"
 NODE_VERSION = "18"
 
+[env.production.secrets]

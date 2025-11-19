@@ -24,3 +24,5 @@ mode = "smart"
 ENVIRONMENT = "production"
 NODE_VERSION = "18"
 
+[env.production.secrets]
+GEMINI_API_KEY = "AIzaSyD-XHFNALuhUU_FPwv3xflyOS9ZlR31U48"
