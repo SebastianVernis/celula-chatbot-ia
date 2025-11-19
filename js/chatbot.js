@@ -526,8 +526,7 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
         processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
         // Cursivas (solo si no es parte de negritas)
-        processed = processed.replace(/\*([^*<>
-]+?)\*/g, function(match, content) {
+        processed = processed.replace(/\*([^*<>]+?)\*/g, function(match, content) {
             return '<em>' + content + '</em>';
         });
 

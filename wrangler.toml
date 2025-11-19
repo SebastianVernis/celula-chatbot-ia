@@ -4,12 +4,8 @@ pages_build_output_dir = "."
 compatibility_date = "2025-11-16"
 compatibility_flags = ["nodejs_compat"]
 
-[build]
-command = "npm install"
-
-[build.upload]
-format = "service-worker"
-
+# Removed unsupported [build] section
+# Removed unsupported [build.upload] section
 [placement]
 mode = "off"
 
@@ -23,4 +19,3 @@ mode = "smart"
 [env.production.vars]
 ENVIRONMENT = "production"
 NODE_VERSION = "18"
-
