@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Lista por defecto de posts embebida (se usa si no se puede cargar JSON externo)
     let blogPosts = [
-        { id: 'post-1', title: 'De los 80s a Hoy: Un Viaje por el Repertorio Musical de La Célula', excerpt: 'Descubre cómo Grupo Musical Versátil La Célula combina clásicos y éxitos actuales.', date: '14 ago 2025', image: 'assets/gallery/banda-2.jpg', url: 'post-1.html' },
-        { id: 'post-2', title: '¿Por qué la Cumbia nos Hace Bailar a Todos?', excerpt: 'La psicología detrás del ritmo que pone a todos a bailar.', date: '17 ago 2025', image: 'assets/gallery/banda-1.jpg', url: 'post-2.html' },
-        { id: 'post-3', title: 'Más que Canciones: Beneficios Psicológicos de la Música en Vivo', excerpt: 'Cómo la música en vivo transforma las emociones en eventos.', date: '20 ago 2025', image: 'assets/gallery/banda-10.jpg', url: 'post-3.html' },
-        { id: 'post-4', title: 'Guía Paso a Paso: Cómo Contratar a Célula para tu Evento', excerpt: 'Cinco pasos sencillos para reservar a la banda perfecta.', date: '23 ago 2025', image: 'assets/gallery/banda-9.jpg', url: 'post-4.html' }
+        { id: 'post-1', title: 'De los 80s a Hoy: Un Viaje por el Repertorio Musical de La Célula', excerpt: 'Descubre cómo Grupo Musical Versátil La Célula combina clásicos y éxitos actuales.', date: '14 ago 2025', image: 'assets/gallery/banda-2.webp', url: 'post-1.html' },
+        { id: 'post-2', title: '¿Por qué la Cumbia nos Hace Bailar a Todos?', excerpt: 'La psicología detrás del ritmo que pone a todos a bailar.', date: '17 ago 2025', image: 'assets/gallery/banda-1.webp', url: 'post-2.html' },
+        { id: 'post-3', title: 'Más que Canciones: Beneficios Psicológicos de la Música en Vivo', excerpt: 'Cómo la música en vivo transforma las emociones en eventos.', date: '20 ago 2025', image: 'assets/gallery/banda-10.webp', url: 'post-3.html' },
+        { id: 'post-4', title: 'Guía Paso a Paso: Cómo Contratar a Célula para tu Evento', excerpt: 'Cinco pasos sencillos para reservar a la banda perfecta.', date: '23 ago 2025', image: 'assets/gallery/banda-9.webp', url: 'post-4.html' }
     ];
 
     // Intentar cargar posts desde `assets/data/blog-posts.json` si está disponible

@@ -103,7 +103,7 @@ class YouTubeCarousel {
             // Usar thumbnail de mejor calidad (hqdefault) que es más ligera
             videoDiv.innerHTML = `
                 <div class="youtube-thumbnail" style="position: relative; width: 100%; height: 100%; cursor: pointer; background: #000;">
-                    <img src="https://i.ytimg.com/vi/${video.id}/hqdefault.jpg" 
+                    <img src="https://i.ytimg.com/vi/${video.id}/hqdefault.webp" 
                          alt="${video.title}"
                          style="width: 100%; height: 100%; object-fit: cover;"
                          loading="lazy"
@@ -227,7 +227,7 @@ class YouTubeCarousel {
                 if (videoId) {
                     videoDiv.innerHTML = `
                         <div class="youtube-thumbnail" style="position: relative; width: 100%; height: 100%; cursor: pointer; background: #000;">
-                            <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" 
+                            <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.webp" 
                                  alt="${videoTitle}"
                                  style="width: 100%; height: 100%; object-fit: cover;"
                                  loading="lazy">
