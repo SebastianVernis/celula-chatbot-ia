@@ -526,7 +526,8 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
         processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
         // Cursivas (solo si no es parte de negritas)
-        processed = processed.replace(/\*([^*<>\n]+?)\*/g, function(match, content) {
+        processed = processed.replace(/\*([^*<>
+]+?)\*/g, function(match, content) {
             return '<em>' + content + '</em>';
         });
 
@@ -554,7 +555,7 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
         // Resaltar tipos de eventos
         const eventTypes = ['boda', 'bodas', 'xv años', 'quinceañera', 'graduación', 'graduaciones', 'fiesta', 'fiestas', 'corporativo', 'empresarial'];
         eventTypes.forEach(event => {
-            const regex = new RegExp(`\\b${event}\\b`, 'gi');
+            const regex = new RegExp(`\b${event}\b`, 'gi');
             processed = processed.replace(regex, `<span style="color: #3D9BE9; font-weight: 600;">$&</span>`);
         });
 
@@ -599,46 +600,32 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
                 return false;
             }
 
-            // Formatear la conversación completa como texto legible
+            // Formatear la conversación completa como un mensaje
             const conversationText = this.chatHistory
                 .filter(msg => !msg.parts[0].text.includes('Eres el Asistente Musical'))
                 .map(msg => {
-                    const role = msg.role === 'user' ? '👤 Usuario' : '🤖 Asistente';
-                    const timestamp = new Date().toLocaleString('es-MX');
-                    return `${role} [${timestamp}]:\n${msg.parts[0].text}\n`;
+                    const role = msg.role === 'user' ? '👤 Cliente' : '🤖 Asistente';
+                    return `${role}: ${msg.parts[0].text}`;
                 })
-                .join('\n---\n\n');
+                .join('\n\n');
 
-            // Preparar datos en formato unificado para /api/send-email
+            // Preparar datos para el endpoint unificado
             const emailData = {
                 type: 'chatbot',
-                name: this.leadData.name || 'Usuario del Chatbot',
-                email: this.leadData.email || 'no-proporcionado@celula.com',
+                name: this.leadData.name || 'Usuario Anónimo',
+                email: this.leadData.email || 'no-email@proporcionado.com',
                 phone: this.leadData.phone || 'No proporcionado',
-                eventType: this.leadData.eventType || 'No especificado',
-                message: conversationText,
-                metadata: {
-                    conversation_length: userMessages.length + botMessages.length,
-                    started_at: this.sessionStartTime || new Date().toISOString(),
-                    user_messages_count: userMessages.length,
-                    bot_messages_count: botMessages.length
-                }
+                message: `RESUMEN DE CONVERSACIÓN DEL CHATBOT\n\nTipo de Evento: ${this.leadData.eventType || 'No especificado'}\n\nConversación Completa (${userMessages.length + botMessages.length} mensajes):\n\n${conversationText}\n\nSesión iniciada: ${new Date(this.sessionStartTime).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}\nResumen enviado: ${new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}`
             };
 
-            // Usar el nuevo endpoint unificado /api/send-email
+            // Usar el endpoint unificado
             const response = await fetch('/api/send-email', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(emailData)
             });
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ error: 'Error desconocido' }));
-                throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
-            }
 
             const result = await response.json();
 
@@ -648,13 +635,14 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
                 return true;
             } else {
                 console.error('❌ Error enviando email:', result.error);
-                this.showErrorNotification('No se pudo enviar el resumen. Por favor, contacta al 55 3541 2631');
+                if (result.errors) {
+                    console.error('Errores de validación:', result.errors);
+                }
                 return false;
             }
 
         } catch (error) {
-            console.error('❌ Error al enviar resumen de conversación:', error);
-            this.showErrorNotification('Error de conexión. Por favor, contacta al 55 3541 2631');
+            console.error('Error al enviar resumen de conversación:', error);
             return false;
         }
     }
@@ -677,28 +665,6 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
                 notification.parentNode.removeChild(notification);
             }
         }, 5000);
-
-        this.scrollToBottom();
-    }
-
-    // Mostrar notificación de error
-    showErrorNotification(message) {
-        const notification = document.createElement('div');
-        notification.className = 'error-notification';
-        notification.innerHTML = `
-            <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; font-size: 12px; border: 1px solid #f5c6cb;">
-                ⚠️ ${message}
-            </div>
-        `;
-
-        this.chatWindow.appendChild(notification);
-
-        // Quitar la notificación después de 7 segundos
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 7000);
 
         this.scrollToBottom();
     }
@@ -848,45 +814,4 @@ if (document.readyState === 'loading') {
     initializeChatbot();
 }
 
-// Envio automatico de conversaciones via Web3Forms
-if (typeof window !== 'undefined') {
-    let conversationSent = false;
-
-    async function sendConversationViaWeb3Forms() {
-        if (conversationSent) return;
-
-        const chatbotInstance = window.celulaChatbot;
-        if (!chatbotInstance || !chatbotInstance.chatHistory || chatbotInstance.chatHistory.length < 2) {
-            return;
-        }
-
-        conversationSent = true;
-
-        const userData = {
-            name: chatbotInstance.userName || 'Usuario del Chatbot',
-            email: chatbotInstance.userEmail || 'no-proporcionado@celula.com',
-            phone: chatbotInstance.userPhone || 'No proporcionado'
-        };
-
-        if (typeof window.sendChatConversation === 'function') {
-            try {
-                const result = await window.sendChatConversation(chatbotInstance.chatHistory, userData);
-                console.log('Conversacion enviada:', result.success);
-            } catch (error) {
-                console.error('Error enviando conversacion:', error);
-            }
-        }
-    }
-
-    window.addEventListener('beforeunload', sendConversationViaWeb3Forms);
-
-    let inactivityTimer;
-    function resetInactivityTimer() {
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(sendConversationViaWeb3Forms, 300000);
-    }
-
-    document.addEventListener('click', resetInactivityTimer);
-    document.addEventListener('keypress', resetInactivityTimer);
-    resetInactivityTimer();
-}
+// Form submission logic will be handled by Cloudflare Worker

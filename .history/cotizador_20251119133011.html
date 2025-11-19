@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Blog - Grupo Musical Versátil La Célula</title>
-    <meta name="description" content="Blog del Grupo Musical Versátil La Célula - Noticias, eventos y novedades musicales.">
+    <title>Cotizador - Grupo Musical Versátil La Célula</title>
+    <meta name="description" content="Cotiza tu evento musical con Grupo Musical Versátil La Célula. Obtén un presupuesto personalizado para tu boda, fiesta o evento corporativo.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://grupomusicalcelula.com/blog.html">
-    <meta property="og:title" content="Blog - Grupo Musical Versátil La Célula">
-    <meta property="og:description" content="Noticias, eventos y novedades musicales del Grupo Musical La Célula">
+    <meta property="og:url" content="https://grupomusicalcelula.com/cotizador.html">
+    <meta property="og:title" content="Cotizador - Grupo Musical Versátil La Célula">
+    <meta property="og:description" content="Cotiza tu evento musical. Presupuesto personalizado para bodas, fiestas y eventos corporativos.">
     <meta property="og:image" content="https://grupomusicalcelula.com/assets/gallery/banda-1.webp">
 
     <!-- Theme Color -->
@@ -33,88 +33,145 @@
     <link rel="stylesheet" href="css/styles.min.css">
 </head>
 <body>
-  <header class="site-header" id="SITE_HEADER">
-      <nav class="nav-container">
-          <ul class="nav-menu" id="nav-menu">
-              <li class="nav-item">
-                  <a href="index.html" class="nav-link">INICIO</a>
-              </li>
-              <li class="nav-item">
-                  <a href="cotizador.html" class="nav-link">COTIZADOR</a>
-              </li>
-              <li class="nav-item">
-                  <a href="blog.html" class="nav-link active">BLOG</a>
-              </li>
-          </ul>
+    <!-- Header y Navegación -->
+    <header class="site-header" id="SITE_HEADER">
+        <nav class="nav-container">
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">INICIO</a>
+                </li>
+                <li class="nav-item">
+                    <a href="cotizador.html" class="nav-link active">COTIZADOR</a>
+                </li>
+                <li class="nav-item">
+                    <a href="blog.html" class="nav-link">Blog</a>
+                </li>
+            </ul>
 
-          <!-- Menú móvil -->
-          <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Abrir menú">
-              <span></span>
-              <span></span>
-              <span></span>
-          </button>
-      </nav>
-  </header>
+            <!-- Menú móvil -->
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
 
     <!-- Contenido Principal -->
     <main class="site-container">
-        <!-- Hero del Blog -->
-        <section class="hero-section" id="hero">
+        <!-- Hero del Cotizador -->
+        <section class="hero-section hero-cotizador">
             <div class="hero-content fade-in">
-                <h1 class="section-title">Blog Musical</h1>
-                <p class="hero-title">Noticias, eventos y novedades de La Célula</p>
+                <h1 class="section-title hero-title-large">Cotizador</h1>
+                <p class="hero-title">Obtén un presupuesto personalizado para tu evento</p>
             </div>
         </section>
 
-        <!-- Contenido del Blog -->
+        <!-- Formulario de Cotización -->
         <section class="content-section">
             <div class="main-content">
-                <!-- Posts Destacados -->
-                <div class="blog-featured blog-featured-container">
-                    <!-- Post Principal -->
-                    <article class="blog-post-featured fade-in">
-                        <div class="post-image">
-                            <img src="assets/gallery/banda-1.webp" alt="Bienvenidos al Mundo Musical" class="post-img">
-                        </div>
-                        <div class="post-content">
-                            <div class="post-meta">
-                                <span class="post-category">Música</span>
-                                <span class="post-date">30 jul 2024</span>
+                <div class="form-container">
+                    <h2 class="section-title">Solicita tu Cotización</h2>
+                    <p class="section-description">
+                        Completa el formulario y te contactaremos para brindarte un presupuesto personalizado
+                        para tu evento musical.
+                    </p>
+
+                    <div class="p-8 rounded-sm shadow-xl">
+
+                        <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+
+                            <input type="hidden" name="access_key" value="c437c213-198c-4507-893a-9ecaca4af699">
+
+                            <div class="form-group">
+                                <label for="name" class="form-label">Nombre *</label>
+                                <input type="text" id="name" name="name" required class="form-input">
                             </div>
-                            <h2 class="post-title">🎶 Bienvenidos al Mundo Musical de Grupo Musical Versátil La Célula</h2>
-                            <div class="post-author">
-                                <img src="https://via.placeholder.com/40x40/3d9be9/ffffff?text=GR" alt="Giovanni Rocha" class="author-avatar">
+                            <div class="form-group">
+                                <label for="number" class="form-label">Número telefónico *</label>
+                                <input type="number" id="number" name="number" required class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" id="email" name="email" required class="form-input">
+                            </div>
+                            <div class="form-grid-2col">
                                 <div>
-                                    <div class="author-name">Giovanni Rocha Urzua</div>
-                                    <div class="post-stats">1 Min. de lectura</div>
+                                    <label for="event-type" class="form-label">Tipo de Evento *</label>
+                                    <select id="event-type" name="event-type" required class="form-select">
+                                        <option value="" class="form-option">Selecciona el tipo de evento</option>
+                                        <option value="boda" class="form-option">Boda</option>
+                                        <option value="xv" class="form-option">XV Años</option>
+                                        <option value="corporativo" class="form-option">Evento Corporativo</option>
+                                        <option value="otro" class="form-option">Otro</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="event-date" class="form-label">Fecha del evento *</label>
+                                    <input type="date" id="event-date" name="event-date" required class="form-input">
                                 </div>
                             </div>
-                            <p class="post-excerpt">
-                                En Grupo Musical Versátil La Célula creemos que la música no solo se escucha, se vive.
-                                Nuestro objetivo es crear atmósferas memorables para cada evento especial...
-                            </p>
-                            <a href="post/post-0.html" class="btn btn-primary">Leer más</a>
-                        </div>
-                <!-- Todos los Posts -->
-                <div class="blog-posts-grid" id="blog-posts-container">
-                    <!-- Los posts se cargan dinámicamente desde blog-pagination.js -->
-                </div>
+                            <div class="form-group">
+                                <label for="guests-contact" class="form-label">Número de Invitados</label>
+                                <select id="guests-contact" name="guests-contact" class="form-select">
+                                    <option value="" class="form-option">Selecciona el número de invitados</option>
+                                    <option value="50-100" class="form-option">50-100 invitados</option>
+                                    <option value="101-200" class="form-option">101-200 invitados</option>
+                                    <option value="201-500" class="form-option">201-500 invitados</option>
+                                    <option value="500+" class="form-option">Más de 500 invitados</option>
+                                </select>
+                            </div>
+                            <div class="mb-20">
+                                <h3 class="form-section-title">Ubicación del Evento</h3>
+                                <div>
+                                    <label for="city-contact" class="form-label">Ciudad/Área Metropolitana *</label>
+                                    <select id="city-contact" name="city-contact" required class="form-select">
+                                        <option value="" class="form-option">Selecciona una ciudad</option>
+                                        <option value="cdmx" class="form-option">Ciudad de México (CDMX)</option>
+                                        <option value="estado-mexico" class="form-option">Estado de México</option>
+                                        <option value="morelos" class="form-option">Morelos</option>
+                                        <option value="puebla" class="form-option">Puebla</option>
+                                        <option value="hidalgo" class="form-option">Hidalgo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="message" class="form-label">Mensaje</label>
+                                <textarea id="message" name="message" rows="4"
+                                          placeholder="Cuéntanos más..."
+                                          class="form-textarea"></textarea>
+                            </div>
 
-                <!-- Paginación -->
-                <nav class="pagination pagination-container">
-                    <ul class="pagination-list">
-                        <li><a href="../contacto.html" class="page-link page-link-active">1</a></li>
-                        <li><a href="../contacto.html" class="page-link page-link-inactive">2</a></li>
-                        <li><a href="../contacto.html" class="page-link page-link-inactive">3</a></li>
-                        <li><a href="../contacto.html" class="page-link page-link-active page-link-next">Siguiente →</a></li>
-                    </ul>
-                </nav>
+                            <button type="submit" class="btn btn-primary form-submit-full">
+                                Enviar Solicitud
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Información de contacto -->
+                    <div class="contact-info-container">
+                        <h3 class="contact-title">
+                            ¿Prefieres contactarnos directamente?
+                        </h3>
+                        <div class="contact-buttons">
+                            <a href="https://wa.me/+525535412631?text=Hola,%20me%20interesa%20cotizar%20mi%20evento..."
+                               target="_blank"
+                               class="btn btn-secondary">
+                                📱 WhatsApp
+                            </a>
+                            <a href="tel:+525535412631" class="btn btn-primary">
+                                📞 Llamar
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer" id="SITE_FOOTER">
+    <footer class="site-footer">
         <div class="footer-social">
             <a href="https://wa.me/+525535412631?text=Hola,%20me%20interesa%20cotizar%20mi%20evento..."
                target="_blank"
@@ -155,17 +212,19 @@
         </div>
     </footer>
 
-    <!-- JavaScript común -->
-    <script src="js/navigation.min.js"></script>
-    <script src="js/optimizations.min.js"></script>
+    <!-- JavaScript para el formulario -->
+    <script src="js/form-handler.min.js"></script>
+
+    <!-- Estilos adicionales para el formulario -->
 
     <!-- Persistent Video Background -->
     <script src="js/video-background.min.js"></script>
 
-    <!-- Estilos específicos para el blog -->
+    <!-- Navegación -->
+    <script src="js/navigation.min.js"></script>
 
-    <!-- Script de Paginación -->
-    <script src="js/blog-pagination.min.js"></script>
+    <!-- Optimizaciones -->
+    <script src="js/optimizations.min.js"></script>
 
     <!-- Chatbot La Célula -->
     <div id="celula-chatbot-container" class="celula-chatbot-container">
@@ -212,6 +271,24 @@
                     <button type="submit" class="lead-form-submit">Iniciar chat</button>
                 </form>
                 <p class="lead-form-privacy">Tu información es confidencial y solo se utilizará para brindarte atención personalizada.</p>
+            </div>
+        </div>
+
+        <!-- Ventana de chat -->
+        <div id="chat-window-container" class="chat-window-container">
+            <div class="chat-header">
+                <img src="assets/logo/logo.webp" alt="La Célula" class="chatbot-logo">
+                <h2>Asistente Musical</h2>
+                <button id="chat-close" class="chat-close" aria-label="Cerrar">×</button>
+            </div>
+            <div id="chat-window" class="chat-window">
+                <!-- Messages will be appended here -->
+            </div>
+            <div id="chat-input-area" class="chat-input-area">
+                <textarea id="user-input" placeholder="Escribe tu mensaje..." rows="1"></textarea>
+                <button id="send-btn" class="send-btn" aria-label="Enviar mensaje">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
             </div>
         </div>
     </div>
@@ -606,8 +683,8 @@
     </style>
 
     <!-- Script de inicialización del chatbot -->
-    <script src="js/chatbot.js"></script>
-    <script src="public/forms/web3forms-chatbot.js"></script>
+    <script src="chatbot.js"></script>
+    <script src="web3forms-chatbot.js"></script>
 
-</body>
-</html>
+  </body>
+  </html>
