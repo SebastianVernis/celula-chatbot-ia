@@ -6,6 +6,8 @@
 
 class CelulaChatbotManager {
     constructor() {
+        console.log('🔧 Construyendo CelulaChatbotManager...');
+        
         this.chatWindow = document.getElementById('chat-window');
         this.userInput = document.getElementById('user-input');
         this.sendBtn = document.getElementById('send-btn');
@@ -15,6 +17,27 @@ class CelulaChatbotManager {
         this.chatInputArea = document.getElementById('chat-input-area');
         this.emailSent = false; // Flag para evitar envíos múltiples
         this.sessionStartTime = new Date().toISOString();
+
+        // Verificar que todos los elementos existen
+        const elements = {
+            chatWindow: this.chatWindow,
+            userInput: this.userInput,
+            sendBtn: this.sendBtn,
+            closeBtn: this.closeBtn,
+            leadForm: this.leadForm,
+            chatWindowContainer: this.chatWindowContainer,
+            chatInputArea: this.chatInputArea
+        };
+        
+        const missingElements = Object.entries(elements)
+            .filter(([key, value]) => !value)
+            .map(([key]) => key);
+            
+        if (missingElements.length > 0) {
+            console.error('❌ Elementos faltantes del chatbot:', missingElements);
+        } else {
+            console.log('✅ Todos los elementos del chatbot encontrados');
+        }
 
         this.init();
     }
@@ -29,36 +52,28 @@ class CelulaChatbotManager {
             chatHistory: this.chatHistory,
             leadData: this.leadData,
             isChatActive: this.chatWindowContainer.classList.contains('active'),
-            lastUpdated: new Date().getTime() // Añadir timestamp para rastrear la frescura de los datos
+            lastUpdated: new Date().getTime()
         };
-        localStorage.setItem('celulaChatbotState', JSON.stringify(state));
+        // Usar sessionStorage en lugar de localStorage para que solo persista durante la sesión
+        sessionStorage.setItem('celulaChatbotState', JSON.stringify(state));
     }
 
     loadState() {
-        const savedState = localStorage.getItem('celulaChatbotState');
+        // Cargar desde sessionStorage (se borra al cerrar la pestaña/ventana)
+        const savedState = sessionStorage.getItem('celulaChatbotState');
         if (savedState) {
             try {
                 const state = JSON.parse(savedState);
+                
+                this.chatHistory = state.chatHistory || [];
+                this.leadData = state.leadData || {};
 
-                // Verificar si los datos son recientes (menos de 24 horas)
-                const isRecent = state.lastUpdated &&
-                                 (new Date().getTime() - state.lastUpdated) < 24 * 60 * 60 * 1000;
-
-                // Usar datos guardados solo si son recientes
-                if (isRecent) {
-                    this.chatHistory = state.chatHistory || [];
-                    this.leadData = state.leadData || {};
-
-                    // Only pre-fill the form if leadData exists, but don't open anything automatically
-                    if (Object.keys(this.leadData).length > 0) {
-                        this.fillLeadForm();
-                    }
-                    // The chat window should NOT be opened automatically here.
-                    // The chatbot-toggle button will handle opening the lead form or chat.
-                } else {
-                    console.log("Datos del chatbot antiguos, iniciando nueva conversación");
-                    this.resetState();
+                // Only pre-fill the form if leadData exists, but don't open anything automatically
+                if (Object.keys(this.leadData).length > 0) {
+                    this.fillLeadForm();
                 }
+                // The chat window should NOT be opened automatically here.
+                // The chatbot-toggle button will handle opening the lead form or chat.
             } catch (error) {
                 console.error("Error al cargar el estado del chatbot:", error);
                 this.resetState();
@@ -71,7 +86,7 @@ class CelulaChatbotManager {
     resetState() {
         this.chatHistory = [];
         this.leadData = {};
-        localStorage.removeItem('celulaChatbotState');
+        sessionStorage.removeItem('celulaChatbotState');
     }
 
     fillLeadForm() {
@@ -129,19 +144,36 @@ class CelulaChatbotManager {
     }
 
     setupEventListeners() {
+        console.log('🎯 Configurando event listeners...');
+        
         // Evento para el botón flotante del chatbot (abrir chatbot)
-        document.getElementById('chatbot-toggle')?.addEventListener('click', () => {
-            if (this.chatHistory.length > 3) {
-                this.leadForm.classList.remove('active');
-                this.chatWindowContainer.classList.add('active');
-                this.chatInputArea.style.display = 'flex';
-            } else if (Object.keys(this.leadData).length > 0) {
-                this.fillLeadForm();
-                this.leadForm.classList.add('active');
-            } else {
-                this.leadForm.classList.add('active');
-            }
-        });
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        if (chatbotToggle) {
+            console.log('✅ Botón chatbot-toggle encontrado, agregando listener');
+            chatbotToggle.addEventListener('click', () => {
+                console.log('🖱️ Click en chatbot-toggle detectado');
+                console.log('Estado actual:', {
+                    chatHistoryLength: this.chatHistory?.length || 0,
+                    leadDataKeys: Object.keys(this.leadData || {}).length
+                });
+                
+                if (this.chatHistory && this.chatHistory.length > 3) {
+                    console.log('📝 Abriendo ventana de chat (historial > 3)');
+                    this.leadForm.classList.remove('active');
+                    this.chatWindowContainer.classList.add('active');
+                    this.chatInputArea.style.display = 'flex';
+                } else if (this.leadData && Object.keys(this.leadData).length > 0) {
+                    console.log('📋 Abriendo formulario con datos pre-llenados');
+                    this.fillLeadForm();
+                    this.leadForm.classList.add('active');
+                } else {
+                    console.log('📋 Abriendo formulario vacío');
+                    this.leadForm.classList.add('active');
+                }
+            });
+        } else {
+            console.error('❌ No se encontró el botón chatbot-toggle');
+        }
 
         // Evento para cerrar el formulario de lead
         document.getElementById('lead-form-close')?.addEventListener('click', () => {
@@ -705,55 +737,78 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const chatbotManager = new CelulaChatbotManager();
+// Función de inicialización que se ejecuta cuando el DOM está listo
+function initializeChatbot() {
+    console.log('🎵 Inicializando Chatbot La Célula...');
+    
+    try {
+        const chatbotManager = new CelulaChatbotManager();
 
-    // Inicializar estado visual de los componentes del chatbot
-    const chatbotToggle = document.getElementById('chatbot-toggle');
-    const leadForm = document.getElementById('lead-form');
-    const chatWindowContainer = document.getElementById('chat-window-container');
+        // Inicializar estado visual de los componentes del chatbot
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const leadForm = document.getElementById('lead-form');
+        const chatWindowContainer = document.getElementById('chat-window-container');
 
-    // Añadir estilo para el botón de restablecer chat
-    const style = document.createElement('style');
-    style.textContent = `
-        .reset-chat {
-            position: absolute;
-            right: 40px;
-            top: 15px;
-            background: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.3s ease;
-            z-index: 10;
-        }
-
-        .reset-chat:hover {
-            transform: scale(1.2);
-        }
-
-        @media (max-width: 600px) {
+        // Añadir estilo para el botón de restablecer chat
+        const style = document.createElement('style');
+        style.textContent = `
             .reset-chat {
-                right: 35px;
-                top: 14px;
-                font-size: 14px;
+                position: absolute;
+                right: 40px;
+                top: 15px;
+                background: transparent;
+                border: none;
+                color: white;
+                cursor: pointer;
+                font-size: 16px;
+                transition: transform 0.3s ease;
+                z-index: 10;
             }
+
+            .reset-chat:hover {
+                transform: scale(1.2);
+            }
+
+            @media (max-width: 600px) {
+                .reset-chat {
+                    right: 35px;
+                    top: 14px;
+                    font-size: 14px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        if (chatbotToggle && leadForm && chatWindowContainer) {
+            console.log('✅ Chatbot La Célula inicializado correctamente con persistencia entre páginas');
+        } else {
+            console.error('❌ No se pudieron encontrar elementos del chatbot:', {
+                chatbotToggle: !!chatbotToggle,
+                leadForm: !!leadForm,
+                chatWindowContainer: !!chatWindowContainer
+            });
         }
-    `;
-    document.head.appendChild(style);
 
-    if (chatbotToggle && leadForm && chatWindowContainer) {
-        console.log('Chatbot La Célula inicializado correctamente con persistencia entre páginas');
-    } else {
-        console.error('No se pudieron encontrar elementos del chatbot');
+        // Mostrar mensaje de persistencia en el chatbot (sólo en desarrollo)
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            console.log('Persistencia del chatbot activada. Los datos se conservarán entre páginas y sesiones');
+        }
+        
+        // Hacer el manager accesible globalmente para debugging
+        window.celulaChatbotManager = chatbotManager;
+        
+    } catch (error) {
+        console.error('❌ Error al inicializar el chatbot:', error);
     }
+}
 
-    // Mostrar mensaje de persistencia en el chatbot (sólo en desarrollo)
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        console.log('Persistencia del chatbot activada. Los datos se conservarán entre páginas y sesiones');
-    }
-});
+// Ejecutar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeChatbot);
+} else {
+    // El DOM ya está listo, ejecutar inmediatamente
+    initializeChatbot();
+}
 
 // Envio automatico de conversaciones via Web3Forms
 if (typeof window !== 'undefined') {
