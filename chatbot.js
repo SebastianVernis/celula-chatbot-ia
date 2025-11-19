@@ -526,7 +526,8 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
         processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
         // Cursivas (solo si no es parte de negritas)
-        processed = processed.replace(/\*([^*<>\n]+?)\*/g, function(match, content) {
+        processed = processed.replace(/\*([^*<>
+]+?)\*/g, function(match, content) {
             return '<em>' + content + '</em>';
         });
 
@@ -554,7 +555,7 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
         // Resaltar tipos de eventos
         const eventTypes = ['boda', 'bodas', 'xv años', 'quinceañera', 'graduación', 'graduaciones', 'fiesta', 'fiestas', 'corporativo', 'empresarial'];
         eventTypes.forEach(event => {
-            const regex = new RegExp(`\\b${event}\\b`, 'gi');
+            const regex = new RegExp(`\b${event}\b`, 'gi');
             processed = processed.replace(regex, `<span style="color: #3D9BE9; font-weight: 600;">$&</span>`);
         });
 
@@ -599,30 +600,30 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
                 return false;
             }
 
-            const conversationData = {
-                user_messages: userMessages,
-                bot_messages: botMessages,
-                full_conversation: this.chatHistory
-                    .filter(msg => !msg.parts[0].text.includes('Eres el Asistente Musical'))
-                    .map(msg => ({
-                        role: msg.role,
-                        message: msg.parts[0].text,
-                        timestamp: new Date().toLocaleString('es-MX')
-                    })),
-                conversation_length: userMessages.length + botMessages.length,
-                started_at: this.sessionStartTime || new Date().toISOString()
-            };
+            // Formatear la conversación completa como un mensaje
+            const conversationText = this.chatHistory
+                .filter(msg => !msg.parts[0].text.includes('Eres el Asistente Musical'))
+                .map(msg => {
+                    const role = msg.role === 'user' ? '👤 Cliente' : '🤖 Asistente';
+                    return `${role}: ${msg.parts[0].text}`;
+                })
+                .join('\n\n');
 
+            // Preparar datos para el endpoint unificado
             const emailData = {
-                action: 'send_summary',
-                leadData: this.leadData,
-                conversationData: conversationData
+                type: 'chatbot',
+                name: this.leadData.name || 'Usuario Anónimo',
+                email: this.leadData.email || 'no-email@proporcionado.com',
+                phone: this.leadData.phone || 'No proporcionado',
+                message: `RESUMEN DE CONVERSACIÓN DEL CHATBOT\n\nTipo de Evento: ${this.leadData.eventType || 'No especificado'}\n\nConversación Completa (${userMessages.length + botMessages.length} mensajes):\n\n${conversationText}\n\nSesión iniciada: ${new Date(this.sessionStartTime).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}\nResumen enviado: ${new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}`
             };
 
-            // Usar la función API de Cloudflare Pages (la ruta /api/ es mapeada automáticamente a /functions/api/)
-            const response = await fetch('/api/email', {
+            // Usar el endpoint unificado
+            const response = await fetch('/api/send-email', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(emailData)
             });
 
@@ -634,6 +635,9 @@ Tipo de evento: ${this.leadData.eventType || "[Sin especificar]"}`;
                 return true;
             } else {
                 console.error('❌ Error enviando email:', result.error);
+                if (result.errors) {
+                    console.error('Errores de validación:', result.errors);
+                }
                 return false;
             }
 
@@ -810,45 +814,4 @@ if (document.readyState === 'loading') {
     initializeChatbot();
 }
 
-// Envio automatico de conversaciones via Web3Forms
-if (typeof window !== 'undefined') {
-    let conversationSent = false;
-
-    async function sendConversationViaWeb3Forms() {
-        if (conversationSent) return;
-
-        const chatbotInstance = window.celulaChatbot;
-        if (!chatbotInstance || !chatbotInstance.chatHistory || chatbotInstance.chatHistory.length < 2) {
-            return;
-        }
-
-        conversationSent = true;
-
-        const userData = {
-            name: chatbotInstance.userName || 'Usuario del Chatbot',
-            email: chatbotInstance.userEmail || 'no-proporcionado@celula.com',
-            phone: chatbotInstance.userPhone || 'No proporcionado'
-        };
-
-        if (typeof window.sendChatConversation === 'function') {
-            try {
-                const result = await window.sendChatConversation(chatbotInstance.chatHistory, userData);
-                console.log('Conversacion enviada:', result.success);
-            } catch (error) {
-                console.error('Error enviando conversacion:', error);
-            }
-        }
-    }
-
-    window.addEventListener('beforeunload', sendConversationViaWeb3Forms);
-
-    let inactivityTimer;
-    function resetInactivityTimer() {
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(sendConversationViaWeb3Forms, 300000);
-    }
-
-    document.addEventListener('click', resetInactivityTimer);
-    document.addEventListener('keypress', resetInactivityTimer);
-    resetInactivityTimer();
-}
+// Form submission logic will be handled by Cloudflare Worker

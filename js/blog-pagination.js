@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Embedded fallback posts (small)
   let blogPosts = [
-    { id: 'post-32', title: 'Tu Tranquilidad no Tiene Precio', excerpt: 'Firmar un contrato...', date: '14 nov 2025', image: 'assets/gallery/banda-1.jpg', url: 'post-32.html' },
-    { id: 'post-31', title: 'Lo que Nuestros Clientes Dicen', excerpt: 'Descubre testimonios...', date: '11 nov 2025', image: 'assets/gallery/banda-2.jpg', url: 'post-31.html' },
-    { id: 'post-30', title: 'Dale un Toque Especial a tu Posada', excerpt: 'Convierte tu posada...', date: '08 nov 2025', image: 'assets/gallery/banda-3.jpg', url: 'post-30.html' }
+    { id: 'post-32', title: 'Tu Tranquilidad no Tiene Precio', excerpt: 'Firmar un contrato...', date: '14 nov 2025', image: 'assets/gallery/banda-1.webp', url: 'post-32.html' },
+    { id: 'post-31', title: 'Lo que Nuestros Clientes Dicen', excerpt: 'Descubre testimonios...', date: '11 nov 2025', image: 'assets/gallery/banda-2.webp', url: 'post-31.html' },
+    { id: 'post-30', title: 'Dale un Toque Especial a tu Posada', excerpt: 'Convierte tu posada...', date: '08 nov 2025', image: 'assets/gallery/banda-3.webp', url: 'post-30.html' }
   ];
 
   // Try to load external posts, otherwise keep the fallback
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       let inner = '';
       inner += '<div class="post-image">';
-      inner += '<img src="' + (post.image || 'assets/gallery/banda-1.jpg') + '" alt="' + (post.title || '') + '" class="post-img">';
+      inner += '<img src="' + (post.image || 'assets/gallery/banda-1.webp') + '" alt="' + (post.title || '') + '" class="post-img">';
       inner += '</div>';
       inner += '<div class="post-content-card">';
       inner += '<div class="post-meta">';

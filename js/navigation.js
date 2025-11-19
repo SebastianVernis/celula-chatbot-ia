@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (videoContainer) {
                 videoContainer.style.background = `
                     linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%),
-                    url('assets/images/hero-background.jpg') center/cover no-repeat
+                    url('assets/images/hero-background.webp') center/cover no-repeat
                 `;
                 video.style.display = 'none';
             }
@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (videoContainer) {
                 videoContainer.style.background = `
                     linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%),
-                    url('assets/images/hero-background.jpg') center/cover no-repeat
+                    url('assets/images/hero-background.webp') center/cover no-repeat
                 `;
             }
         }

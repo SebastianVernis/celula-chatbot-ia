@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fallback: small embedded list used if fetch fails
     let blogPosts = [
-        { id: 'post-1', title: 'De los 80s a Hoy: Un Viaje por el Repertorio Musical de La C\u00e9lula', excerpt: 'Descubre c\u00f3mo Grupo Musical Vers\u00e1til La C\u00e9lula combina cl\u00e1sicos y \u00e9itos actuales.', date: '14 ago 2025', image: 'assets/gallery/banda-2.jpg', url: 'post-1.html' },
-        { id: 'post-2', title: '\u00bfPor qu\u00e9 la Cumbia nos Hace Bailar a Todos?', excerpt: 'La psicolog\u00eda detr\u00e1s del ritmo que pone a todos a bailar.', date: '17 ago 2025', image: 'assets/gallery/banda-1.jpg', url: 'post-2.html' },
-        { id: 'post-3', title: 'M\u00e1s que Canciones: Beneficios Psicol\u00f3gicos de la M\u00fasica en Vivo', excerpt: 'C\u00f3mo la m\u00fasica en vivo transforma las emociones en eventos.', date: '20 ago 2025', image: 'assets/gallery/banda-10.jpg', url: 'post-3.html' }
+        { id: 'post-1', title: 'De los 80s a Hoy: Un Viaje por el Repertorio Musical de La C\u00e9lula', excerpt: 'Descubre c\u00f3mo Grupo Musical Vers\u00e1til La C\u00e9lula combina cl\u00e1sicos y \u00e9itos actuales.', date: '14 ago 2025', image: 'assets/gallery/banda-2.webp', url: 'post-1.html' },
+        { id: 'post-2', title: '\u00bfPor qu\u00e9 la Cumbia nos Hace Bailar a Todos?', excerpt: 'La psicolog\u00eda detr\u00e1s del ritmo que pone a todos a bailar.', date: '17 ago 2025', image: 'assets/gallery/banda-1.webp', url: 'post-2.html' },
+        { id: 'post-3', title: 'M\u00e1s que Canciones: Beneficios Psicol\u00f3gicos de la M\u00fasica en Vivo', excerpt: 'C\u00f3mo la m\u00fasica en vivo transforma las emociones en eventos.', date: '20 ago 2025', image: 'assets/gallery/banda-10.webp', url: 'post-3.html' }
     ];
 
     // Try to load external posts JSON, fall back to embedded list
