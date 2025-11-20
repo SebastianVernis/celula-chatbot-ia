@@ -11,6 +11,7 @@ class PersistentVideoBackground {
             selector: options.selector || '.persistent-video-bg',
             mobileBreakpoint: options.mobileBreakpoint || 768,
             tabletBreakpoint: options.tabletBreakpoint || 1024,
+            desktopBreakpoint: options.desktopBreakpoint || 1440,
             volume: options.volume || 0,
             loop: options.loop !== false,
             muted: options.muted !== false,
@@ -22,15 +23,50 @@ class PersistentVideoBackground {
         this.container = null;
         this.isMobile = this.checkIsMobile();
         this.isVisible = true;
+        this.currentOrientation = this.getOrientation();
+        this.devicePixelRatio = window.devicePixelRatio || 1;
 
         this.init();
     }
 
+    getOrientation() {
+        return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+    }
+
+    getDeviceType() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const userAgent = navigator.userAgent.toLowerCase();
+        
+        // Detectar tipo de dispositivo
+        const isMobileDevice = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+        const isTabletDevice = /ipad|android(?!.*mobile)|tablet/i.test(userAgent);
+        
+        if (isMobileDevice && width <= this.options.mobileBreakpoint) {
+            return 'mobile';
+        } else if ((isTabletDevice || width <= this.options.tabletBreakpoint) && width > this.options.mobileBreakpoint) {
+            return 'tablet';
+        } else if (width <= this.options.desktopBreakpoint) {
+            return 'desktop';
+        } else {
+            return 'large-desktop';
+        }
+    }
+
     getVideoSrc() {
         const width = window.innerWidth;
-        if (width <= this.options.mobileBreakpoint) {
+        const height = window.innerHeight;
+        const deviceType = this.getDeviceType();
+        const orientation = this.getOrientation();
+        
+        // Calcular la resolución óptima basada en el viewport y pixel ratio
+        const effectiveWidth = width * this.devicePixelRatio;
+        const effectiveHeight = height * this.devicePixelRatio;
+        
+        // Seleccionar resolución de video basada en el tamaño efectivo
+        if (deviceType === 'mobile' || effectiveWidth <= 640) {
             return `${this.options.videoBaseName}-480p.mp4`;
-        } else if (width <= this.options.tabletBreakpoint) {
+        } else if (deviceType === 'tablet' || effectiveWidth <= 1280) {
             return `${this.options.videoBaseName}-720p.mp4`;
         } else {
             return `${this.options.videoBaseName}-1080p.mp4`;
@@ -77,6 +113,8 @@ class PersistentVideoBackground {
     createVideoBackground() {
         this.container = document.createElement('div');
         this.container.className = 'persistent-video-container';
+        this.container.setAttribute('data-orientation', this.currentOrientation);
+        this.container.setAttribute('data-device', this.getDeviceType());
         
         this.videoElement = document.createElement('video');
         this.videoElement.autoplay = true;
@@ -85,10 +123,10 @@ class PersistentVideoBackground {
         this.videoElement.playsInline = true;
         this.videoElement.preload = 'auto';
         this.videoElement.volume = this.options.volume;
-        this.videoElement.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1000;';
+        this.videoElement.className = 'persistent-video-element';
         
         const sourceElement = document.createElement('source');
-        sourceElement.src = this.getVideoSrc(); // Use the new method to get the initial source
+        sourceElement.src = this.getVideoSrc();
         sourceElement.type = 'video/mp4';
         
         this.videoElement.appendChild(sourceElement);
@@ -106,8 +144,27 @@ class PersistentVideoBackground {
         }
         
         this.addStyles();
+        this.updateVideoPosition();
         
         console.log('Responsive video background created with initial src:', sourceElement.src);
+    }
+
+    updateVideoPosition() {
+        const orientation = this.getOrientation();
+        const deviceType = this.getDeviceType();
+        
+        // Actualizar atributos del contenedor
+        this.container.setAttribute('data-orientation', orientation);
+        this.container.setAttribute('data-device', deviceType);
+        
+        // Ajustar object-position basado en orientación y dispositivo
+        if (orientation === 'portrait' && deviceType === 'mobile') {
+            this.videoElement.style.objectPosition = 'center center';
+        } else if (orientation === 'landscape' && deviceType === 'mobile') {
+            this.videoElement.style.objectPosition = 'center center';
+        } else {
+            this.videoElement.style.objectPosition = 'center center';
+        }
     }
     
     addStyles() {
@@ -120,6 +177,7 @@ class PersistentVideoBackground {
                 left: 0;
                 width: 100vw;
                 height: 100vh;
+                height: 100dvh; /* Dynamic viewport height for mobile browsers */
                 z-index: 0;
                 overflow: hidden;
                 opacity: 0;
@@ -131,17 +189,56 @@ class PersistentVideoBackground {
                 opacity: 1;
             }
             
-            .persistent-video-container video {
+            .persistent-video-element {
                 position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
+                top: 50%;
+                left: 50%;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                max-width: none;
                 z-index: 1;
+                transform: translate(-50%, -50%);
                 object-fit: cover;
-                object-position: center;
+                object-position: center center;
                 will-change: transform;
                 pointer-events: none;
+            }
+            
+            /* Optimizaciones para diferentes orientaciones */
+            .persistent-video-container[data-orientation="portrait"] .persistent-video-element {
+                width: 100%;
+                height: auto;
+                min-height: 100%;
+            }
+            
+            .persistent-video-container[data-orientation="landscape"] .persistent-video-element {
+                width: auto;
+                height: 100%;
+                min-width: 100%;
+            }
+            
+            /* Optimizaciones para dispositivos móviles */
+            @media (max-width: 768px) {
+                .persistent-video-element {
+                    transform: translate(-50%, -50%) scale(1.05);
+                }
+            }
+            
+            /* Optimizaciones para tablets */
+            @media (min-width: 769px) and (max-width: 1024px) {
+                .persistent-video-element {
+                    transform: translate(-50%, -50%) scale(1.02);
+                }
+            }
+            
+            /* Optimizaciones para pantallas grandes */
+            @media (min-width: 1441px) {
+                .persistent-video-element {
+                    min-width: 100%;
+                    min-height: 100%;
+                }
             }
             
             .persistent-video-overlay {
@@ -175,16 +272,42 @@ class PersistentVideoBackground {
     
     setupEventListeners() {
         let resizeTimeout;
+        let orientationTimeout;
+        
+        // Manejar cambios de tamaño de ventana
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
+                const newOrientation = this.getOrientation();
+                const orientationChanged = newOrientation !== this.currentOrientation;
+                
+                if (orientationChanged) {
+                    this.currentOrientation = newOrientation;
+                    this.updateVideoPosition();
+                }
+                
                 const newSrc = this.getVideoSrc();
-                if (this.videoElement.querySelector('source').src !== newSrc) {
+                const currentSrc = this.videoElement.querySelector('source').src;
+                
+                // Solo actualizar si la fuente realmente cambió
+                if (!currentSrc.includes(newSrc)) {
                     this.updateVideoSource(newSrc);
                 }
-            }, 250); // Debounce resize event
+            }, 300); // Debounce optimizado
         });
         
+        // Manejar cambios de orientación específicamente
+        if (window.screen && window.screen.orientation) {
+            window.screen.orientation.addEventListener('change', () => {
+                clearTimeout(orientationTimeout);
+                orientationTimeout = setTimeout(() => {
+                    this.currentOrientation = this.getOrientation();
+                    this.updateVideoPosition();
+                }, 200);
+            });
+        }
+        
+        // Manejar visibilidad de la página
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 this.pauseVideo();
@@ -192,6 +315,37 @@ class PersistentVideoBackground {
                 this.playVideo();
             }
         });
+        
+        // Pausar video cuando está fuera del viewport (performance)
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.playVideo();
+                    } else {
+                        this.pauseVideo();
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            observer.observe(this.container);
+        }
+        
+        // Detectar conexión lenta y ajustar calidad
+        if ('connection' in navigator) {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                const updateVideoQuality = () => {
+                    if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+                        console.log('Slow connection detected, video may be paused for performance');
+                        this.pauseVideo();
+                    }
+                };
+                
+                connection.addEventListener('change', updateVideoQuality);
+                updateVideoQuality();
+            }
+        }
     }
     
     applyVideoBackground() {
