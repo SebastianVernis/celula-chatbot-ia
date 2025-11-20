@@ -1,0 +1,175 @@
+/**
+ * Servidor de prueba local para testear el chatbot y sistema de emails
+ * Simula los endpoints de Cloudflare Pages Functions
+ */
+
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+
+const app = express();
+const PORT = 3000;
+
+// Configuración de API keys (puedes modificar estas variables)
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_67m23uAi_Cxey8XRQeZRy3UBXcSzUzSXE';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'contacto@grupomusicalcelula.pages.dev';
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static(__dirname)); // Servir archivos estáticos desde la raíz
+
+console.log('🔧 Configuración del servidor:');
+console.log('- RESEND_API_KEY:', RESEND_API_KEY ? '✓ Configurada' : '✗ Faltante');
+console.log('- GEMINI_API_KEY:', GEMINI_API_KEY ? '✓ Configurada' : '✗ Faltante');
+console.log('- CONTACT_EMAIL:', CONTACT_EMAIL);
+
+// Endpoint para enviar emails con Resend
+app.post('/api/send-email', async (req, res) => {
+  console.log('📧 Petición recibida en /api/send-email');
+  console.log('📦 Datos recibidos:', JSON.stringify(req.body, null, 2));
+
+  const { type, leadData, conversationData, formData } = req.body;
+
+  if (!RESEND_API_KEY) {
+    console.error('❌ RESEND_API_KEY no configurada');
+    return res.status(500).json({
+      success: false,
+      error: 'Configuración de email no disponible'
+    });
+  }
+
+  let emailHtml, subject;
+
+  // Determinar tipo de email
+  if (type === 'chatbot_summary') {
+    emailHtml = createChatbotSummaryEmail(leadData, conversationData);
+    subject = `🎵 Nueva consulta musical - ${leadData.name}`;
+  } else if (type === 'form_cotizador') {
+    emailHtml = createCotizadorEmail(formData);
+    subject = `📝 Nueva cotización - ${formData.nombre}`;
+  } else if (type === 'chatbot_lead') {
+    emailHtml = createLeadCaptureEmail(leadData);
+    subject = `👤 Nuevo lead - ${leadData.name}`;
+  } else {
+    return res.status(400).json({
+      success: false,
+      error: 'Tipo no reconocido'
+    });
+  }
+
+  console.log('📨 Intentando enviar email...');
+  console.log('- Asunto:', subject);
+  console.log('- Para:', CONTACT_EMAIL);
+
+  try {
+    // Enviar con Resend API
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: 'Grupo La Célula <onboarding@resend.dev>',
+        to: [CONTACT_EMAIL],
+        subject: subject,
+        html: emailHtml
+      })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      console.log('✅ Email enviado exitosamente');
+      console.log('- ID del email:', result.id);
+      res.json({
+        success: true,
+        message: 'Email enviado',
+        emailId: result.id
+      });
+    } else {
+      console.error('❌ Error de Resend:', result);
+      throw new Error(result.message || 'Error al enviar');
+    }
+  } catch (error) {
+    console.error('❌ Error al enviar email:', error.message);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Endpoint para el chatbot (Gemini AI)
+app.post('/api/chatbot', async (req, res) => {
+  console.log('🤖 Petición recibida en /api/chatbot');
+
+  const { history } = req.body;
+
+  if (!GEMINI_API_KEY) {
+    console.error('❌ GEMINI_API_KEY no configurada');
+    return res.status(500).json({
+      error: 'GEMINI_API_KEY no configurada. Configúrala como variable de entorno.'
+    });
+  }
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const contents = history.map(item => ({
+      role: item.role,
+      parts: Array.isArray(item.parts) ? item.parts : [{ text: item.parts[0]?.text || '' }]
+    }));
+
+    const payload = {
+      contents: contents,
+      generationConfig: {
+        temperature: 0.7,
+        topK: 1,
+        topP: 1,
+        maxOutputTokens: 2048,
+      },
+      safetySettings: [
+        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      ],
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('❌ Error en Gemini API:', errorData);
+      throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Error desconocido'}`);
+    }
+
+    const data = await response.json();
+    console.log('✅ Respuesta de Gemini recibida');
+    
+    res.json(data);
+
+  } catch (error) {
+    console.error('❌ Error en chatbot:', error.message);
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
+// Funciones para crear los emails HTML
+function createChatbotSummaryEmail(leadData, conversationData) {
+  const date = new Date().toLocaleDateString('es-MX', {
+    year: 'numeric', month: 'long', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  const eventType = leadData.eventType || 'No especificado';
+  const userMessages = conversationData.user_messages || [];

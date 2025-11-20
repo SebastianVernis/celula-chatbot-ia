@@ -12,6 +12,9 @@
     "optimize:video": "bash scripts/optimize-video.sh"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2",
     "resend": "^4.8.0"
   },
   "devDependencies": {
