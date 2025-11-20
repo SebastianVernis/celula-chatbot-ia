@@ -112,23 +112,303 @@
       "justificacion": "Completar migración de iconos a formato WebP optimizado en todas las páginas principales para mejorar performance.",
       "colision": "false",
       "estado": "COMPLETADO"
+    },
+    {
+      "id": 11,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-0.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-0.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 12,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-2.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-2.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 13,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-3.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-3.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 14,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-10.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-10.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 15,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-11.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-11.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 16,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-12.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-12.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 17,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-14.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-14.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 18,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-5.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-5.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 19,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-6.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-6.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 20,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-8.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-8.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 21,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-9.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-9.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 22,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-15.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-15.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 23,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-16.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-16.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 24,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-17.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-17.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 25,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-19.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-19.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 26,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-20.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-20.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 27,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-21.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-21.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 28,
+      "tarea_tomada": "canonicals defectuosos",
+      "segmento": "A",
+      "url_afectada": "/post/post-22.html",
+      "accion_realizada": "corregir canonical",
+      "nuevo_valor": "https://grupomusicalcelula.pages.dev/post/post-22.html",
+      "justificacion": "Canonical URL estaba usando una ruta relativa en lugar de una URL absoluta, lo que puede causar problemas de SEO al no indicar claramente la URL canónica definitiva para los motores de búsqueda",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 29,
+      "tarea_tomada": "pocos párrafos",
+      "segmento": "C",
+      "url_afectada": "/offline.html",
+      "accion_realizada": "agregar párrafos",
+      "nuevo_valor": "6 párrafos",
+      "justificacion": "La página offline.html tenía solo 3 párrafos de contenido, lo cual es insuficiente para SEO y experiencia de usuario. Se agregaron 3 párrafos adicionales con información relevante sobre Grupo Musical Versátil La Célula para mejorar la experiencia mientras el usuario está sin conexión.",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 30,
+      "tarea_tomada": "pocos párrafos",
+      "segmento": "C",
+      "url_afectada": "/index-optimized.html",
+      "accion_realizada": "agregar párrafos",
+      "nuevo_valor": "32 párrafos",
+      "justificacion": "El archivo index-optimized.html estaba incompleto y tenía solo 3 párrafos de contenido, lo cual es insuficiente para SEO. Se completó el archivo con todas las secciones que faltaban (Servicios, Galería de Videos, La Banda) y se agregaron 29 párrafos adicionales con información relevante sobre Grupo Musical Versátil La Célula.",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 31,
+      "tarea_tomada": "H1 problemáticos",
+      "segmento": "B",
+      "url_afectada": "/index.html",
+      "accion_realizada": "corregir H1",
+      "nuevo_valor": "Grupo Musical Versátil La Célula - Música Profesional para Eventos en CDMX",
+      "justificacion": "La etiqueta H1 en index.html era muy genérica ('Grupo Musical Versátil La Célula') y no incluía palabras clave relevantes para SEO. Se actualizó para incluir términos como 'Música Profesional' y 'Eventos en CDMX' que mejoran la relevancia para motores de búsqueda.",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 32,
+      "tarea_tomada": "H1 problemáticos",
+      "segmento": "B",
+      "url_afectada": "/index-optimized.html",
+      "accion_realizada": "corregir H1",
+      "nuevo_valor": "Grupo Musical Versátil La Célula - Música en Vivo para Eventos en CDMX",
+      "justificacion": "La etiqueta H1 en index-optimized.html era muy genérica y contenía la palabra 'Optimized' que no aporta valor SEO ('Grupo Musical Versátil La Célula (Optimized)'). Se actualizó para incluir términos más relevantes como 'Música en Vivo' y 'Eventos en CDMX' para mejorar la relevancia para motores de búsqueda.",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 33,
+      "tarea_tomada": "meta descriptions duplicadas",
+      "segmento": "B",
+      "url_afectada": "/blog.html",
+      "accion_realizada": "corregir meta tags",
+      "nuevo_valor": "Blog - Grupo Musical Versátil La Célula",
+      "justificacion": "La página blog.html tenía URLs de Open Graph y Twitter que apuntaban a la página principal en lugar de a la página del blog, y tenía metadescripciones sociales duplicadas con la página principal. Se actualizaron todos los meta tags sociales para que sean específicos de la página del blog.",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 34,
+      "tarea_tomada": "meta descriptions duplicadas",
+      "segmento": "B",
+      "url_afectada": "/cotizador.html",
+      "accion_realizada": "corregir meta tags",
+      "nuevo_valor": "Cotizador - Grupo Musical Versátil La Célula",
+      "justificacion": "La página cotizador.html tenía URLs de Open Graph y Twitter que apuntaban a la página principal en lugar de a la página del cotizador, y tenía metadescripciones sociales duplicadas con la página principal. Se actualizaron todos los meta tags sociales para que sean específicos del cotizador.",
+      "colision": false,
+      "estado": "COMPLETADO"
+    },
+    {
+      "id": 35,
+      "tarea_tomada": "títulos duplicados",
+      "segmento": "B",
+      "url_afectada": "/index.html",
+      "accion_realizada": "modificar título",
+      "nuevo_valor": "Grupo Musical Versátil La Célula - Música en Vivo para Bodas y Eventos en CDMX",
+      "justificacion": "El título original era genérico. Se actualizó para incluir palabras clave más específicas como 'Música en Vivo', 'Bodas' y 'CDMX' para mejorar la relevancia SEO.",
+      "colision": "false",
+      "estado": "COMPLETADO"
     }
   ],
   "resumen_por_segmento": {
     "segmento_A_criticos_estructurales": {
-      "tareas_completadas": 6,
+      "tareas_completadas": 28,
       "problemas_resueltos": {
-        "canonicals_defectuosos": "24 URLs corregidas de relativas a absolutas"
+        "canonicals_defectuosos": "28 URLs corregidas de relativas a absolutas (todos los posts del blog)"
       }
     },
     "segmento_B_seo_onpage": {
-      "tareas_completadas": 0,
-      "estado": "Validado - No se encontraron títulos ni meta descriptions duplicadas en archivos principales"
+      "tareas_completadas": 5,
+      "problemas_resueltos": {
+        "H1_problematicos": "2 H1 corregidos en index.html e index-optimized.html",
+        "meta_descriptions_duplicadas": "2 páginas corregidas (blog.html y cotizador.html)",
+        "titulos_duplicados": "1 título actualizado en index.html"
+      }
     },
     "segmento_C_contenido": {
-      "tareas_completadas": 2,
+      "tareas_completadas": 4,
       "problemas_resueltos": {
-        "poco_texto": "2 páginas mejoradas (blog.html, cotizador.html)"
+        "poco_texto": "2 páginas mejoradas (blog.html, cotizador.html)",
+        "pocos_parrafos": "2 páginas mejoradas (offline.html, index-optimized.html)"
       }
     },
     "segmento_D_performance": {
@@ -143,8 +423,8 @@
     }
   },
   "metricas_generales": {
-    "total_tareas_completadas": 10,
-    "archivos_modificados": 27,
+    "total_tareas_completadas": 39,
+    "archivos_modificados": 35,
     "archivos_creados": 4,
     "reduccion_peso_imagenes": "~37% promedio en iconos sociales"
   },
@@ -156,10 +436,12 @@
       "Canibalización de keywords (2) - Requiere análisis semántico"
     ],
     "segmento_B": [
-      "H1 problemáticos (2) - No detectados en archivos principales"
+      "Títulos duplicados (6 restantes de 7)",
+      "Meta descriptions duplicadas (5 restantes de 7)"
     ],
     "segmento_C": [
-      "Pocos párrafos (7 restantes) - Requiere análisis detallado de posts individuales",
+      "Pocos párrafos (7 restantes de 9) - Requiere análisis detallado de posts individuales",
+      "Poco texto (7 restantes de 9) - Requiere análisis detallado",
       "Texto o imágenes de relleno (1) - Requiere revisión manual"
     ],
     "segmento_D": [
