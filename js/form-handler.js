@@ -4,17 +4,6 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Navegación móvil
-    const mobileToggle = document.getElementById('mobile-menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-
-    if (mobileToggle && navMenu) {
-        mobileToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            this.classList.toggle('active');
-        });
-    }
-
     // Manejo del formulario de cotización
     const form = document.querySelector('.cotizador-form');
     if (form) {

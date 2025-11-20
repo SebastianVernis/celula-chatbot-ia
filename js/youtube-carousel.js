@@ -1,6 +1,7 @@
 /**
- * YouTube Carousel Dynamic Loader
- * Carga los videos de YouTube desde un archivo JSON y genera el carrusel dinámicamente
+ * YouTube Carousel Dynamic Loader with Lite Embeds
+ * Carga los videos de YouTube desde un archivo JSON con carga diferida (on-click)
+ * Optimización: Los iframes SOLO se cargan cuando el usuario hace click
  */
 
 class YouTubeCarousel {
@@ -79,9 +80,7 @@ class YouTubeCarousel {
 
             for (let i = startIndex; i < endIndex; i++) {
                 const video = this.videos[i];
-                // Siempre cargar como iframe para el primer grupo (groupIndex === 0)
-                const loadAsIframe = groupIndex === 0;
-                const videoDiv = this.createVideoElement(video, loadAsIframe);
+                const videoDiv = this.createLiteEmbed(video);
                 groupDiv.appendChild(videoDiv);
             }
 
@@ -91,52 +90,71 @@ class YouTubeCarousel {
         }
     }
 
-    createVideoElement(video, loadAsIframe = false) {
+    /**
+     * Crea un "lite embed" - solo thumbnail que carga iframe al click
+     * Ahorro de recursos: ~1.5MB por video + reducción de requests HTTP
+     */
+    createLiteEmbed(video) {
         const videoDiv = document.createElement('div');
-        videoDiv.className = 'youtube-video';
+        videoDiv.className = 'youtube-video lite-youtube';
         videoDiv.dataset.videoId = video.id;
         videoDiv.dataset.videoTitle = video.title;
+        videoDiv.setAttribute('data-loaded', 'false');
         
-        // SIEMPRE usar facade pattern para mejor rendimiento
-        // Ahorro: ~1.5MB por video
-        if (true) { // Cambiado de loadAsIframe a siempre usar facade
-            // Usar thumbnail de mejor calidad (hqdefault) que es más ligera
-            videoDiv.innerHTML = `
-                <div class="youtube-thumbnail" style="position: relative; width: 100%; height: 100%; cursor: pointer; background: #000;">
-                    <img src="https://i.ytimg.com/vi/${video.id}/hqdefault.webp" 
-                         alt="${video.title}"
-                         style="width: 100%; height: 100%; object-fit: cover;"
-                         loading="lazy"
-                         decoding="async">
-                    <button class="youtube-play-btn" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68px; height: 48px; background: transparent; border: none; cursor: pointer; padding: 0; transition: transform 0.2s ease;" aria-label="Reproducir ${video.title}">
-                        <svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%" style="filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));">
-                            <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
-                            <path d="M 45,24 27,14 27,34" fill="#fff"></path>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            
-            // Agregar evento click para cargar el iframe
-            const playBtn = videoDiv.querySelector('.youtube-play-btn');
-            playBtn.addEventListener('click', () => {
+        // Crear thumbnail con botón de play - NO cargar iframe
+        videoDiv.innerHTML = `
+            <div class="youtube-thumbnail" style="position: relative; width: 100%; height: 100%; cursor: pointer; background: #000;">
+                <img src="https://i.ytimg.com/vi/${video.id}/hqdefault.jpg" 
+                     alt="${video.title}"
+                     class="loaded"
+                     style="width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; top: 0; left: 0;"
+                     decoding="async"
+                     onerror="this.style.display='none';">
+                <button class="youtube-play-btn"
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                               width: 68px; height: 48px; background: transparent; border: none; 
+                               cursor: pointer; padding: 0; transition: transform 0.2s ease;" 
+                        aria-label="Reproducir ${video.title}">
+                    <svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%" 
+                         style="filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));">
+                        <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
+                        <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        // Evento click para cargar iframe solo cuando el usuario lo solicita
+        const playBtn = videoDiv.querySelector('.youtube-play-btn');
+        const thumbnail = videoDiv.querySelector('.youtube-thumbnail');
+        
+        const loadVideo = () => {
+            // Verificar que no esté ya cargado
+            if (videoDiv.getAttribute('data-loaded') === 'false') {
                 this.loadVideoIframe(videoDiv, video);
-            });
-            
-            // Hover effect
-            playBtn.addEventListener('mouseenter', () => {
-                playBtn.style.transform = 'translate(-50%, -50%) scale(1.1)';
-            });
-            playBtn.addEventListener('mouseleave', () => {
-                playBtn.style.transform = 'translate(-50%, -50%) scale(1)';
-            });
-        }
+                videoDiv.setAttribute('data-loaded', 'true');
+            }
+        };
+        
+        playBtn.addEventListener('click', loadVideo);
+        thumbnail.addEventListener('click', loadVideo);
+        
+        // Efectos hover solo en el botón
+        playBtn.addEventListener('mouseenter', () => {
+            playBtn.style.transform = 'translate(-50%, -50%) scale(1.1)';
+        });
+        playBtn.addEventListener('mouseleave', () => {
+            playBtn.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
         
         return videoDiv;
     }
 
+    /**
+     * Carga el iframe de YouTube solo cuando es solicitado
+     */
     loadVideoIframe(videoDiv, video) {
-        // Reemplazar thumbnail con iframe
+        // Reemplazar thumbnail con iframe y autoplay
         videoDiv.innerHTML = `
             <iframe src="https://www.youtube.com/embed/${video.id}?rel=0&showinfo=0&autoplay=1"
                     title="${video.title}"
@@ -181,11 +199,9 @@ class YouTubeCarousel {
         groups.forEach((group, index) => {
             if (index === groupIndex) {
                 group.style.display = 'flex';
-                // Siempre cargar iframes del grupo visible
-                this.loadGroupIframes(group);
             } else {
                 group.style.display = 'none';
-                // Descargar iframes de grupos no visibles para liberar memoria
+                // Liberar memoria desconectando iframes de grupos no visibles
                 this.unloadGroupIframes(group);
             }
         });
@@ -193,29 +209,10 @@ class YouTubeCarousel {
         this.currentGroupIndex = groupIndex;
     }
 
-    loadGroupIframes(group) {
-        const videos = group.querySelectorAll('.youtube-video');
-        videos.forEach(videoDiv => {
-            // Si el video tiene thumbnail, convertirlo a iframe
-            const thumbnail = videoDiv.querySelector('.youtube-thumbnail');
-            if (thumbnail) {
-                const videoId = videoDiv.dataset.videoId;
-                const videoTitle = videoDiv.dataset.videoTitle;
-                if (videoId) {
-                    videoDiv.innerHTML = `
-                        <iframe src="https://www.youtube.com/embed/${videoId}?rel=0&showinfo=0"
-                                title="${videoTitle}"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                                style="width: 100%; height: 100%;">
-                        </iframe>
-                    `;
-                }
-            }
-        });
-    }
-
+    /**
+     * Descarga iframes de videos no visibles para liberar memoria
+     * Los videos volverán a su estado de thumbnail
+     */
     unloadGroupIframes(group) {
         const videos = group.querySelectorAll('.youtube-video');
         videos.forEach(videoDiv => {
@@ -224,26 +221,51 @@ class YouTubeCarousel {
                 // Reemplazar iframe con thumbnail para liberar recursos
                 const videoId = videoDiv.dataset.videoId;
                 const videoTitle = videoDiv.dataset.videoTitle;
+                
                 if (videoId) {
                     videoDiv.innerHTML = `
                         <div class="youtube-thumbnail" style="position: relative; width: 100%; height: 100%; cursor: pointer; background: #000;">
-                            <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.webp" 
+                            <img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" 
                                  alt="${videoTitle}"
-                                 style="width: 100%; height: 100%; object-fit: cover;"
-                                 loading="lazy">
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68px; height: 48px; background: rgba(255, 0, 0, 0.8); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                <svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%">
+                                 class="loaded"
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; top: 0; left: 0;"
+                                 decoding="async"
+                                 onerror="this.style.display='none';">
+                            <button class="youtube-play-btn"
+                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                                           width: 68px; height: 48px; background: transparent; border: none; 
+                                           cursor: pointer; padding: 0; transition: transform 0.2s ease;" 
+                                    aria-label="Reproducir ${videoTitle}">
+                                <svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%" 
+                                     style="filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));">
                                     <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
                                     <path d="M 45,24 27,14 27,34" fill="#fff"></path>
                                 </svg>
-                            </div>
+                            </button>
                         </div>
                     `;
                     
                     // Re-agregar evento click
-                    videoDiv.addEventListener('click', () => {
+                    const playBtn = videoDiv.querySelector('.youtube-play-btn');
+                    const thumbnail = videoDiv.querySelector('.youtube-thumbnail');
+                    
+                    const loadVideo = () => {
                         this.loadVideoIframe(videoDiv, { id: videoId, title: videoTitle });
+                    };
+                    
+                    playBtn.addEventListener('click', loadVideo);
+                    thumbnail.addEventListener('click', loadVideo);
+                    
+                    // Efectos hover
+                    playBtn.addEventListener('mouseenter', () => {
+                        playBtn.style.transform = 'translate(-50%, -50%) scale(1.1)';
                     });
+                    playBtn.addEventListener('mouseleave', () => {
+                        playBtn.style.transform = 'translate(-50%, -50%) scale(1)';
+                    });
+                    
+                    // Resetear el estado
+                    videoDiv.setAttribute('data-loaded', 'false');
                 }
             }
         });
@@ -291,7 +313,8 @@ class YouTubeCarousel {
             totalVideos: this.videos.length,
             totalGroups: this.container ? this.container.querySelectorAll('.youtube-video-group').length : 0,
             currentGroup: this.currentGroupIndex + 1,
-            videosPerGroup: this.settings.videosPerGroup || 3
+            videosPerGroup: this.settings.videosPerGroup || 3,
+            optimization: 'Lite Embeds - Carga on-click'
         };
     }
 }
@@ -302,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carouselContainer = document.getElementById('youtubeCarouselContainer');
     if (carouselContainer) {
         window.youtubeCarousel = new YouTubeCarousel();
-        console.log('✅ Carrusel de YouTube inicializado');
+        console.log('✅ Carrusel de YouTube inicializado con Lite Embeds');
     }
 });
 
