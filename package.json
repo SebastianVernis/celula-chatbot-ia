@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "wrangler pages dev . --port 8788",
     "deploy": "wrangler pages deploy .",
-    "build": "npm run minify",
+    "build": "cd functions && npm install && cd ..",
     "minify": "bash scripts/minify-all.sh",
     "optimize:images": "bash scripts/convert-images-to-webp.sh",
     "optimize:video": "bash scripts/optimize-video.sh"

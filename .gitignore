@@ -2,10 +2,6 @@
 node_modules/
 package-lock.json
 
-# Exception: Allow functions dependencies
-!functions/node_modules/
-!functions/package-lock.json
-
 # Environment variables
 .env
 .env.local
