@@ -12,7 +12,7 @@
     "optimize:video": "bash scripts/optimize-video.sh"
   },
   "dependencies": {
-    "resend": "^4.0.0"
+    "resend": "^4.8.0"
   },
   "devDependencies": {
     "wrangler": "^3.80.0"
