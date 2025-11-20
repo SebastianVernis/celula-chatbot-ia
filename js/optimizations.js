@@ -1,15 +1,4 @@
-/**
- * Optimizaciones de rendimiento para Grupo Musical Célula
- * - Lazy loading de imágenes
- * - Cache de recursos
- * - Optimización de carga
- */
-
-(function() {
-    'use strict';
-
-    // ===== LAZY LOADING DE IMÁGENES =====
-    function initLazyLoading() {
+/*! Optimizaciones de rendimiento para Grupo Musical Célula */(function(){'use strict';function initLazyLoading(){
         // Usar Intersection Observer para lazy loading
         if ('IntersectionObserver' in window) {
             const imageObserver = new IntersectionObserver((entries, observer) => {

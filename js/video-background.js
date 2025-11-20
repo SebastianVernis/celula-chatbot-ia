@@ -1,14 +1,4 @@
-/**
- * Grupo Musical Célula - Persistent Video Background Module
- * Componente para video de fondo persistente entre sesiones y páginas
- */
-
-class PersistentVideoBackground {
-    constructor(options = {}) {
-        this.options = {
-            videoBaseName: options.videoBaseName || 'assets/video/background',
-            fallbackImage: options.fallbackImage || 'assets/images/hero-background.webp',
-            selector: options.selector || '.persistent-video-bg',
+/*! Grupo Musical Célula - Persistent Video Background Module */class PersistentVideoBackground{constructor(options={}){this.options={videoBaseName:options.videoBaseName||'assets/video/background',fallbackImage:options.fallbackImage||'assets/images/hero-background.webp',selector:options.selector||'.persistent-video-bg',
             mobileBreakpoint: options.mobileBreakpoint || 768,
             tabletBreakpoint: options.tabletBreakpoint || 1024,
             desktopBreakpoint: options.desktopBreakpoint || 1440,

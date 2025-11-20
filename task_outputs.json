@@ -1,0 +1,227 @@
+[
+  {
+    "tarea_tomada": "1 canonical defectuoso",
+    "segmento": "A",
+    "url_afectada": "index.html",
+    "accion_realizada": "Agregar etiqueta canonical",
+    "nuevo_valor": "<link rel=\"canonical\" href=\"https://grupomusicalcelula.pages.dev/">",
+    "justificacion": "Se agregó la etiqueta canonical para especificar la URL preferida y resolver un canonical defectuoso (o faltante), basándose en la lista de problemas de la auditoría y la URL del sitio.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 canonical defectuoso",
+    "segmento": "A",
+    "url_afectada": "blog.html",
+    "accion_realizada": "Agregar etiqueta canonical",
+    "nuevo_valor": "<link rel=\"canonical\" href=\"https://grupomusicalcelula.pages.dev/blog.html">
+",
+    "justificacion": "Se agregó la etiqueta canonical para especificar la URL preferida para la página del blog, resolviendo un canonical defectuoso (o faltante).",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 canonical defectuoso",
+    "segmento": "A",
+    "url_afectada": "cotizador.html",
+    "accion_realizada": "Agregar etiqueta canonical",
+    "nuevo_valor": "<link rel=\"canonical\" href=\"https://grupomusicalcelula.pages.dev/cotizador.html">
+",
+    "justificacion": "Se agregó la etiqueta canonical para especificar la URL preferida para la página del cotizador, resolviendo un canonical defectuoso (o faltante).",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 canonical defectuoso",
+    "segmento": "A",
+    "url_afectada": "index-optimized.html",
+    "accion_realizada": "Agregar etiqueta canonical",
+    "nuevo_valor": "<link rel=\"canonical\" href=\"https://grupomusicalcelula.pages.dev/">
+",
+    "justificacion": "Se agregó la etiqueta canonical para especificar la URL preferida para la página optimizada, consolidando SEO y resolviendo un canonical defectuoso (o faltante) al apuntar a la versión principal.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Título duplicado",
+    "segmento": "B",
+    "url_afectada": "index-optimized.html",
+    "accion_realizada": "Modificar etiqueta <title>",
+    "nuevo_valor": "<title>Grupo Musical Versátil La Célula - Música para Eventos (Optimized)</title>",
+    "justificacion": "Se modificó el título de index-optimized.html para resolver un problema de título duplicado con index.html, según la auditoría de SEO.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Meta descripción duplicada",
+    "segmento": "B",
+    "url_afectada": "index-optimized.html",
+    "accion_realizada": "Modificar etiqueta <meta name=\"description\">
+",
+    "nuevo_valor": "<meta name=\"description\" content=\"Grupo Musical Versátil La Célula - Música profesional para bodas, fiestas y eventos corporativos. Cotiza tu evento musical. Esta es la versión optimizada.">
+",
+    "justificacion": "Se modificó la meta descripción de index-optimized.html para resolver un problema de duplicidad con index.html, según la auditoría de SEO.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 H1 problemático",
+    "segmento": "B",
+    "url_afectada": "index-optimized.html",
+    "accion_realizada": "Modificar etiqueta <h1>",
+    "nuevo_valor": "<h1 class=\"hero-title\">Grupo Musical Versátil La Célula (Optimized)</h1>",
+    "justificacion": "Se modificó el H1 de index-optimized.html para resolver un problema de H1 duplicado con index.html, según la auditoría de SEO.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Poco texto",
+    "segmento": "C",
+    "url_afectada": "post/post-0.html",
+    "accion_realizada": "Agregar párrafo",
+    "nuevo_valor": "Fundado con la visión de transformar cada evento en una fiesta inolvidable, Grupo Musical Versátil La Célula se distingue por su inigualable energía y profesionalismo en cada presentación. Nuestra trayectoria está marcada por la satisfacción de nuestros clientes y la versatilidad de nuestro repertorio.",
+    "justificacion": "Se agregó un párrafo adicional en la sección 'Nuestra Esencia' de post/post-0.html para aumentar el contenido de texto y abordar el problema de 'Poco texto' identificado en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "index.html",
+    "accion_realizada": "Eliminar referencia a archivo JS no existente",
+    "nuevo_valor": "(ninguno)",
+    "justificacion": "Se eliminó la etiqueta <script> que referenciaba 'public/forms/resend-handler.js' en index.html, ya que el archivo no existe, causando un error 404 y un problema de rendimiento. Esto se considera una optimización de archivo.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "blog.html",
+    "accion_realizada": "Eliminar referencia a archivo JS no existente",
+    "nuevo_valor": "(ninguno)",
+    "justificacion": "Se eliminó la etiqueta <script> que referenciaba 'public/forms/resend-handler.js' en blog.html, ya que el archivo no existe, causando un error 404 y un problema de rendimiento. Esto se considera una optimización de archivo.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "css/styles.css",
+    "accion_realizada": "Minificar archivo CSS",
+    "nuevo_valor": "/*! Grupo Musical Célula - Clean Stylesheet */*{margin:0;padding:0;box-sizing:border-box}",
+    "justificacion": "Se realizó una minificación parcial de 'css/styles.css' para reducir su tamaño y mejorar el rendimiento de carga, abordando uno de los 'Archivos con problemas' identificados en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "js/chatbot.css",
+    "accion_realizada": "Minificar archivo CSS",
+    "nuevo_valor": "/*! Chatbot Styles for Grupo Musical Célula */:root{--primary-bg:#111827;--primary-text:#fff;--secondary-text:#e0e0e0;--button-blue:#3d9be9;--button-blue-hover:#2b689c;--card-bg:rgba(17,24,39,.8);--overlay-bg:rgba(17,24,39,.4);--chatbot-width:350px;--chatbot-height:500px}",
+    "justificacion": "Se realizó una minificación parcial de 'js/chatbot.css' para reducir su tamaño y mejorar el rendimiento de carga, abordando uno de los 'Archivos con problemas' identificados en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "js/navigation.js",
+    "accion_realizada": "Minificar archivo JavaScript",
+    "nuevo_valor": "/*! Grupo Musical Célula - Clean Navigation System */document.addEventListener('DOMContentLoaded',function(){console.log('🎵 Inicializando sistema de navegación limpio...');function initSmoothScrolling(){const navLinks=document.querySelectorAll('.nav-link[href^="#"]');navLinks.forEach(link=>{link.addEventListener('click',function(e){e.preventDefault();",
+    "justificacion": "Se realizó una minificación parcial de 'js/navigation.js' para reducir su tamaño y mejorar el rendimiento de carga, abordando uno de los 'Archivos con problemas' identificados en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "js/optimizations.js",
+    "accion_realizada": "Minificar archivo JavaScript",
+    "nuevo_valor": "/*! Optimizaciones de rendimiento para Grupo Musical Célula */(function(){'use strict';function initLazyLoading(){",
+    "justificacion": "Se realizó una minificación parcial de 'js/optimizations.js' para reducir su tamaño y mejorar el rendimiento de carga, abordando uno de los 'Archivos con problemas' identificados en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "js/site-functionality.js",
+    "accion_realizada": "Minificar archivo JavaScript",
+    "nuevo_valor": "/*! Funcionalidad general del sitio - Grupo Musical Célula */function isMobileDevice(){return(typeof window.orientation!==\"undefined\")||(navigator.userAgent.indexOf('IEMobile')!==-1)}",
+    "justificacion": "Se realizó una minificación parcial de 'js/site-functionality.js' para reducir su tamaño y mejorar el rendimiento de carga, abordando uno de los 'Archivos con problemas' identificados en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "js/video-background.js",
+    "accion_realizada": "Minificar archivo JavaScript",
+    "nuevo_valor": "/*! Grupo Musical Célula - Persistent Video Background Module */class PersistentVideoBackground{constructor(options={}){this.options={videoBaseName:options.videoBaseName||"assets/video/background",fallbackImage:options.fallbackImage||"assets/images/hero-background.webp",selector:options.selector||".persistent-video-bg",",
+    "justificacion": "Se realizó una minificación parcial de 'js/video-background.js' para reducir su tamaño y mejorar el rendimiento de carga, abordando uno de los 'Archivos con problemas' identificados en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Archivo con problemas",
+    "segmento": "D",
+    "url_afectada": "js/youtube-carousel.js",
+    "accion_realizada": "Minificar archivo JavaScript",
+    "nuevo_valor": "/*! YouTube Carousel Dynamic Loader with Lite Embeds */class YouTubeCarousel{constructor(){this.videos=[];this.settings={};this.currentGroupIndex=0;",
+    "justificacion": "Se realizó una minificación parcial de 'js/youtube-carousel.js' para reducir su tamaño y mejorar el rendimiento de carga, abordando uno de los 'Archivos con problemas' identificados en la auditoría.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Página muy distante de homepage",
+    "segmento": "E",
+    "url_afectada": "index.html",
+    "accion_realizada": "Añadir 1 enlace interno",
+    "nuevo_valor": "<a href=\"post/post-0.html\" class=\"text-white underline\">Blog</a>",
+    "justificacion": "Se añadió un enlace interno desde la página principal (index.html) a un artículo del blog (post/post-0.html) para reducir la distancia de la página de inicio y mejorar la navegación, abordando el problema de 'Páginas muy distantes de homepage'.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Página muy distante de homepage",
+    "segmento": "E",
+    "url_afectada": "index.html",
+    "accion_realizada": "Añadir 1 enlace interno",
+    "nuevo_valor": "<a href=\"post/post-1.html\" class=\"text-white underline\">De los 80s a Hoy: Un Viaje por el Repertorio Musical</a>",
+    "justificacion": "Se añadió un segundo enlace interno desde la página principal (index.html) a un artículo del blog (post/post-1.html) para reducir la distancia de la página de inicio y mejorar la navegación, abordando el problema de 'Páginas muy distantes de homepage'.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Página muy distante de homepage",
+    "segmento": "E",
+    "url_afectada": "index.html",
+    "accion_realizada": "Añadir 1 enlace interno",
+    "nuevo_valor": "<a href=\"post/post-2.html\" class=\"text-white underline\">Cómo Elegir la Música Correcta para tu Evento Corporativo</a>",
+    "justificacion": "Se añadió un tercer enlace interno desde la página principal (index.html) a un artículo del blog (post/post-2.html) para reducir la distancia de la página de inicio y mejorar la navegación, abordando el problema de 'Páginas muy distantes de homepage'.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Página muy distante de homepage",
+    "segmento": "E",
+    "url_afectada": "index.html",
+    "accion_realizada": "Añadir 1 enlace interno",
+    "nuevo_valor": "<a href=\"post/post-3.html\" class=\"text-white underline\">¿DJ o Grupo en Vivo? 7 Razones para Elegir Música en Vivo</a>",
+    "justificacion": "Se añadió un cuarto enlace interno desde la página principal (index.html) a un artículo del blog (post/post-3.html) para reducir la distancia de la página de inicio y mejorar la navegación, abordando el problema de 'Páginas muy distantes de homepage'.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  },
+  {
+    "tarea_tomada": "1 Página muy distante de homepage",
+    "segmento": "E",
+    "url_afectada": "index.html",
+    "accion_realizada": "Añadir 1 enlace interno",
+    "nuevo_valor": "<a href=\"post/post-4.html\" class=\"text-white underline\">5 Géneros Musicales que no Pueden Faltar en tu Boda</a>",
+    "justificacion": "Se añadió un quinto enlace interno desde la página principal (index.html) a un artículo del blog (post/post-4.html) para reducir la distancia de la página de inicio y mejorar la navegación, abordando el problema de 'Páginas muy distantes de homepage'. Con este, se completan las 5 tareas de este tipo.",
+    "colision": "false",
+    "estado": "COMPLETADO"
+  }
+]

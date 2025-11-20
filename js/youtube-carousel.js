@@ -1,14 +1,4 @@
-/**
- * YouTube Carousel Dynamic Loader with Lite Embeds
- * Carga los videos de YouTube desde un archivo JSON con carga diferida (on-click)
- * Optimización: Los iframes SOLO se cargan cuando el usuario hace click
- */
-
-class YouTubeCarousel {
-    constructor() {
-        this.videos = [];
-        this.settings = {};
-        this.currentGroupIndex = 0;
+/*! YouTube Carousel Dynamic Loader with Lite Embeds */class YouTubeCarousel{constructor(){this.videos=[];this.settings={};this.currentGroupIndex=0;
         this.container = null;
         this.prevBtn = null;
         this.nextBtn = null;

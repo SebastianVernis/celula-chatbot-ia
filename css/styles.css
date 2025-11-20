@@ -1,15 +1,4 @@
-/*
- * Grupo Musical Célula - Clean Stylesheet
- * Homologación completa sin dependencias de Wix
- * Versión: 1.0
- */
-
-/* ===== RESET Y BASE ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/*! Grupo Musical Célula - Clean Stylesheet */*{margin:0;padding:0;box-sizing:border-box}
 
 html, body {
     height: 100%;
@@ -70,7 +59,7 @@ html, body {
     /* Tipografía */
     --font-header: normal normal normal 50px/1.4em 'Lobster', cursive;
     --font-nav: normal normal bold 15px/1.4em 'Open Sans', Arial, sans-serif;
-    --font-body: normal normal normal 14px/1.4em 'Open Sans', Arial, sans-serif;
+    --font-body: normal normal normal 20px/1.4em 'Open Sans', Arial, sans-serif;
     --font-title: normal normal normal 25px/1.4em 'Lobster', cursive;
     --font-large: normal normal normal 35px/1.4em 'Open Sans', Arial, sans-serif;
     --font-medium: normal normal normal 27px/1.4em 'Open Sans', Arial, sans-serif;

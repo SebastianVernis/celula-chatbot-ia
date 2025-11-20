@@ -1,18 +1,4 @@
-/**
- * Grupo Musical Célula - Clean Navigation System
- * Sistema de navegación limpio sin dependencias de Wix
- */
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎵 Inicializando sistema de navegación limpio...');
-    
-    // ===== NAVEGACIÓN SUAVE =====
-    function initSmoothScrolling() {
-        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
+/*! Grupo Musical Célula - Clean Navigation System */document.addEventListener('DOMContentLoaded',function(){console.log('🎵 Inicializando sistema de navegación limpio...');function initSmoothScrolling(){const navLinks=document.querySelectorAll('.nav-link[href^="#"]');navLinks.forEach(link=>{link.addEventListener('click',function(e){e.preventDefault();
                 const targetId = this.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
 

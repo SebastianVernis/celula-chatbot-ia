@@ -1,12 +1,4 @@
-/**
- * Galería Dinámica - Grupo Musical Célula
- * Gestiona la carga y visualización dinámica de imágenes de la galería
- */
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Lista de imágenes de la galería (solo las que existen)
-    const galleryImages = [
-        { src: 'assets/gallery/banda-1.webp', alt: 'Grupo Musical La Célula en vivo', text: 'En vivo' },
+/*! Galería Dinámica - Grupo Musical Célula */document.addEventListener('DOMContentLoaded',function(){const galleryImages=[{src:'assets/gallery/banda-1.webp',alt:'Grupo Musical La Célula en vivo',text:'En vivo'},
         { src: 'assets/gallery/banda-2.webp', alt: 'Presentación musical', text: 'Presentación' },
         { src: 'assets/gallery/banda-3.webp', alt: 'Evento corporativo', text: 'Eventos' },
         { src: 'assets/gallery/banda-4.webp', alt: 'Boda musical', text: 'Bodas' },

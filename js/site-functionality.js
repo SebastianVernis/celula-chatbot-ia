@@ -1,11 +1,4 @@
-/**
- * Funcionalidad general del sitio - Grupo Musical Célula
- */
-
-// Detect mobile devices and potentially disable video for performance
-function isMobileDevice() {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-}
+/*! Funcionalidad general del sitio - Grupo Musical Célula */function isMobileDevice(){return(typeof window.orientation!=="undefined")||(navigator.userAgent.indexOf('IEMobile')!==-1)}
 
 // Funcionalidad general del sitio
 document.addEventListener('DOMContentLoaded', function() {

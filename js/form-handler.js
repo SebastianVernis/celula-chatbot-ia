@@ -1,15 +1,4 @@
-/**
- * Manejador del Formulario de Cotización - Grupo Musical La Célula
- * Envía solicitudes de cotización por email y redirige a WhatsApp
- */
-
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('.cotizador-form');
-    if (form) {
-        let isSubmitting = false;
-
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+/*! Manejador del Formulario de Cotización - Grupo Musical La Célula */document.addEventListener('DOMContentLoaded',function(){const form=document.querySelector('.cotizador-form');if(form){let isSubmitting=false;form.addEventListener('submit',async function(e){e.preventDefault();
 
             if (isSubmitting) {
                 console.log('Formulario ya está siendo procesado...');
