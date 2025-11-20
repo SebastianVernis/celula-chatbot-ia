@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# Script para generar imágenes de blog usando la API de Blackbox AI
+# Genera todas las imágenes con un intervalo de 30 segundos entre cada una
+
+# Colores para output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # Sin color
+
+# Verificar que existe la API key
+if [ -z "$BLACKBOX_API_KEY" ]; then
+    echo -e "${RED}Error: La variable de entorno BLACKBOX_API_KEY no está configurada${NC}"
+    echo "Configúrala con: export BLACKBOX_API_KEY='tu_clave_aqui'"
+    exit 1
+fi
+
+# Crear directorio de salida si no existe
+OUTPUT_DIR="assets/images/blog-generated"
+mkdir -p "$OUTPUT_DIR"
+
+echo -e "${BLUE}==================================================${NC}"
+echo -e "${BLUE}  Generador de Imágenes para Blog - La Célula${NC}"
+echo -e "${BLUE}==================================================${NC}"
+echo -e "${GREEN}Directorio de salida: $OUTPUT_DIR${NC}"
+echo -e "${YELLOW}Intervalo entre peticiones: 30 segundos${NC}"
+echo ""
+
+# Contador de imágenes
+TOTAL_IMAGES=30
+CURRENT=0
+SUCCESSFUL=0
+FAILED=0
+
+# Array de prompts (Post ID : Prompt)
+declare -A PROMPTS=(
+    ["0"]="Professional digital illustration, vibrant colors, high resolution 1920x1080px. Show a versatile 6-member musical group 'La Célula' on a modern illuminated stage. Include: electric guitar, bass, drums, keyboard, saxophone, and vocalist. Stage lighting with purple, blue, and amber tones. Festive atmosphere with subtle crowd silhouettes. Photorealistic style with dynamic composition, warm color palette, bokeh background effects. Sharp focus on instruments and musicians."
+    
+    ["1"]="Timeline collage illustration, 1920x1080px. Horizontal timeline from 1980s to 2025. Band performing at each decade marker with era-appropriate styling. Visual elements representing each era (80s neon, 90s grunge, 2000s digital, 2010s indie, 2020s modern). Chronological composition, nostalgic color schemes transitioning through time, detailed period-accurate elements, dynamic layout."
+    
+    ["2"]="Corporate professional illustration, 1920x1080px. Modern conference hall with sophisticated live band setup. Business professionals networking, cocktail style event. Sleek contemporary stage, professional sound equipment. Corporate branding elements, elegant color scheme (navy, silver, white). Balanced lighting, professional atmosphere, high-end venue, sharp business aesthetic, polished composition."
+    
+    ["3"]="Split-screen comparison illustration, 1920x1080px. Left side: DJ booth with digital equipment, static setup. Right side: Live band with acoustic instruments, dynamic energy. Visual contrast highlighting live music advantages. Modern clean design, balanced composition, informative icons, professional photography style, clear visual storytelling, comparative layout."
+    
+    ["4"]="Digital collage artwork, 1920x1080px, vibrant saturated colors. Five distinct sections representing musical genres at a wedding: cumbia (accordion, guiro), rock (electric guitars, drums), salsa (congas, timbales), pop (synthesizers, modern setup), bachata (acoustic guitars, bongos). Central dancing couples in formal attire, joyful expressions. Balanced composition, warm ambient lighting, golden hour tones, romantic atmosphere, high detail."
+    
+    ["5"]="Cinematic digital illustration, 1920x1080px. Energetic wedding reception, live band center stage with professional backlight setup. Dancing couples in foreground with motion blur effect. Vibrant LED stage lights in magenta, cyan, and amber. Crystal chandeliers, elegant venue. Dynamic composition, celebratory mood, depth of field, photorealistic rendering, high contrast, festive color grading."
+    
+    ["6"]="Process flowchart illustration, 1920x1080px. Step-by-step visual guide: Initial contact (phone icon) → Consultation (meeting icon) → Contract signing (document icon) → Preparation (checklist icon) → Performance (stage icon) → Follow-up (feedback icon). Clean modern infographic style, connected with flowing arrows, professional color scheme, clear icons, instructional design, high usability."
+    
+    ["8"]="Event timeline illustration, 1920x1080px. Five circular vignettes showing: ceremony (soft natural light), cocktail hour (elegant gathering), dinner (warm intimate), dance party (energetic lights), finale (spectacular moment). Live music impact icons for each. Circular composition, varied lighting moods, cohesive color story, clear visual narrative, professional event documentation style."
+    
+    ["9"]="Romantic soft-focus illustration, 1920x1080px, warm color palette. Intimate wedding reception with elegant band playing acoustic set. Soft Edison bulb string lights, candlelit tables, rose gold accents. Guests in semi-formal attire enjoying peaceful moment. Shallow depth of field, dreamy bokeh, pastel tones (blush, ivory, champagne), gentle golden hour lighting, serene composition."
+    
+    ["10"]="Conceptual science illustration, 1920x1080px. Stylized human brain with flowing colorful musical notes entering and transforming into positive emotional waves. Scientific aesthetic meets artistic creativity. Calming color palette (blues, purples, soft greens), neurological visualization, modern medical illustration style, clean educational design, positive energy visualization."
+    
+    ["11"]="Professional studio scene illustration, 1920x1080px. Focused musician at modern workstation with dual monitors displaying music software. Floating translucent musical notes and wedding-themed icons (rings, flowers, hearts) around the workspace. Organized studio with instruments on walls. Clean modern aesthetic, cool blue lighting with warm desk lamp, technical precision, detailed interface elements."
+    
+    ["12"]="Technical diagram illustration, 1920x1080px. Detailed stage setup blueprint showing: speaker placement, mixer position, microphone types, monitor configuration, lighting rig, cable management. Professional technical drawing style with labels and measurements. Clean blueprint aesthetic, technical precision, educational diagram, professional audio engineering visualization, organized layout."
+    
+    ["13"]="High-energy product launch illustration, 1920x1080px. Modern stage with live band amplifying excitement. Spotlit product display center stage. Enthusiastic audience with phones recording. Dynamic LED wall displaying brand elements. Contemporary corporate aesthetic, powerful stage lighting (cyan, magenta spotlights), energetic composition, tech-forward design, professional photography style."
+    
+    ["14"]="Infographic illustration, 1920x1080px. Checklist design with crossed-out common mistakes (red X marks) and correct choices (green checkmarks). Visual icons for each point. Clean modern layout, instructional style. Color-coded sections, clear typography, professional educational design, organized grid composition, high readability, graphic design aesthetic."
+    
+    ["15"]="Testimonial collage illustration, 1920x1080px. Grid layout with diverse client photos, speech bubbles with positive quotes, live band performing in background. Authentic happy moments from real events. Warm trustworthy color scheme, professional testimonial design, varied event types shown, relatable scenarios, social proof visualization, modern marketing aesthetic."
+    
+    ["16"]="Contemporary vibrant illustration, 1920x1080px. Modern XV años celebration with energetic live band. Teen guests dancing enthusiastically, mix of formal dresses and stylish casual wear. Stage with professional LED panels displaying abstract patterns. Colorful balloon installations, neon accents (pink, electric blue, mint green). Dynamic wide-angle composition, high energy, youthful atmosphere, sharp details."
+    
+    ["17"]="Luxury illustration, 1920x1080px. Five-star hotel ballroom with versatile band in elegant setup. Crystal chandeliers, marble columns, refined guests in formal attire. Band playing mix of jazz and contemporary. Sophisticated warm lighting, rich color palette (deep burgundy, gold, cream), elegant composition, high-class ambience, architectural details, photorealistic rendering."
+    
+    ["18"]="Fashion-forward illustration, 1920x1080px. Band members in coordinated stylish outfits (modern formal, matching color scheme). Focus on visual presentation alongside instruments. Professional fashion photography lighting, studio-quality setup. Stylish contemporary aesthetic, attention to wardrobe details, professional presentation, elegant color coordination, high-fashion meets music performance."
+    
+    ["19"]="Ethereal romantic illustration, 1920x1080px. Couple's first dance in spotlight, elegant ballroom. Magical atmosphere with floating golden musical notes forming a spiral around them. Soft purple and blue uplighting, crystal chandelier overhead. Formal attire, emotional moment. Dreamy composition, selective focus, fairy-tale aesthetic, warm glow, cinematic lighting."
+    
+    ["20"]="Traditional festive illustration, 1920x1080px. Mexican Christmas posada with live musicians playing traditional instruments (guitarrón, vihuela, trumpet). Colorful papel picado banners, illuminated clay star piñatas, warm string lights. Diverse crowd in festive attire enjoying celebration. Warm orange and red tones, cultural authenticity, joyful composition, detailed traditional elements."
+    
+    ["21"]="Corporate team-building illustration, 1920x1080px. Interactive performance with live band engaging participants. Casual corporate setting, employees participating in music activities. Fun professional atmosphere, collaborative vibe. Bright natural lighting, energetic color scheme (vibrant blue, orange, green), dynamic angles, authentic workplace aesthetic, diverse participants."
+    
+    ["22"]="Dual scene illustration, 1920x1080px. Left: Energetic live band with enthusiastic dancing crowd. Right: Digital jukebox with passive standing guests. Clear emotional contrast. Modern event venue, split lighting (warm for band side, cool for jukebox side). Storytelling composition, psychological impact visualization, relatable scenario, professional event photography aesthetic."
+    
+    ["23"]="Vision board illustration, 1920x1080px. Futuristic 2026 events collage with live music highlights. Modern holographic design elements, inspirational quotes, upcoming trends visualization. Forward-thinking aesthetic, innovative color palette (electric blue, neon accents, metallics), inspiring composition, aspirational mood, contemporary graphic design, motivational visual storytelling."
+    

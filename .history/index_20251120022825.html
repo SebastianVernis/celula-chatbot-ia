@@ -41,9 +41,6 @@
     <link rel="preconnect" href="https://www.youtube.com">
     <link rel="preconnect" href="https://i.ytimg.com">
 
-    <!-- Preload de LCP image (logo hero) -->
-    <link rel="preload" as="image" href="assets/images/logo-blanco.webp" type="image/webp">
-
     <!-- Google Fonts con display=swap para evitar FOIT -->
     <link href="https://fonts.googleapis.com/css2?family=Lobster:wght@400&family=Open+Sans:wght@400;600;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
 
@@ -80,14 +77,9 @@
     <section class="hero-section" id="hero">
 
         <div class="hero-content fade-in">
-            <picture>
-                <source srcset="assets/images/logo-blanco.webp" type="image/webp">
-                <img src="assets/images/logo-blanco.png"
-                     alt="Logo Grupo Musical Versátil La Célula"
-                     class="hero-logo"
-                     width="390"
-                     height="220">
-            </picture>
+            <img src="assets/images/logo-blanco.png"
+                 alt="Logo Grupo Musical Versátil La Célula"
+                 class="hero-logo">
 
             <h1 class="hero-title">Grupo Musical Versátil La Célula</h1>
 
@@ -560,11 +552,11 @@
     </noscript>
 
     <!-- JavaScript para navegación y galería -->
-    <script src="js/site-functionality.min.js?v=2.6" defer></script>
-    <script src="js/navigation.min.js?v=2.6" defer></script>
-    <script src="js/youtube-carousel.min.js?v=2.6" defer></script>
-    <script src="js/gallery-dynamic.min.js?v=2.6" defer></script>
-    <script src="js/optimizations.min.js?v=2.6" defer></script>
+    <script src="js/site-functionality.min.js?v=2.3"></script>
+    <script src="js/navigation.min.js?v=2.3"></script>
+    <script src="js/youtube-carousel.min.js?v=2.3"></script>
+    <script src="js/gallery-dynamic.min.js?v=2.3"></script>
+    <script src="js/optimizations.min.js?v=2.3"></script>
 
     <!-- Chatbot La Célula -->
     <div id="celula-chatbot-container" class="celula-chatbot-container">
@@ -1023,8 +1015,158 @@
     </style>
 
     <!-- Script de inicialización del chatbot -->
-    <script src="js/chatbot.js" defer></script>
-    <script src="public/forms/web3forms-chatbot.js" defer></script>
+    <script src="js/chatbot.js"></script>
+    <script src="public/forms/web3forms-chatbot.js"></script>
+
+</body>
+</html>
+            background-color: var(--chatbot-dark-bg);
+        }
+
+        .user-message, .bot-message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: var(--chatbot-border-radius);
+            font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-message {
+            background-color: var(--chatbot-secondary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background-color: var(--chatbot-light-bg);
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .bot-message a {
+            color: #6dc0ff;
+            text-decoration: underline;
+        }
+
+        .bot-message strong {
+            font-weight: 700;
+            color: #ffcc00;
+        }
+
+        .chat-input-area {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #555;
+            gap: 10px;
+            background-color: var(--chatbot-darker-bg);
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background-color: var(--chatbot-dark-bg);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            resize: none;
+            font-family: var(--chatbot-font);
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        #user-input::placeholder {
+            color: #aaa;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--chatbot-secondary);
+            color: white;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .send-btn:hover {
+            background-color: var(--chatbot-primary);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            background-color: var(--chatbot-light-bg);
+            color: white;
+            padding: 12px 15px;
+            border-radius: var(--chatbot-border-radius);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .typing-indicator span {
+            height: 10px;
+            width: 10px;
+            float: left;
+            margin: 0 1px;
+            background-color: var(--chatbot-secondary);
+            display: block;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0px); }
+            28% { transform: translateY(-5px); }
+            44% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 600px) {
+            .celula-chatbot-container {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .lead-form, .chat-window-container {
+                width: 90vw;
+                right: -10px;
+            }
+
+            .chatbot-tooltip {
+                display: none;
+            }
+
+            .chat-window-container {
+                height: 70vh;
+            }
+        }
+    </style>
+
+    <!-- Script de inicialización del chatbot -->
+    <script src="js/chatbot.js"></script>
+    <script src="public/forms/web3forms-chatbot.js"></script>
 
 </body>
 </html>
