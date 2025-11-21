@@ -49,7 +49,7 @@ html, body {
     --primary-text: #ffffff;
     --secondary-text: #e0e0e0;
     --content-text: #ffffff;
-    --accent-yellow: #fbe649;
+    --accent-yellow: #ffed4e;
     --button-blue: #3d9be9;
     --button-blue-hover: #2b689c;
     --card-bg: rgba(0, 0, 0, 0.8);
@@ -596,7 +596,7 @@ html, body {
 }
 
 .btn-secondary:hover {
-    background: #e6d142;
+    background: #ffdb3d;
     transform: translateY(-2px);
 }
 
