@@ -1,157 +1,217 @@
-# Sitio Web - Grupo Musical Versátil La Célula
+# Grupo Musical Versátil La Célula - Sitio Web
 
-## Descripción
+Sitio web oficial del Grupo Musical Versátil La Célula, una banda versátil profesional en México.
 
-Este es el sitio web completo y fusionado de **Grupo Musical Versátil La Célula**, que incluye todas las funcionalidades, páginas, assets y configuraciones necesarias para su despliegue en Cloudflare Pages.
+## 🎵 Características
 
-## Estructura del Proyecto
+- **Sitio estático optimizado** con HTML, CSS y JavaScript
+- **Blog** con sistema de paginación
+- **AI Chatbot** con Google Gemini
+- **Sistema de cotizaciones** integrado
+- **Galería multimedia** con fotos y videos
+- **Formularios de contacto** con Resend API
+- **PWA** (Progressive Web App)
+- **Optimizado para rendimiento** (Core Web Vitals)
+
+## 🚀 Inicio Rápido
+
+### Prerequisitos
+
+- Node.js 18+
+- npm o yarn
+- Cuenta en Cloudflare Pages
+- API Keys: Resend (email), Gemini (chatbot)
+
+### Instalación
+
+```bash
+# Clonar repositorio
+git clone https://github.com/tu-usuario/celula-site.git
+cd celula-site
+
+# Instalar dependencias
+npm install
+
+# Instalar dependencias de Functions
+cd functions && npm install && cd ..
+```
+
+### Desarrollo Local
+
+```bash
+# Iniciar servidor de desarrollo con Cloudflare Functions
+npm run dev
+
+# El sitio estará disponible en http://localhost:8788
+```
+
+### Build y Minificación
+
+```bash
+# Minificar todos los archivos JS y CSS
+npm run minify
+
+# Optimizar imágenes a WebP
+npm run optimize:images
+
+# Optimizar videos
+npm run optimize:video
+```
+
+### Deploy
+
+```bash
+# Deploy a Cloudflare Pages
+npm run deploy
+```
+
+## 📁 Estructura del Proyecto
 
 ```
 celula-site/
 ├── index.html              # Página principal
-├── blog.html               # Página del blog
-├── cotizador.html          # Página del cotizador
-├── manifest.json           # Manifiesto PWA
-├── robots.txt              # Configuración para bots
-├── sitemap.xml             # Mapa del sitio
-├── sw.js                   # Service Worker
-├── wrangler.toml           # Configuración de Cloudflare
-│
-├── css/
-│   └── styles.css          # Estilos principales
-│
-├── js/
-│   ├── navigation.js       # Sistema de navegación
-│   ├── video-background.js # Video de fondo persistente
-│   ├── site-functionality.js # Funcionalidad general
-│   ├── youtube-carousel.js # Carrusel de videos
-│   ├── gallery-dynamic.js  # Galería dinámica
-│   ├── optimizations.js    # Optimizaciones de rendimiento
-│   ├── form-handler.js     # Manejo de formularios
-│   └── blog-pagination.js  # Paginación del blog
-│
-├── chatbot.js              # Lógica del chatbot
-├── chatbot.css             # Estilos del chatbot
-├── web3forms.js            # Integración Web3Forms
-├── web3forms-chatbot.js    # Web3Forms para chatbot
-├── web3forms-cotizador.js  # Web3Forms para cotizador
-│
-├── assets/
-│   ├── data/
-│   │   └── youtube-videos.json  # Videos de YouTube
-```markdown
-# Sitio Web - Grupo Musical Versátil La Célula
-
-## Descripción
-
-Repositorio del sitio web estático de Grupo Musical Versátil La Célula, preparado para servir como sitio estático o desplegar en Cloudflare Pages con Functions.
-
-## Estructura del Proyecto (resumen)
-
-```
-celula-site/
-├── index.html
-├── blog.html
-├── cotizador.html
-├── manifest.json
-├── robots.txt
-├── sitemap.xml
-├── sw.js
-├── wrangler.toml
-├── css/
-├── js/
-├── assets/
-├── post/
-└── functions/
+├── blog.html               # Blog
+├── cotizador.html          # Cotizador
+├── assets/                 # Imágenes, videos, fuentes, etc.
+├── js/                     # JavaScript (source + minified)
+├── css/                    # Estilos (source + minified)
+├── functions/              # Cloudflare Functions (serverless)
+│   └── api/                # Endpoints API
+├── post/                   # Artículos del blog
+├── docs/                   # Documentación
+├── scripts/                # Scripts de utilidad
+└── archived/               # Archivos archivados
 ```
 
-Hechos rápidos:
-- Posts de blog: archivos en `post/` (post-0.html ... post-32.html)
-- Galería: `assets/gallery/` (varias imágenes banda-*.jpg / .webp)
-- Iconos: `assets/icons/`
+Ver [`docs/ESTRUCTURA-DIRECTORIOS.md`](docs/ESTRUCTURA-DIRECTORIOS.md) para más detalles.
 
-## Validación realizada (resumen)
+## 📚 Documentación
 
-Hice un barrido automático para detectar rutas locales rotas y errores de sintaxis en JS.
+- [**AGENTS.md**](docs/AGENTS.md) - Guía para AI assistants
+- [**DEPLOY.md**](docs/DEPLOY.md) - Guía de deployment
+- [**ESTRUCTURA-DIRECTORIOS.md**](docs/ESTRUCTURA-DIRECTORIOS.md) - Estructura del proyecto
+- [**ESTRUCTURA-PROYECTO.md**](docs/ESTRUCTURA-PROYECTO.md) - Documentación técnica
+- [**API-EMAIL-DOCUMENTATION.md**](docs/API-EMAIL-DOCUMENTATION.md) - API de email
+- [**CLOUDFLARE_PAGES_SETUP.md**](docs/CLOUDFLARE_PAGES_SETUP.md) - Setup de Cloudflare
+- [**REPORTE-FINAL-OPTIMIZACIONES.md**](docs/REPORTE-FINAL-OPTIMIZACIONES.md) - Optimizaciones
 
-- Refs locales escaneadas: 770
-- Refs locales faltantes detectadas (resolviendo rutas relativas desde cada archivo): 130
-- Comprobación de sintaxis JS (node --check) sobre los archivos .js del repo: PASS (no se reportaron errores por node --check)
+## 🛠️ Scripts Disponibles
 
-Notas sobre los "faltantes":
-- Muchos de los refs marcados como faltantes son placeholders de plantillas (por ejemplo `${post.image}`, `$1`) o referencias a rutas que sólo existen en el sitio original/export (por ejemplo `contacto.html`, `cotizador-clean.html`, o imágenes dentro de `img/blog/`).
-- También se detectaron enlaces a archivos que en este repo están en una ubicación diferente (por ejemplo `../contacto.html` referido desde `post/` cuando el archivo real podría estar en la raíz).
-
-Acciones recomendadas para arreglar rutas rotas:
-1. Reemplazar placeholders de plantillas (${...}, $1) por valores reales o añadir un proceso de build que los genere.
-2. Revisar referencias a `contacto.html` y `cotizador-clean.html`: crear los archivos o actualizar las referencias a `cotizador.html`/`contacto` reales si aplica.
-3. Mover o copiar las imágenes referenciadas en `./img/blog/` a la ruta esperada (`img/blog/`) o corregir los posts para apuntar a `assets/gallery/`.
-4. Ejecutar una comprobación manual después de cada cambio (ver comandos sugeridos más abajo).
-
-## Resultados importantes encontrados (ejemplos)
-- Varios posts en `post/` contienen referencias a `post/post-XX.html` lo que produce rutas duplicadas (`post/post/post-XX.html`) cuando se resuelven desde la propia carpeta `post/`.
-- `blog.html` y algunos scripts esperan `contacto.html` en la raíz, pero ese archivo no existe.
-- Plantillas y scripts incluyen placeholders (`${post.image}`, `${post.url}`, `${imageData.src}`, `${this.options.fallbackImage}`, `$1`) que deben ser resueltos por el sistema de build o reemplazados manualmente.
-
-## Cómo ejecutar comprobaciones locales (rápido)
-
-1) Levantar un servidor estático para ver el sitio:
+### npm scripts
 
 ```bash
-python3 -m http.server 8000
-# o
-npx http-server
+npm run dev           # Servidor de desarrollo
+npm run build         # Build para producción
+npm run deploy        # Deploy a Cloudflare Pages
+npm run minify        # Minificar JS y CSS
+npm run optimize:images    # Optimizar imágenes
+npm run optimize:video     # Optimizar videos
 ```
 
-2) Comprobar sintaxis JS en todos los archivos del repo:
+### Bash scripts (en `/scripts/`)
 
 ```bash
-for f in $(find . -name '*.js'); do echo "Checking $f"; node --check "$f" || true; done
+bash scripts/minify-all.sh              # Minificar todo
+bash scripts/convert-images-to-webp.sh  # Convertir imágenes
+bash scripts/optimize-video.sh          # Optimizar video
+bash scripts/generate-blog-images.sh    # Generar imágenes blog
+bash scripts/cleanup.sh                 # Limpiar archivos temporales
+bash scripts/cleanup.sh --deep          # Limpieza profunda
 ```
 
-3) Volver a escanear rutas locales desde la raíz del repo (si cambiaste archivos):
+## 🔧 Configuración
+
+### Variables de Entorno
+
+Crear archivo `.env` en la raíz con:
+
+```env
+RESEND_API_KEY=tu_api_key_de_resend
+CONTACT_EMAIL=email@ejemplo.com
+GEMINI_API_KEY=tu_api_key_de_gemini
+```
+
+También configurar en Cloudflare Pages Dashboard > Settings > Environment Variables.
+
+### Cloudflare Pages
+
+- **Build command**: `npm run build`
+- **Build output directory**: `.`
+- **Node version**: 18+
+
+## 🎨 Personalización
+
+### Agregar un Artículo al Blog
+
+1. Crear archivo en `/post/post-XX.html`
+2. Agregar entrada en `assets/data/blog-posts.json`
+3. Generar imágenes con `bash scripts/generate-blog-images.sh`
+
+### Modificar Estilos
+
+1. Editar `css/styles.css`
+2. Minificar con `npm run minify`
+3. Probar con `npm run dev`
+
+### Modificar JavaScript
+
+1. Editar archivos en `/js/` (ej: `chatbot.js`)
+2. Minificar con `npm run minify`
+3. Probar con `npm run dev`
+
+## 🚦 Testing
 
 ```bash
-python3 - <<'PY'
-import re,os
-pattern = re.compile(r'''(?:href|src|srcset)=(["'])([^"']+)\1|url\(([^)]+)\)|@import\s+(["'])([^"']+)\4''', re.I)
-missing=[]
-for root,dirs,files in os.walk('.'):
-   for fn in files:
-      if fn.endswith(('.html','.js','.css')):
-         p=os.path.join(root,fn)
-         s=open(p,encoding='utf-8',errors='ignore').read()
-         for m in pattern.finditer(s):
-            ref=(m.group(2) or m.group(3) or m.group(5) or '').strip().strip('"\'')
-            if not ref: continue
-            if ref.startswith(('http://','https://','//','mailto:','tel:','data:','javascript:')): continue
-            rr=ref.split('#')[0].split('?')[0]
-            if rr.startswith('/'):
-               resolved='.'+rr
-            else:
-               resolved=os.path.normpath(os.path.join(os.path.dirname(p), rr))
-            if not os.path.exists(resolved):
-               missing.append((p,ref,resolved))
-print('MISSING',len(missing))
-for src,ref,res in missing[:200]:
-   print(src,'->',ref,'->',res)
-PY
+# Testing local con Wrangler
+npm run dev
+
+# Testing de API endpoint
+curl -X POST http://localhost:8788/api/send-email \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"test@test.com","message":"Test"}'
 ```
 
-## Siguientes pasos sugeridos
+## 📊 Optimización
 
-1. Corregir las referencias rotas más importantes: `contacto.html`, `cotizador-clean.html`, y las rutas de `img/blog/` (mover imágenes o actualizar rutas en posts).
-2. Añadir un pequeño build script que reemplace placeholders si los posts son generados desde plantillas.
-3. Considerar ejecutar una validación HTML (por ejemplo, validators o el validador de W3C) antes del deploy.
+El sitio está optimizado para Core Web Vitals:
 
-## Notas de despliegue
+- ✅ WebP images
+- ✅ Responsive images
+- ✅ Lazy loading
+- ✅ Minified CSS/JS
+- ✅ Self-hosted fonts
+- ✅ Critical CSS inlining
+- ✅ Deferred JS loading
 
-- Para deploy en Cloudflare Pages, configura `wrangler.toml` y las variables necesarias para las Functions.
-- Si usas el chatbot con IA, añade `OPENAI_API_KEY` en las variables del entorno de Pages.
+Ver [`docs/REPORTE-FINAL-OPTIMIZACIONES.md`](docs/REPORTE-FINAL-OPTIMIZACIONES.md) para detalles.
+
+## 🔒 Seguridad
+
+- HTTPS-only
+- Content Security Policy
+- Input sanitization
+- Rate limiting en APIs
+- Environment variables para secrets
+- No credentials en código
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crear branch (`git checkout -b feature/mejora`)
+3. Commit cambios (`git commit -m 'Agregar mejora'`)
+4. Push al branch (`git push origin feature/mejora`)
+5. Abrir Pull Request
+
+## 📄 Licencia
+
+© 2024 Grupo Musical Versátil La Célula. Todos los derechos reservados.
+
+## 📞 Contacto
+
+- **Web**: https://grupomusicalcelula.pages.dev
+- **Email**: contacto@grupomusicalcelula.com
+- **WhatsApp**: [Contactar](https://wa.me/...)
 
 ---
 
-Si quieres, aplico ahora cambios concretos: por ejemplo crear un `contacto.html` básico, corregir referencias a `post/post-*.html` dentro de `post/` o mover las imágenes faltantes a `img/blog/`. Dime cuál prefieres y lo hago.
-
-```
-- Configurado en `web3forms.js`
+**Hecho con ❤️ por el equipo de La Célula**
