@@ -312,9 +312,6 @@ html, body {
     margin: 0 auto 20px auto;
     display: block;
     object-fit: contain;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .hero-title {
