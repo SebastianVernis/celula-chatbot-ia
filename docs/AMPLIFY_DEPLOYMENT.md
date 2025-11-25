@@ -74,26 +74,84 @@ applications:
 ## 🔐 Migración de Secretos
 
 ### Secretos Actuales (Cloudflare)
-- `RESEND_API_KEY` - Para envío de emails
-- `GEMINI_API_KEY` - Para funcionalidad de chatbot
+- `RESEND_API_KEY` - Para envío de emails (API de Resend)
+- `GEMINI_API_KEY` - Para funcionalidad de chatbot (Google Gemini AI)
 
-### Configurar en AWS Amplify
+### ⚠️ IMPORTANTE: Configuración de Secretos en AWS Amplify
 
-#### Método 1: AWS Amplify Console
-1. **Ir a Environment Variables**
-   - En AWS Amplify Console
-   - Seleccionar la aplicación
-   - Ir a: App settings > Environment variables
+**Las variables de entorno DEBEN configurarse en AWS Amplify Console para que las funciones serverless funcionen correctamente.**
 
-2. **Agregar Variables**
-   ```
-   RESEND_API_KEY = [tu-clave-resend]
-   GEMINI_API_KEY = [tu-clave-gemini]
-   ```
+#### Método 1: AWS Amplify Console (Recomendado)
+
+1. **Acceder a Environment Variables**
+   - Ir a AWS Amplify Console: https://console.aws.amazon.com/amplify/
+   - Seleccionar tu aplicación
+   - En el menú lateral: **App settings > Environment variables**
+
+2. **Agregar Variables de Entorno**
+   
+   Hacer clic en "Add environment variable" y agregar:
+   
+   | Variable | Valor | Tipo |
+   |----------|-------|------|
+   | `RESEND_API_KEY` | `re_xxxxxxxxxxxxx` | Secret |
+   | `GEMINI_API_KEY` | `AIzaSyxxxxxxxxxx` | Secret |
+   | `CONTACT_EMAIL` | `tu-email@ejemplo.com` | Plain text |
 
 3. **Marcar como Secretas**
-   - Activar opción "Secret" para cada variable
+   - ✅ Activar opción **"Secret"** para `RESEND_API_KEY` y `GEMINI_API_KEY`
    - Esto las encriptará automáticamente
+   - Las variables secretas no serán visibles en logs ni en la consola
+
+4. **Aplicar Cambios**
+   - Hacer clic en **"Save"**
+   - Las variables estarán disponibles en el siguiente build
+   - **Importante**: Hacer un nuevo deploy para que las funciones accedan a las variables
+
+5. **Verificar Configuración**
+   - En el build log, deberías ver:
+     ```
+     RESEND_API_KEY is set: YES
+     GEMINI_API_KEY is set: YES
+     ```
+   - Si ves "NO", las variables no están configuradas correctamente
+
+#### Cómo Obtener las API Keys
+
+**RESEND_API_KEY:**
+1. Ir a https://resend.com/
+2. Crear cuenta o iniciar sesión
+3. Ir a "API Keys" en el dashboard
+4. Crear nueva API key
+5. Copiar la key (empieza con `re_`)
+
+**GEMINI_API_KEY:**
+1. Ir a https://makersuite.google.com/app/apikey
+2. Iniciar sesión con cuenta de Google
+3. Crear nueva API key
+4. Copiar la key (empieza con `AIzaSy`)
+
+#### Acceso desde Funciones Serverless
+
+Las funciones en `/functions/api/` acceden a las variables así:
+
+```javascript
+// En functions/api/send-email.js y functions/api/chatbot.js
+export async function onRequest(context) {
+  // Las variables están disponibles en context.env
+  const resendApiKey = context.env.RESEND_API_KEY;
+  const geminiApiKey = context.env.GEMINI_API_KEY;
+  
+  if (!resendApiKey) {
+    console.error('❌ RESEND_API_KEY no configurada');
+    // Retornar error
+  }
+  
+  // Usar las keys...
+}
+```
+
+**Nota:** Las variables de entorno configuradas en Amplify Console están automáticamente disponibles en `context.env` para las funciones serverless.
 
 #### Método 2: AWS Secrets Manager (Recomendado para producción)
 1. **Crear Secretos en AWS Secrets Manager**
@@ -239,35 +297,160 @@ npm run deploy:amplify
 
 ### Problema: Build Falla
 
+**Síntomas:**
+- Build se detiene en fase preBuild o build
+- Errores de dependencias
+
 **Solución:**
 ```bash
 # Verificar logs en Amplify Console
 # Revisar que todas las dependencias estén en package.json
 # Verificar que los paths en amplify.yml sean correctos
+
+# Probar build localmente
+npm run build:amplify
 ```
 
-### Problema: Video Background No Funciona
+### Problema: Video Background No Se Ve en Posts
+
+**Síntomas:**
+- Video background funciona en index.html pero no en posts
+- Solo se ve imagen de fallback
+- Console muestra errores 404 para archivos de video
 
 **Solución:**
-```bash
-# Verificar que los archivos de video estén en dist/assets/video/
-# Comprobar rutas relativas en posts
-npm run test:video-paths
-```
+1. **Verificar que los archivos de video estén en el build:**
+   ```bash
+   # Después del build, verificar:
+   ls -la dist/assets/video/
+   # Debe mostrar: background-1080p.webm, mobile-background.webm
+   ```
+
+2. **Verificar rutas relativas en posts:**
+   - Los posts están en `/post/` subdirectorio
+   - Las rutas deben usar `../` para subir un nivel
+   - El script `video-background.js` tiene función `normalizePath()` que maneja esto
+
+3. **Verificar en browser console:**
+   - Abrir DevTools (F12)
+   - Ir a Console
+   - Buscar mensajes: "🎬 Inicializando video background..."
+   - Verificar que no haya errores 404
+
+4. **Probar rutas de video:**
+   ```bash
+   npm run test:video-paths
+   ```
+
+### Problema: Chatbot No Responde
+
+**Síntomas:**
+- Chatbot se abre pero no responde a mensajes
+- Error: "API Key no configurada"
+- Console muestra: "GEMINI_API_KEY no configurada"
+
+**Solución:**
+1. **Verificar variable de entorno en Amplify:**
+   - Ir a: App settings > Environment variables
+   - Verificar que `GEMINI_API_KEY` esté configurada
+   - Debe estar marcada como "Secret"
+
+2. **Verificar en build logs:**
+   ```
+   GEMINI_API_KEY is set: YES
+   ```
+   Si dice "NO", la variable no está configurada
+
+3. **Hacer nuevo deploy:**
+   - Después de agregar variables, hacer nuevo deploy
+   - Las funciones necesitan reiniciarse para acceder a las nuevas variables
+
+4. **Verificar en browser console:**
+   - Abrir DevTools > Console
+   - Buscar: "🤖 Chatbot API called"
+   - Verificar: "🔑 GEMINI_API_KEY available: true"
+
+### Problema: Emails No Se Envían
+
+**Síntomas:**
+- Formulario de contacto no envía emails
+- Chatbot no envía resúmenes de conversación
+- Error: "Configuración de email no disponible"
+- Console muestra: "RESEND_API_KEY no configurada"
+
+**Solución:**
+1. **Verificar variable de entorno en Amplify:**
+   - Ir a: App settings > Environment variables
+   - Verificar que `RESEND_API_KEY` esté configurada
+   - Debe estar marcada como "Secret"
+   - Formato correcto: `re_xxxxxxxxxxxxx`
+
+2. **Verificar en build logs:**
+   ```
+   RESEND_API_KEY is set: YES
+   ```
+
+3. **Verificar API key en Resend:**
+   - Ir a https://resend.com/api-keys
+   - Verificar que la key esté activa
+   - Verificar límites de envío
+
+4. **Verificar en browser console:**
+   - Abrir DevTools > Console
+   - Buscar: "📧 Send-email API called"
+   - Verificar: "🔑 RESEND_API_KEY available: true"
+
+5. **Probar endpoint directamente:**
+   ```bash
+   curl -X POST https://tu-app.amplifyapp.com/api/send-email \
+     -H "Content-Type: application/json" \
+     -d '{"type":"chatbot_lead","leadData":{"name":"Test","email":"test@test.com","phone":"1234567890"}}'
+   ```
 
 ### Problema: Functions No Funcionan
 
+**Síntomas:**
+- Endpoints /api/* retornan 404 o 500
+- Funciones no se ejecutan
+
 **Solución:**
-1. Verificar que las variables de entorno estén configuradas
-2. Revisar logs de Lambda functions en AWS Console
-3. Validar que las rutas en redirects estén correctas
+1. **Verificar que las funciones estén en el build:**
+   ```bash
+   ls -la dist/functions/api/
+   # Debe mostrar: send-email.js, chatbot.js
+   ```
+
+2. **Verificar redirects en amplify.yml:**
+   - Deben estar configurados los redirects para /api/*
+
+3. **Revisar logs de funciones:**
+   - En Amplify Console > Monitoring
+   - Ver logs de CloudWatch
 
 ### Problema: Secretos No Accesibles
 
+**Síntomas:**
+- Variables de entorno retornan undefined
+- context.env no contiene las variables
+
 **Solución:**
-1. Verificar permisos IAM para Amplify
-2. Comprobar que los nombres de secretos sean correctos
-3. Revisar región de AWS Secrets Manager
+1. **Verificar que las variables estén configuradas:**
+   - AWS Amplify Console > Environment variables
+   - Deben estar en la rama correcta (main, develop, etc.)
+
+2. **Hacer redeploy:**
+   - Las variables solo están disponibles después de un nuevo deploy
+   - Ir a: Amplify Console > Redeploy this version
+
+3. **Verificar nombres exactos:**
+   - Los nombres deben coincidir exactamente
+   - `RESEND_API_KEY` (no `RESEND_KEY` ni `RESEND_API`)
+   - `GEMINI_API_KEY` (no `GEMINI_KEY` ni `GOOGLE_API_KEY`)
+
+4. **Verificar en código:**
+   ```javascript
+   console.log('Available env keys:', Object.keys(context.env || {}));
+   ```
 
 ## 📊 Monitoreo y Métricas
 

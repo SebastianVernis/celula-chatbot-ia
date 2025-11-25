@@ -92,8 +92,12 @@ export async function onRequest(context) {
     // Obtener el cuerpo de la solicitud
     const requestData = await context.request.json();
     
+    console.log('🤖 Chatbot API called');
+    console.log('📊 History length:', requestData?.history?.length || 0);
+    
     // Verificar que tenemos datos válidos
     if (!requestData || !requestData.history) {
+      console.error('❌ Invalid request data');
       return new Response(JSON.stringify({ error: "Datos inválidos" }), {
         status: 400,
         headers: {
@@ -103,11 +107,17 @@ export async function onRequest(context) {
       });
     }
 
-    // Obtener la clave API desde Cloudflare Secret
+    // Obtener la clave API desde Amplify Environment Variables
     const apiKey = context.env.GEMINI_API_KEY;
     
+    console.log('🔑 GEMINI_API_KEY available:', !!apiKey);
+    
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "API Key no configurada" }), {
+      console.error('❌ GEMINI_API_KEY no configurada en context.env');
+      console.error('Available env keys:', Object.keys(context.env || {}));
+      return new Response(JSON.stringify({ 
+        error: "API Key no configurada. Por favor, configura GEMINI_API_KEY en AWS Amplify Environment Variables." 
+      }), {
         status: 500,
         headers: {
           "Content-Type": "application/json",

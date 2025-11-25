@@ -10,12 +10,17 @@ applications:
             - npm --version
             - echo "Installing dependencies..."
             - npm ci
+            - echo "Installing functions dependencies..."
+            - cd functions && npm ci && cd ..
             - echo "Pre-build validation..."
             - npm run validate:html || echo "HTML validation skipped - no script found"
-            - npm run lint || echo "Linting skipped - no script found"
+            - npm run lint:js || echo "Linting skipped - no script found"
         build:
           commands:
             - echo "Starting build phase..."
+            - echo "Environment check..."
+            - echo "RESEND_API_KEY is set:" $(if [ -n "$RESEND_API_KEY" ]; then echo "YES"; else echo "NO"; fi)
+            - echo "GEMINI_API_KEY is set:" $(if [ -n "$GEMINI_API_KEY" ]; then echo "YES"; else echo "NO"; fi)
             - echo "Copying static assets..."
             - mkdir -p dist
             - cp -r assets dist/
@@ -35,6 +40,7 @@ applications:
             - echo "Post-build phase..."
             - echo "Running final validations..."
             - ls -la dist/
+            - ls -la dist/functions/
             - echo "Deployment ready"
       artifacts:
         baseDirectory: dist
@@ -43,6 +49,7 @@ applications:
       cache:
         paths:
           - node_modules/**/*
+          - functions/node_modules/**/*
     customHeaders:
       - pattern: '**/*'
         headers:

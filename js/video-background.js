@@ -504,6 +504,9 @@ destroy() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎬 Inicializando video background...');
+    console.log('📍 Ruta actual:', window.location.pathname);
+
     const videoBgConfig = {
         videoBaseName: 'assets/video/background', // Base name for the video files
         fallbackImage: 'assets/images/hero-background.webp',
@@ -514,8 +517,12 @@ document.addEventListener('DOMContentLoaded', function() {
         loop: true
     };
 
-    if (!document.querySelector('.persistent-video-container')) {
+    const existingContainer = document.querySelector('.persistent-video-container');
+    if (!existingContainer) {
+        console.log('✅ Creando nuevo contenedor de video background');
         window.CelulaVideoBackground = new PersistentVideoBackground(videoBgConfig);
+    } else {
+        console.log('⚠️ Contenedor de video ya existe, omitiendo inicialización');
     }
 
     window.PersistentVideoBackgroundClass = PersistentVideoBackground;
