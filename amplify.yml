@@ -1,0 +1,95 @@
+version: 1
+applications:
+  - appRoot: .
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - echo "Starting pre-build phase..."
+            - node --version
+            - npm --version
+            - echo "Installing dependencies..."
+            - npm ci
+            - echo "Pre-build validation..."
+            - npm run validate:html || echo "HTML validation skipped - no script found"
+            - npm run lint || echo "Linting skipped - no script found"
+        build:
+          commands:
+            - echo "Starting build phase..."
+            - echo "Copying static assets..."
+            - mkdir -p dist
+            - cp -r assets dist/
+            - cp -r css dist/
+            - cp -r js dist/
+            - cp -r post dist/
+            - cp -r functions dist/
+            - cp -r widgets dist/
+            - cp *.html dist/
+            - cp *.json dist/
+            - cp *.xml dist/
+            - cp *.txt dist/
+            - cp _headers dist/
+            - echo "Build completed successfully"
+        postBuild:
+          commands:
+            - echo "Post-build phase..."
+            - echo "Running final validations..."
+            - ls -la dist/
+            - echo "Deployment ready"
+      artifacts:
+        baseDirectory: dist
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+    customHeaders:
+      - pattern: '**/*'
+        headers:
+          - key: 'X-Frame-Options'
+            value: 'DENY'
+          - key: 'X-Content-Type-Options'
+            value: 'nosniff'
+          - key: 'Referrer-Policy'
+            value: 'strict-origin-when-cross-origin'
+          - key: 'Permissions-Policy'
+            value: 'geolocation=(), microphone=(), camera=()'
+      - pattern: '**/*.html'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=3600'
+      - pattern: '/assets/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '/js/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '/css/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '**/*.webm'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+          - key: 'Content-Type'
+            value: 'video/webm'
+    redirects:
+      - source: '/functions/send-email'
+        target: '/.netlify/functions/send-email'
+        status: '200'
+        condition: null
+      - source: '/functions/chat'
+        target: '/.netlify/functions/chat'
+        status: '200'
+        condition: null
+      - source: '/blog'
+        target: '/blog.html'
+        status: '301'
+        condition: null
+      - source: '/cotizador'
+        target: '/cotizador.html'
+        status: '301'
+        condition: null

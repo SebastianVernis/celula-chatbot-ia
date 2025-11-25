@@ -1,15 +1,4 @@
-/* Chatbot Styles for Grupo Musical Célula */
-:root {
-    --primary-bg: #111827;
-    --primary-text: #ffffff;
-    --secondary-text: #e0e0e0;
-    --button-blue: #3d9be9;
-    --button-blue-hover: #2b689c;
-    --card-bg: rgba(17, 24, 39, 0.8);
-    --overlay-bg: rgba(17, 24, 39, 0.4);
-    --chatbot-width: 350px;
-    --chatbot-height: 500px;
-}
+/*! Chatbot Styles for Grupo Musical Célula */:root{--primary-bg:#111827;--primary-text:#fff;--secondary-text:#e0e0e0;--button-blue:#3d9be9;--button-blue-hover:#2b689c;--card-bg:rgba(17,24,39,.8);--overlay-bg:rgba(17,24,39,.4);--chatbot-width:350px;--chatbot-height:500px}
 
 /* Chatbot Container */
 .chatbot-container {

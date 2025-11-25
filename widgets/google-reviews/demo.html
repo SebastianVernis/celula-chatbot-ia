@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo - Widget de Reseñas Google | Grupo Musical La Célula</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS del widget -->
+  <link rel="stylesheet" href="google-reviews-widget.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .demo-section {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .demo-section h2 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.75rem;
+    }
+    
+    .demo-section p {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .layout-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .layout-btn {
+      flex: 1;
+      min-width: 150px;
+      padding: 1rem 1.5rem;
+      border: 2px solid #667eea;
+      background: white;
+      color: #667eea;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .layout-btn:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .layout-btn.active {
+      background: #667eea;
+      color: white;
+    }
+    
+    .code-section {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .code-section h3 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    pre {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1.5rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    code {
+      font-family: 'Courier New', Courier, monospace;
+    }
+    
+    .info-box {
+      background: #e7f3ff;
+      border-left: 4px solid #2196f3;
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+    
+    .info-box p {
+      margin: 0;
+      color: #0d47a1;
+    }
+    
+    .info-box strong {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    footer {
+      text-align: center;
+      color: white;
+      margin-top: 3rem;
+      opacity: 0.9;
+    }
+    
+    footer a {
+      color: white;
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .demo-section {
+        padding: 1.5rem;
+      }
+      
+      .layout-btn {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <header>
+      <h1>🎵 Widget de Reseñas de Google</h1>
+      <p class="subtitle">Grupo Musical Versátil La Célula</p>
+    </header>
+    
+    <div class="demo-section">
+      <h2>Selecciona un Layout</h2>
+      <p>Prueba los diferentes estilos de visualización del widget:</p>
+      
+      <div class="layout-selector">
+        <button class="layout-btn active" onclick="changeLayout('carousel')">
+          🎠 Carousel
+        </button>
+        <button class="layout-btn" onclick="changeLayout('badge')">
+          🏅 Badge
+        </button>
+        <button class="layout-btn" onclick="changeLayout('grid')">
+          📱 Grid
+        </button>
+      </div>
+      
+      <div class="info-box">
+        <strong>💡 Nota:</strong>
+        <p>Este demo usa datos estáticos de ejemplo. Para usar reseñas reales de Google, necesitas configurar Featurable o actualizar los datos en el código.</p>
+      </div>
+      
+      <!-- Contenedor del widget -->
+      <div id="google-reviews-container"></div>
+    </div>
+    
+    <div class="demo-section code-section">
+      <h3>📝 Código de Implementación</h3>
+      <pre><code id="implementation-code">&lt;!-- Incluir CSS --&gt;
+&lt;link rel="stylesheet" href="widgets/google-reviews/google-reviews-widget.css"&gt;
+
+&lt;!-- Contenedor del widget --&gt;
+&lt;div id="google-reviews-container"&gt;&lt;/div&gt;
+
+&lt;!-- Incluir JavaScript --&gt;
+&lt;script src="widgets/google-reviews/google-reviews-widget.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', function() {
+    new GoogleReviewsWidget({
+      featurableId: 'TU_FEATURABLE_ID', // O null para datos estáticos
+      containerId: 'google-reviews-container',
+      layout: 'carousel', // 'carousel', 'badge', o 'grid'
+      maxReviews: 10,
+      autoplay: true,
+      autoplaySpeed: 5000
+    });
+  });
+&lt;/script&gt;</code></pre>
+    </div>
+    
+    <div class="demo-section">
+      <h2>🚀 Cómo empezar</h2>
+      
+      <h3 style="color: #333; margin-top: 1.5rem; margin-bottom: 0.75rem;">Opción 1: Con Featurable (Recomendado - GRATIS)</h3>
+      <ol style="line-height: 2; color: #555;">
+        <li>Regístrate en <a href="https://featurable.com" target="_blank" style="color: #667eea;">featurable.com</a></li>
+        <li>Crea un widget con tu Google Place ID</li>
+        <li>Copia tu Widget ID</li>
+        <li>Úsalo en la configuración del widget</li>
+      </ol>
+      
+      <h3 style="color: #333; margin-top: 1.5rem; margin-bottom: 0.75rem;">Opción 2: Datos Estáticos</h3>
+      <ol style="line-height: 2; color: #555;">
+        <li>Edita el método <code>loadStaticData()</code> en <code>google-reviews-widget.js</code></li>
+        <li>Agrega tus reseñas reales manualmente</li>
+        <li>No incluyas <code>featurableId</code> en la configuración</li>
+      </ol>
+      
+      <div class="info-box" style="margin-top: 1.5rem;">
+        <strong>⚠️ Limitación de Google Places API:</strong>
+        <p>La API oficial de Google solo devuelve las 5 reseñas más recientes. Featurable no tiene esta limitación y es completamente gratuito.</p>
+      </div>
+    </div>
+    
+    <div class="demo-section">
+      <h2>✨ Características</h2>
+      <ul style="line-height: 2; color: #555;">
+        <li>✅ Sin necesidad de Google Cloud Platform</li>
+        <li>✅ 3 layouts responsivos (Carousel, Badge, Grid)</li>
+        <li>✅ Autoplay configurable</li>
+        <li>✅ Accesible (WCAG compatible)</li>
+        <li>✅ Ligero (~15KB minificado)</li>
+        <li>✅ Sin dependencias externas</li>
+        <li>✅ Fácil personalización de estilos</li>
+      </ul>
+    </div>
+    
+    <footer>
+      <p>Desarrollado para <strong>Grupo Musical Versátil La Célula</strong></p>
+      <p>
+        <a href="README.md">Ver Documentación Completa</a> | 
+        <a href="https://grupomusicalcelula.pages.dev">Visitar Sitio</a>
+      </p>
+    </footer>
+  </div>
+  
+  <!-- JavaScript del widget -->
+  <script src="google-reviews-widget.js"></script>
+  
+  <script>
+    let currentWidget = null;
+    let currentLayout = 'carousel';
+    
+    // Inicializar widget al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      initWidget('carousel');
+    });
+    
+    function initWidget(layout) {
+      // Destruir widget anterior si existe
+      if (currentWidget) {
+        currentWidget.destroy();
+      }
+      
+      // Crear nuevo widget
+      currentWidget = new GoogleReviewsWidget({
+        containerId: 'google-reviews-container',
+        layout: layout,
+        maxReviews: 10,
+        autoplay: layout === 'carousel',
+        autoplaySpeed: 5000
+      });
+    }
+    
+    function changeLayout(layout) {
+      currentLayout = layout;
+      
+      // Actualizar botones activos
+      document.querySelectorAll('.layout-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Reinicializar widget con nuevo layout
+      initWidget(layout);
+      
+      // Actualizar código de ejemplo
+      updateCodeExample(layout);
+    }
+    
+    function updateCodeExample(layout) {
+      const code = document.getElementById('implementation-code');
+      const autoplayConfig = layout === 'carousel' ? `,
+      autoplay: true,
+      autoplaySpeed: 5000` : '';
+      
+      code.textContent = `<!-- Incluir CSS -->
+<link rel="stylesheet" href="widgets/google-reviews/google-reviews-widget.css">
+
+<!-- Contenedor del widget -->
+<div id="google-reviews-container"></div>
+
+<!-- Incluir JavaScript -->
+<script src="widgets/google-reviews/google-reviews-widget.js"><\/script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    new GoogleReviewsWidget({
+      featurableId: 'TU_FEATURABLE_ID', // O null para datos estáticos
+      containerId: 'google-reviews-container',
+      layout: '${layout}', // 'carousel', 'badge', o 'grid'
+      maxReviews: 10${autoplayConfig}
+    });
+  });
+<\/script>`;
+    }
+  </script>
+</body>
+</html>

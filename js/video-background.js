@@ -1,221 +1,211 @@
-/**
- * Grupo Musical Célula - Persistent Video Background Module
- * Componente para video de fondo persistente entre sesiones y páginas
- */
+/*! Grupo Musical Célula - Persistent Video Background Module */class PersistentVideoBackground{constructor(options={}){this.options={videoBaseName:options.videoBaseName||'assets/video/background',fallbackImage:options.fallbackImage||'assets/images/hero-background.webp',selector:options.selector||'.persistent-video-bg',
+    mobileBreakpoint: options.mobileBreakpoint || 768,
+    tabletBreakpoint: options.tabletBreakpoint || 1024,
+    desktopBreakpoint: options.desktopBreakpoint || 1440,
+    volume: options.volume || 0,
+    loop: options.loop !== false,
+    muted: options.muted !== false,
+    overlayColor: options.overlayColor || 'rgba(0, 0, 0, 0.5)',
+    ...options
+};
 
-class PersistentVideoBackground {
-    constructor(options = {}) {
-        this.options = {
-            videoBaseName: options.videoBaseName || 'assets/video/background',
-            fallbackImage: options.fallbackImage || 'assets/images/hero-background.webp',
-            selector: options.selector || '.persistent-video-bg',
-            mobileBreakpoint: options.mobileBreakpoint || 768,
-            tabletBreakpoint: options.tabletBreakpoint || 1024,
-            desktopBreakpoint: options.desktopBreakpoint || 1440,
-            volume: options.volume || 0,
-            loop: options.loop !== false,
-            muted: options.muted !== false,
-            overlayColor: options.overlayColor || 'rgba(0, 0, 0, 0.5)',
-            ...options
-        };
+this.videoElement = null;
+this.container = null;
+this.isMobile = this.checkIsMobile();
+this.isVisible = true;
+this.currentOrientation = this.getOrientation();
+this.devicePixelRatio = window.devicePixelRatio || 1;
 
-        this.videoElement = null;
-        this.container = null;
-        this.isMobile = this.checkIsMobile();
-        this.isVisible = true;
-        this.currentOrientation = this.getOrientation();
-        this.devicePixelRatio = window.devicePixelRatio || 1;
+this.init();
+}
 
-        this.init();
+getOrientation() {
+    return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+}
+
+getDeviceType() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const userAgent = navigator.userAgent.toLowerCase();
+
+    // Detectar tipo de dispositivo
+    const isMobileDevice = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+    const isTabletDevice = /ipad|android(?!.*mobile)|tablet/i.test(userAgent);
+
+    if (isMobileDevice && width <= this.options.mobileBreakpoint) {
+        return 'mobile';
+    } else if ((isTabletDevice || width <= this.options.tabletBreakpoint) && width > this.options.mobileBreakpoint) {
+        return 'tablet';
+    } else if (width <= this.options.desktopBreakpoint) {
+        return 'desktop';
+    } else {
+        return 'large-desktop';
+    }
+}
+
+getVideoSrc() {
+    const deviceType = this.getDeviceType();
+    const orientation = this.getOrientation();
+
+    // Si es móvil en portrait, usar video mobile-background
+    if (deviceType === 'mobile' && orientation === 'portrait') {
+        return this.normalizePath('assets/video/mobile-background.webm');
     }
 
-    getOrientation() {
-        return window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+    // Para todo lo demás (desktop, tablet, mobile landscape), usar background normal
+    return this.normalizePath('assets/video/background-1080p.webm');
+}
+
+getBackgroundImage() {
+    const width = window.innerWidth;
+    const deviceType = this.getDeviceType();
+    const orientation = this.getOrientation();
+
+    // Si es móvil en portrait, usar mobile-background
+    if (deviceType === 'mobile' && orientation === 'portrait') {
+        return this.normalizePath('assets/images/mobile-background.webp');
     }
 
-    getDeviceType() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const userAgent = navigator.userAgent.toLowerCase();
+    // Usar la misma lógica que las media queries del CSS
+    if (width <= 480) {
+        return this.normalizePath('assets/images/hero-background-480w.webp');
+    } else if (width <= 768) {
+        return this.normalizePath('assets/images/hero-background-768w.webp');
+    } else if (width <= 1024) {
+        return this.normalizePath('assets/images/hero-background-1024w.webp');
+    } else {
+        return this.normalizePath('assets/images/hero-background-1920w.webp');
+    }
+}
 
-        // Detectar tipo de dispositivo
-        const isMobileDevice = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-        const isTabletDevice = /ipad|android(?!.*mobile)|tablet/i.test(userAgent);
+normalizePath(path) {
+    const currentPath = window.location.pathname;
+    const pathParts = currentPath.substring(1).split('/');
 
-        if (isMobileDevice && width <= this.options.mobileBreakpoint) {
-            return 'mobile';
-        } else if ((isTabletDevice || width <= this.options.tabletBreakpoint) && width > this.options.mobileBreakpoint) {
-            return 'tablet';
-        } else if (width <= this.options.desktopBreakpoint) {
-            return 'desktop';
-        } else {
-            return 'large-desktop';
-        }
+    // If we're on the root, return the path as is
+    if (pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === '')) {
+        return path;
     }
 
-    getVideoSrc() {
-        const deviceType = this.getDeviceType();
-        const orientation = this.getOrientation();
+    // Count how many directory levels we're in
+    let depth = pathParts.length - 1;
 
-        // Si es móvil en portrait, usar video mobile-background
-        if (deviceType === 'mobile' && orientation === 'portrait') {
-            return this.normalizePath('assets/video/mobile-background.webm');
-        }
-        
-        // Para todo lo demás (desktop, tablet, mobile landscape), usar background normal
-        return this.normalizePath('assets/video/background-1080p.webm');
-    }
-    
-    getBackgroundImage() {
-        const width = window.innerWidth;
-        const deviceType = this.getDeviceType();
-        const orientation = this.getOrientation();
-        
-        // Si es móvil en portrait, usar mobile-background
-        if (deviceType === 'mobile' && orientation === 'portrait') {
-            return this.normalizePath('assets/images/mobile-background.webp');
-        }
-        
-        // Usar la misma lógica que las media queries del CSS
-        if (width <= 480) {
-            return this.normalizePath('assets/images/hero-background-480w.webp');
-        } else if (width <= 768) {
-            return this.normalizePath('assets/images/hero-background-768w.webp');
-        } else if (width <= 1024) {
-            return this.normalizePath('assets/images/hero-background-1024w.webp');
-        } else {
-            return this.normalizePath('assets/images/hero-background-1920w.webp');
-        }
+    // If we're on a file (like blog.html), subtract one more
+    if (pathParts[pathParts.length - 1].includes('.')) {
+        depth--;
     }
 
-    normalizePath(path) {
-        const currentPath = window.location.pathname;
-        const pathParts = currentPath.substring(1).split('/');
-
-        // If we're on the root, return the path as is
-        if (pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === '')) {
-            return path;
-        }
-
-        // Count how many directory levels we're in
-        let depth = pathParts.length - 1;
-
-        // If we're on a file (like blog.html), subtract one more
-        if (pathParts[pathParts.length - 1].includes('.')) {
-            depth--;
-        }
-
-        // Build relative path prefix
-        let prefix = '';
-        for (let i = 0; i < depth; i++) {
-            prefix += '../';
-        }
-
-        return prefix + path;
+    // Build relative path prefix
+    let prefix = '';
+    for (let i = 0; i < depth; i++) {
+        prefix += '../';
     }
 
-    checkIsMobile() {
-        return window.innerWidth <= this.options.mobileBreakpoint ||
+    return prefix + path;
+}
+
+checkIsMobile() {
+    return window.innerWidth <= this.options.mobileBreakpoint ||
                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+init() {
+    this.createVideoBackground();
+    this.setupEventListeners();
+    this.applyVideoBackground();
+}
+
+createVideoBackground() {
+    this.container = document.createElement('div');
+    this.container.className = 'persistent-video-container';
+    this.container.setAttribute('data-orientation', this.currentOrientation);
+    this.container.setAttribute('data-device', this.getDeviceType());
+
+    this.videoElement = document.createElement('video');
+    this.videoElement.autoplay = true;
+    this.videoElement.muted = true; // Siempre muted para permitir autoplay
+    this.videoElement.loop = this.options.loop;
+    this.videoElement.playsInline = true;
+    this.videoElement.preload = 'auto';
+    this.videoElement.volume = 0; // Volumen en 0 para autoplay
+    this.videoElement.className = 'persistent-video-element';
+    this.videoElement.setAttribute('playsinline', ''); // Atributo adicional para iOS
+    this.videoElement.setAttribute('webkit-playsinline', ''); // Para Safari antiguo
+
+    const sourceElement = document.createElement('source');
+    sourceElement.src = this.getVideoSrc();
+    sourceElement.type = 'video/webm';
+
+    this.videoElement.appendChild(sourceElement);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'persistent-video-overlay';
+
+    this.container.appendChild(this.videoElement);
+    this.container.appendChild(overlay);
+
+    if (document.body.firstChild) {
+        document.body.insertBefore(this.container, document.body.firstChild);
+    } else {
+        document.body.appendChild(this.container);
     }
 
-    init() {
-        this.createVideoBackground();
-        this.setupEventListeners();
-        this.applyVideoBackground();
+    this.addStyles();
+    this.updateVideoPosition();
+
+    console.log('🎬 Video de fondo creado con src:', sourceElement.src);
+
+    // Intentar reproducir cuando el video esté listo
+    this.videoElement.addEventListener('loadeddata', () => {
+        console.log('📊 Video cargado, intentando reproducir...');
+        this.playVideo();
+    });
+
+    this.videoElement.addEventListener('canplay', () => {
+        console.log('▶️ Video listo para reproducir');
+        this.playVideo();
+    });
+
+    this.videoElement.addEventListener('playing', () => {
+        console.log('🎥 Video reproduciéndose');
+    });
+
+    // Para móviles: intentar reproducir en el primer toque/click
+    const playOnFirstInteraction = () => {
+        console.log('👆 Interacción detectada, intentando reproducir video...');
+        this.playVideo();
+        document.removeEventListener('touchstart', playOnFirstInteraction);
+        document.removeEventListener('click', playOnFirstInteraction);
+    };
+
+    document.addEventListener('touchstart', playOnFirstInteraction, { once: true, passive: true });
+    document.addEventListener('click', playOnFirstInteraction, { once: true });
+}
+
+updateVideoPosition() {
+    const orientation = this.getOrientation();
+    const deviceType = this.getDeviceType();
+
+    // Actualizar atributos del contenedor
+    this.container.setAttribute('data-orientation', orientation);
+    this.container.setAttribute('data-device', deviceType);
+
+    // Ajustar object-position basado en orientación y dispositivo
+    if (orientation === 'portrait' && deviceType === 'mobile') {
+        this.videoElement.style.objectPosition = 'center center';
+    } else if (orientation === 'landscape' && deviceType === 'mobile') {
+        this.videoElement.style.objectPosition = 'center center';
+    } else {
+        this.videoElement.style.objectPosition = 'center center';
     }
+}
 
-    createVideoBackground() {
-        this.container = document.createElement('div');
-        this.container.className = 'persistent-video-container';
-        this.container.setAttribute('data-orientation', this.currentOrientation);
-        this.container.setAttribute('data-device', this.getDeviceType());
+addStyles() {
+    const style = document.createElement('style');
+    style.id = 'persistent-video-bg-styles';
+    const backgroundImage = this.getBackgroundImage();
 
-        this.videoElement = document.createElement('video');
-        this.videoElement.autoplay = true;
-        this.videoElement.muted = true; // Siempre muted para permitir autoplay
-        this.videoElement.loop = this.options.loop;
-        this.videoElement.playsInline = true;
-        this.videoElement.preload = 'auto';
-        this.videoElement.volume = 0; // Volumen en 0 para autoplay
-        this.videoElement.className = 'persistent-video-element';
-        this.videoElement.setAttribute('playsinline', ''); // Atributo adicional para iOS
-        this.videoElement.setAttribute('webkit-playsinline', ''); // Para Safari antiguo
-
-        const sourceElement = document.createElement('source');
-        sourceElement.src = this.getVideoSrc();
-        sourceElement.type = 'video/webm';
-
-        this.videoElement.appendChild(sourceElement);
-
-        const overlay = document.createElement('div');
-        overlay.className = 'persistent-video-overlay';
-
-        this.container.appendChild(this.videoElement);
-        this.container.appendChild(overlay);
-
-        if (document.body.firstChild) {
-            document.body.insertBefore(this.container, document.body.firstChild);
-        } else {
-            document.body.appendChild(this.container);
-        }
-
-        this.addStyles();
-        this.updateVideoPosition();
-
-        console.log('🎬 Video de fondo creado con src:', sourceElement.src);
-        
-        // Intentar reproducir cuando el video esté listo
-        this.videoElement.addEventListener('loadeddata', () => {
-            console.log('📊 Video cargado, intentando reproducir...');
-            this.playVideo();
-        });
-        
-        this.videoElement.addEventListener('canplay', () => {
-            console.log('▶️ Video listo para reproducir');
-            this.playVideo();
-        });
-        
-        this.videoElement.addEventListener('playing', () => {
-            console.log('🎥 Video reproduciéndose');
-        });
-        
-        // Para móviles: intentar reproducir en el primer toque/click
-        const playOnFirstInteraction = () => {
-            console.log('👆 Interacción detectada, intentando reproducir video...');
-            this.playVideo();
-            document.removeEventListener('touchstart', playOnFirstInteraction);
-            document.removeEventListener('click', playOnFirstInteraction);
-        };
-        
-        document.addEventListener('touchstart', playOnFirstInteraction, { once: true, passive: true });
-        document.addEventListener('click', playOnFirstInteraction, { once: true });
-    }
-
-    updateVideoPosition() {
-        const orientation = this.getOrientation();
-        const deviceType = this.getDeviceType();
-
-        // Actualizar atributos del contenedor
-        this.container.setAttribute('data-orientation', orientation);
-        this.container.setAttribute('data-device', deviceType);
-
-        // Ajustar object-position basado en orientación y dispositivo
-        if (orientation === 'portrait' && deviceType === 'mobile') {
-            this.videoElement.style.objectPosition = 'center center';
-        } else if (orientation === 'landscape' && deviceType === 'mobile') {
-            this.videoElement.style.objectPosition = 'center center';
-        } else {
-            this.videoElement.style.objectPosition = 'center center';
-        }
-    }
-
-    addStyles() {
-        const style = document.createElement('style');
-        style.id = 'persistent-video-bg-styles';
-        const backgroundImage = this.getBackgroundImage();
-        
-        style.textContent = `
+    style.textContent = `
             .persistent-video-container {
                 position: fixed;
                 top: 0;
@@ -368,149 +358,149 @@ class PersistentVideoBackground {
             }
         `;
 
-        document.head.appendChild(style);
-    }
+    document.head.appendChild(style);
+}
 
-    setupEventListeners() {
-        let resizeTimeout;
-        let orientationTimeout;
+setupEventListeners() {
+    let resizeTimeout;
+    let orientationTimeout;
 
-        // Manejar cambios de tamaño de ventana
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                const newOrientation = this.getOrientation();
-                const orientationChanged = newOrientation !== this.currentOrientation;
+    // Manejar cambios de tamaño de ventana
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const newOrientation = this.getOrientation();
+            const orientationChanged = newOrientation !== this.currentOrientation;
 
-                if (orientationChanged) {
-                    this.currentOrientation = newOrientation;
-                    this.updateVideoPosition();
-                    
-                    // Actualizar imagen de fondo según orientación
-                    const newBackgroundImage = this.getBackgroundImage();
-                    this.container.style.backgroundImage = `url('${newBackgroundImage}')`;
-                }
+            if (orientationChanged) {
+                this.currentOrientation = newOrientation;
+                this.updateVideoPosition();
 
-                const newSrc = this.getVideoSrc();
-                const currentSrc = this.videoElement.querySelector('source').src;
+                // Actualizar imagen de fondo según orientación
+                const newBackgroundImage = this.getBackgroundImage();
+                this.container.style.backgroundImage = `url('${newBackgroundImage}')`;
+            }
 
-                // Solo actualizar si la fuente realmente cambió
-                if (!currentSrc.includes(newSrc)) {
-                    this.updateVideoSource(newSrc);
-                }
-            }, 300); // Debounce optimizado
+            const newSrc = this.getVideoSrc();
+            const currentSrc = this.videoElement.querySelector('source').src;
+
+            // Solo actualizar si la fuente realmente cambió
+            if (!currentSrc.includes(newSrc)) {
+                this.updateVideoSource(newSrc);
+            }
+        }, 300); // Debounce optimizado
+    });
+
+    // Manejar cambios de orientación específicamente
+    if (window.screen && window.screen.orientation) {
+        window.screen.orientation.addEventListener('change', () => {
+            clearTimeout(orientationTimeout);
+            orientationTimeout = setTimeout(() => {
+                this.currentOrientation = this.getOrientation();
+                this.updateVideoPosition();
+            }, 200);
         });
-
-        // Manejar cambios de orientación específicamente
-        if (window.screen && window.screen.orientation) {
-            window.screen.orientation.addEventListener('change', () => {
-                clearTimeout(orientationTimeout);
-                orientationTimeout = setTimeout(() => {
-                    this.currentOrientation = this.getOrientation();
-                    this.updateVideoPosition();
-                }, 200);
-            });
-        }
-
-        // Manejar visibilidad de la página
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.pauseVideo();
-            } else if (this.isVisible) {
-                this.playVideo();
-            }
-        });
-
-        // Pausar video cuando está fuera del viewport (performance)
-        if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        this.playVideo();
-                    } else {
-                        this.pauseVideo();
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            observer.observe(this.container);
-        }
-
-        // Detectar conexión lenta y ajustar calidad
-        if ('connection' in navigator) {
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            if (connection) {
-                const updateVideoQuality = () => {
-                    if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
-                        console.log('Slow connection detected, video may be paused for performance');
-                        this.pauseVideo();
-                    }
-                };
-
-                connection.addEventListener('change', updateVideoQuality);
-                updateVideoQuality();
-            }
-        }
     }
 
-    applyVideoBackground() {
-        this.container.classList.add('active');
-        this.playVideo();
-    }
-
-    playVideo() {
-        if (this.videoElement) {
-            // Asegurar que el video esté muted para permitir autoplay
-            this.videoElement.muted = true;
-            this.videoElement.playsInline = true;
-            
-            const playPromise = this.videoElement.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    console.log('✅ Video reproduciéndose correctamente');
-                }).catch(e => {
-                    console.warn('⚠️ Video playback prevented:', e);
-                    this.setupPlayOnInteraction();
-                });
-            }
-        }
-    }
-
-    pauseVideo() {
-        if (this.videoElement) {
-            this.videoElement.pause();
-        }
-    }
-
-    setupPlayOnInteraction() {
-        const playOnInteraction = () => {
-            this.videoElement.play().catch(e => console.warn('Still cannot play video:', e));
-            document.removeEventListener('click', playOnInteraction);
-            document.removeEventListener('touchstart', playOnInteraction);
-        };
-
-        document.addEventListener('click', playOnInteraction);
-        document.addEventListener('touchstart', playOnInteraction);
-    }
-
-    updateVideoSource(newSrc) {
-        if (this.videoElement && this.videoElement.querySelector('source').src !== window.location.origin + newSrc) {
-            console.log(`Updating video source to: ${newSrc}`);
-            this.videoElement.querySelector('source').src = newSrc;
-            this.videoElement.load();
+    // Manejar visibilidad de la página
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            this.pauseVideo();
+        } else if (this.isVisible) {
             this.playVideo();
         }
+    });
+
+    // Pausar video cuando está fuera del viewport (performance)
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.playVideo();
+                } else {
+                    this.pauseVideo();
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(this.container);
     }
 
-    destroy() {
-        if (this.container) {
-            this.container.remove();
-        }
-        const styles = document.getElementById('persistent-video-bg-styles');
-        if (styles) {
-            styles.remove();
+    // Detectar conexión lenta y ajustar calidad
+    if ('connection' in navigator) {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection) {
+            const updateVideoQuality = () => {
+                if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+                    console.log('Slow connection detected, video may be paused for performance');
+                    this.pauseVideo();
+                }
+            };
+
+            connection.addEventListener('change', updateVideoQuality);
+            updateVideoQuality();
         }
     }
+}
+
+applyVideoBackground() {
+    this.container.classList.add('active');
+    this.playVideo();
+}
+
+playVideo() {
+    if (this.videoElement) {
+        // Asegurar que el video esté muted para permitir autoplay
+        this.videoElement.muted = true;
+        this.videoElement.playsInline = true;
+
+        const playPromise = this.videoElement.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('✅ Video reproduciéndose correctamente');
+            }).catch(e => {
+                console.warn('⚠️ Video playback prevented:', e);
+                this.setupPlayOnInteraction();
+            });
+        }
+    }
+}
+
+pauseVideo() {
+    if (this.videoElement) {
+        this.videoElement.pause();
+    }
+}
+
+setupPlayOnInteraction() {
+    const playOnInteraction = () => {
+        this.videoElement.play().catch(e => console.warn('Still cannot play video:', e));
+        document.removeEventListener('click', playOnInteraction);
+        document.removeEventListener('touchstart', playOnInteraction);
+    };
+
+    document.addEventListener('click', playOnInteraction);
+    document.addEventListener('touchstart', playOnInteraction);
+}
+
+updateVideoSource(newSrc) {
+    if (this.videoElement && this.videoElement.querySelector('source').src !== window.location.origin + newSrc) {
+        console.log(`Updating video source to: ${newSrc}`);
+        this.videoElement.querySelector('source').src = newSrc;
+        this.videoElement.load();
+        this.playVideo();
+    }
+}
+
+destroy() {
+    if (this.container) {
+        this.container.remove();
+    }
+    const styles = document.getElementById('persistent-video-bg-styles');
+    if (styles) {
+        styles.remove();
+    }
+}
 }
 
 document.addEventListener('DOMContentLoaded', function() {
