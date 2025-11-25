@@ -1,4 +1,4 @@
-/*! Funcionalidad general del sitio - Grupo Musical Célula */function isMobileDevice(){return(typeof window.orientation!=="undefined")||(navigator.userAgent.indexOf('IEMobile')!==-1)}
+/*! Funcionalidad general del sitio - Grupo Musical Célula */function isMobileDevice(){return(typeof window.orientation!=='undefined')||(navigator.userAgent.indexOf('IEMobile')!==-1);}
 
 // Funcionalidad general del sitio
 document.addEventListener('DOMContentLoaded', function() {
@@ -67,14 +67,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Remover event listeners previos clonando el elemento
             const newCard = card.cloneNode(true);
             card.parentNode.replaceChild(newCard, card);
-            
+
             // Agregar event listener para flip con click/tap
             newCard.addEventListener('click', function(e) {
                 // Prevenir que el click en los botones active el flip
                 if (e.target.tagName === 'A' || e.target.closest('a')) {
                     return;
                 }
-                
+
                 this.classList.toggle('flipped');
                 console.log(`🔄 Tarjeta ${index + 1} ${this.classList.contains('flipped') ? 'volteada' : 'restaurada'}`);
             });

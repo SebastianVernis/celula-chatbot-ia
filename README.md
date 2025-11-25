@@ -19,7 +19,7 @@ Sitio web oficial del Grupo Musical Versátil La Célula, una banda versátil pr
 
 - Node.js 18+
 - npm o yarn
-- Cuenta en Cloudflare Pages
+- Cuenta en AWS Amplify (o Cloudflare Pages)
 - API Keys: Resend (email), Gemini (chatbot)
 
 ### Instalación
@@ -39,7 +39,7 @@ cd functions && npm install && cd ..
 ### Desarrollo Local
 
 ```bash
-# Iniciar servidor de desarrollo con Cloudflare Functions
+# Iniciar servidor de desarrollo
 npm run dev
 
 # El sitio estará disponible en http://localhost:8788
@@ -61,7 +61,10 @@ npm run optimize:video
 ### Deploy
 
 ```bash
-# Deploy a Cloudflare Pages
+# Deploy a AWS Amplify (recomendado)
+npm run deploy:amplify
+
+# Deploy a Cloudflare Pages (legacy)
 npm run deploy
 ```
 
@@ -75,8 +78,8 @@ celula-site/
 ├── assets/                 # Imágenes, videos, fuentes, etc.
 ├── js/                     # JavaScript (source + minified)
 ├── css/                    # Estilos (source + minified)
-├── functions/              # Cloudflare Functions (serverless)
-│   └── api/                # Endpoints API
+├── functions/              # Serverless Functions (API endpoints)
+│   └── api/                # API routes
 ├── post/                   # Artículos del blog
 ├── docs/                   # Documentación
 ├── scripts/                # Scripts de utilidad
@@ -88,7 +91,9 @@ Ver [`docs/ESTRUCTURA-DIRECTORIOS.md`](docs/ESTRUCTURA-DIRECTORIOS.md) para más
 ## 📚 Documentación
 
 - [**AGENTS.md**](docs/AGENTS.md) - Guía para AI assistants
-- [**DEPLOY.md**](docs/DEPLOY.md) - Guía de deployment
+- [**AMPLIFY_DEPLOYMENT.md**](docs/AMPLIFY_DEPLOYMENT.md) - Guía de AWS Amplify (Nueva)
+- [**SECRETS_MIGRATION.md**](docs/SECRETS_MIGRATION.md) - Migración de secretos
+- [**DEPLOY.md**](docs/DEPLOY.md) - Guía de deployment (Legacy)
 - [**ESTRUCTURA-DIRECTORIOS.md**](docs/ESTRUCTURA-DIRECTORIOS.md) - Estructura del proyecto
 - [**ESTRUCTURA-PROYECTO.md**](docs/ESTRUCTURA-PROYECTO.md) - Documentación técnica
 - [**API-EMAIL-DOCUMENTATION.md**](docs/API-EMAIL-DOCUMENTATION.md) - API de email
@@ -100,17 +105,29 @@ Ver [`docs/ESTRUCTURA-DIRECTORIOS.md`](docs/ESTRUCTURA-DIRECTORIOS.md) para más
 ### npm scripts
 
 ```bash
-npm run dev           # Servidor de desarrollo
-npm run build         # Build para producción
-npm run deploy        # Deploy a Cloudflare Pages
-npm run minify        # Minificar JS y CSS
-npm run optimize:images    # Optimizar imágenes
-npm run optimize:video     # Optimizar videos
+npm run dev                 # Servidor de desarrollo
+npm run build               # Build para producción (legacy)
+npm run build:amplify       # Build optimizado para AWS Amplify
+npm run deploy:amplify      # Deploy a AWS Amplify
+npm run deploy              # Deploy a Cloudflare Pages (legacy)
+npm run minify              # Minificar JS y CSS
+npm run lint:js             # Linting JavaScript con ESLint
+npm run validate:html       # Validar estructura HTML
+npm run test:video-paths    # Probar rutas de video background
+npm run optimize:images     # Optimizar imágenes
+npm run optimize:video      # Optimizar videos
 ```
 
 ### Bash scripts (en `/scripts/`)
 
 ```bash
+# Nuevos scripts para AWS Amplify
+bash scripts/deploy-amplify.sh          # Despliegue completo a Amplify
+bash scripts/build-amplify.sh           # Build optimizado para Amplify
+bash scripts/validate-html.sh           # Validación HTML detallada
+bash scripts/test-video-paths.sh        # Testing de video background
+
+# Scripts legacy
 bash scripts/minify-all.sh              # Minificar todo
 bash scripts/convert-images-to-webp.sh  # Convertir imágenes
 bash scripts/optimize-video.sh          # Optimizar video
@@ -131,9 +148,18 @@ CONTACT_EMAIL=email@ejemplo.com
 GEMINI_API_KEY=tu_api_key_de_gemini
 ```
 
-También configurar en Cloudflare Pages Dashboard > Settings > Environment Variables.
+También configurar en:
+- **AWS Amplify**: App settings > Environment variables
+- **Cloudflare Pages**: Dashboard > Settings > Environment Variables
 
-### Cloudflare Pages
+### AWS Amplify (Recomendado)
+
+- **Build command**: Automático con `amplify.yml`
+- **Build output directory**: `dist`
+- **Node version**: 18+
+- **Configuration file**: `amplify.yml`
+
+### Cloudflare Pages (Legacy)
 
 - **Build command**: `npm run build`
 - **Build output directory**: `.`
