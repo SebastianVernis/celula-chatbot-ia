@@ -90,14 +90,18 @@ Ver [`docs/ESTRUCTURA-DIRECTORIOS.md`](docs/ESTRUCTURA-DIRECTORIOS.md) para más
 
 ## 📚 Documentación
 
-- [**AGENTS.md**](docs/AGENTS.md) - Guía para AI assistants
-- [**AMPLIFY_DEPLOYMENT.md**](docs/AMPLIFY_DEPLOYMENT.md) - Guía de AWS Amplify (Nueva)
+### Despliegue y Configuración
+- [**AMPLIFY_DEPLOYMENT.md**](docs/AMPLIFY_DEPLOYMENT.md) - Guía completa de AWS Amplify
+- [**CONFIGURACION_SECRETOS_AMPLIFY.md**](docs/CONFIGURACION_SECRETOS_AMPLIFY.md) - 🔐 Configuración de API Keys (IMPORTANTE)
 - [**SECRETS_MIGRATION.md**](docs/SECRETS_MIGRATION.md) - Migración de secretos
 - [**DEPLOY.md**](docs/DEPLOY.md) - Guía de deployment (Legacy)
+- [**CLOUDFLARE_PAGES_SETUP.md**](docs/CLOUDFLARE_PAGES_SETUP.md) - Setup de Cloudflare (Legacy)
+
+### Desarrollo
+- [**AGENTS.md**](docs/AGENTS.md) - Guía para AI assistants
 - [**ESTRUCTURA-DIRECTORIOS.md**](docs/ESTRUCTURA-DIRECTORIOS.md) - Estructura del proyecto
 - [**ESTRUCTURA-PROYECTO.md**](docs/ESTRUCTURA-PROYECTO.md) - Documentación técnica
 - [**API-EMAIL-DOCUMENTATION.md**](docs/API-EMAIL-DOCUMENTATION.md) - API de email
-- [**CLOUDFLARE_PAGES_SETUP.md**](docs/CLOUDFLARE_PAGES_SETUP.md) - Setup de Cloudflare
 - [**REPORTE-FINAL-OPTIMIZACIONES.md**](docs/REPORTE-FINAL-OPTIMIZACIONES.md) - Optimizaciones
 
 ## 🛠️ Scripts Disponibles
@@ -138,7 +142,21 @@ bash scripts/cleanup.sh --deep          # Limpieza profunda
 
 ## 🔧 Configuración
 
-### Variables de Entorno
+### ⚠️ Variables de Entorno (REQUERIDAS)
+
+**Para que el sitio funcione completamente, debes configurar las siguientes API keys:**
+
+#### En AWS Amplify (Producción)
+
+1. **Ir a:** AWS Amplify Console > App settings > Environment variables
+2. **Agregar:**
+   - `RESEND_API_KEY` = tu_clave_resend (marcar como Secret)
+   - `GEMINI_API_KEY` = tu_clave_gemini (marcar como Secret)
+   - `CONTACT_EMAIL` = tu_email@ejemplo.com
+
+📖 **Guía completa:** Ver [CONFIGURACION_SECRETOS_AMPLIFY.md](docs/CONFIGURACION_SECRETOS_AMPLIFY.md)
+
+#### En Desarrollo Local
 
 Crear archivo `.env` en la raíz con:
 
@@ -148,9 +166,14 @@ CONTACT_EMAIL=email@ejemplo.com
 GEMINI_API_KEY=tu_api_key_de_gemini
 ```
 
-También configurar en:
-- **AWS Amplify**: App settings > Environment variables
-- **Cloudflare Pages**: Dashboard > Settings > Environment Variables
+#### Obtener API Keys
+
+- **RESEND_API_KEY**: https://resend.com/api-keys
+- **GEMINI_API_KEY**: https://makersuite.google.com/app/apikey
+
+#### Cloudflare Pages (Legacy)
+
+Dashboard > Settings > Environment Variables
 
 ### AWS Amplify (Recomendado)
 

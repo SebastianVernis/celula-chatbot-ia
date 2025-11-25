@@ -43,12 +43,18 @@ export async function onRequest(context) {
     const contactEmail =
       context.env.CONTACT_EMAIL || "contacto@grupomusicalcelula.pages.dev";
 
+    console.log('📧 Send-email API called');
+    console.log('📋 Type:', type);
+    console.log('🔑 RESEND_API_KEY available:', !!resendApiKey);
+    console.log('📮 Contact email:', contactEmail);
+
     if (!resendApiKey) {
-      console.error("RESEND_API_KEY no configurada");
+      console.error("❌ RESEND_API_KEY no configurada en context.env");
+      console.error("Available env keys:", Object.keys(context.env || {}));
       return new Response(
         JSON.stringify({
           success: false,
-          error: "Configuración de email no disponible",
+          error: "Configuración de email no disponible. Por favor, configura RESEND_API_KEY en AWS Amplify Environment Variables.",
         }),
         {
           status: 500,
