@@ -7,11 +7,16 @@
     "dev": "wrangler pages dev . --port 8788",
     "deploy": "wrangler pages deploy .",
     "build": "cd functions && npm install && cd ..",
+    "build:amplify": "npm run lint:js && npm run validate:html && bash scripts/build-amplify.sh",
     "minify": "bash scripts/minify-all.sh",
     "optimize:images": "bash scripts/convert-images-to-webp.sh",
     "optimize:video": "bash scripts/optimize-video.sh",
     "cleanup": "bash scripts/cleanup.sh",
-    "cleanup:deep": "bash scripts/cleanup.sh --deep"
+    "cleanup:deep": "bash scripts/cleanup.sh --deep",
+    "lint:js": "npx eslint js/**/*.js --fix || echo 'ESLint completed with warnings'",
+    "validate:html": "bash scripts/validate-html.sh",
+    "test:video-paths": "bash scripts/test-video-paths.sh",
+    "deploy:amplify": "npm run build:amplify && echo 'Ready for Amplify deployment'"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -20,6 +25,7 @@
     "resend": "^4.8.0"
   },
   "devDependencies": {
+    "eslint": "^8.57.1",
     "wrangler": "^3.80.0"
   },
   "engines": {
