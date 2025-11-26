@@ -19,7 +19,7 @@ Sitio web oficial del Grupo Musical Versátil La Célula, una banda versátil pr
 
 - Node.js 18+
 - npm o yarn
-- Cuenta en AWS Amplify (o Cloudflare Pages)
+- Cuenta en AWS Amplify (recomendado) o Cloudflare Pages
 - API Keys: Resend (email), Gemini (chatbot)
 
 ### Instalación
@@ -65,7 +65,7 @@ npm run optimize:video
 npm run deploy:amplify
 
 # Deploy a Cloudflare Pages (legacy)
-npm run deploy
+npm run deploy:legacy
 ```
 
 ## 📁 Estructura del Proyecto
@@ -109,17 +109,21 @@ Ver [`docs/ESTRUCTURA-DIRECTORIOS.md`](docs/ESTRUCTURA-DIRECTORIOS.md) para más
 ### npm scripts
 
 ```bash
-npm run dev                 # Servidor de desarrollo
+npm run dev                 # Servidor de desarrollo (Node.js/Express)
+npm run dev:legacy          # Servidor legacy con Wrangler
 npm run build               # Build para producción (legacy)
 npm run build:amplify       # Build optimizado para AWS Amplify
+npm run build:functions     # Instalar dependencias de functions (legacy)
 npm run deploy:amplify      # Deploy a AWS Amplify
-npm run deploy              # Deploy a Cloudflare Pages (legacy)
+npm run deploy              # Deploy a AWS Amplify (alias)
+npm run deploy:legacy       # Deploy a Cloudflare Pages (legacy)
 npm run minify              # Minificar JS y CSS
 npm run lint:js             # Linting JavaScript con ESLint
 npm run validate:html       # Validar estructura HTML
 npm run test:video-paths    # Probar rutas de video background
 npm run optimize:images     # Optimizar imágenes
 npm run optimize:video      # Optimizar videos
+npm run start               # Alias para npm run dev
 ```
 
 ### Bash scripts (en `/scripts/`)
@@ -181,12 +185,14 @@ Dashboard > Settings > Environment Variables
 - **Build output directory**: `dist`
 - **Node version**: 18+
 - **Configuration file**: `amplify.yml`
+- **Servidor de desarrollo**: `npm run dev` (Node.js/Express)
 
 ### Cloudflare Pages (Legacy)
 
 - **Build command**: `npm run build`
 - **Build output directory**: `.`
 - **Node version**: 18+
+- **Servidor de desarrollo**: `npm run dev:legacy` (Wrangler)
 
 ## 🎨 Personalización
 
