@@ -11,7 +11,7 @@ applications:
             - echo "Installing dependencies..."
             - npm ci
             - echo "Installing functions dependencies..."
-            - cd functions && npm ci && cd ..
+
             - echo "Pre-build validation..."
             - npm run validate:html || echo "HTML validation skipped - no script found"
             - npm run lint:js || echo "Linting skipped - no script found"
@@ -27,7 +27,6 @@ applications:
             - cp -r css dist/
             - cp -r js dist/
             - cp -r post dist/
-            - cp -r functions dist/
             - cp -r widgets dist/
             - cp *.html dist/
             - cp *.json dist/
@@ -49,7 +48,7 @@ applications:
       cache:
         paths:
           - node_modules/**/*
-          - functions/node_modules/**/*
+
     customHeaders:
       - pattern: '**/*'
         headers:
