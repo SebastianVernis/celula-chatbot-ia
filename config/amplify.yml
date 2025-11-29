@@ -1,6 +1,14 @@
 version: 1
 applications:
   - appRoot: .
+    backend:
+      phases:
+        build:
+          commands:
+            - echo "🔧 Building Lambda functions..."
+            - cd amplify/functions/chatbot && npm install && cd ../../..
+            - cd amplify/functions/send-email && npm install && cd ../../..
+            - echo "✅ Lambda functions ready"
     frontend:
       phases:
         preBuild:
@@ -8,12 +16,18 @@ applications:
             - echo "Starting pre-build phase..."
             - node --version
             - npm --version
+            - echo "Checking environment variables..."
+            - echo "GEMINI_API_KEY configured:" ${GEMINI_API_KEY:+YES}
+            - echo "RESEND_API_KEY configured:" ${RESEND_API_KEY:+YES}
+            - echo "CONTACT_EMAIL configured:" ${CONTACT_EMAIL:+YES}
             - echo "Installing dependencies..."
             - npm ci
         build:
           commands:
             - echo "Starting build phase..."
             - npm run build
+            - echo "Checking dist contents..."
+            - ls -la dist/
         postBuild:
           commands:
             - echo "Post-build phase..."
@@ -27,6 +41,8 @@ applications:
       cache:
         paths:
           - node_modules/**/*
+          - amplify/functions/chatbot/node_modules/**/*
+          - amplify/functions/send-email/node_modules/**/*
     customHeaders:
       - pattern: '**/*'
         headers:

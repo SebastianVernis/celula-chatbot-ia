@@ -1,0 +1,11 @@
+{
+  "name": "chatbot-function",
+  "version": "1.0.0",
+  "description": "AWS Lambda function for chatbot using Google Gemini AI",
+  "type": "module",
+  "main": "handler.js",
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

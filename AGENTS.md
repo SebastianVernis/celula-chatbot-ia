@@ -110,6 +110,29 @@ The site is deployed on AWS Amplify with the following configuration:
 - **Node version**: 18+
 - **Build spec file**: `config/amplify.yml`
 
+### ⚠️ CRITICAL: Serverless Functions Issue
+
+**Current Status:** Functions are written in Cloudflare Pages format but AWS Amplify requires Lambda format.
+
+**Problem:**
+- Functions use `export async function onRequest(context)` (Cloudflare format)
+- AWS Amplify expects `export const handler = async (event)` (Lambda format)
+- Environment variables accessed via `context.env.VAR` need to be `process.env.VAR`
+- Response format is different
+
+**Current Error:** 
+```
+[WARNING]: !Failed to set up process.env.secrets
+404 Not Found on /api/chatbot and /api/send-email
+```
+
+**Options:**
+1. **Recommended:** Use Cloudflare Pages for functions (already working there)
+2. Convert functions to AWS Lambda format (requires refactoring)
+3. Deploy static site on Amplify, functions on Cloudflare
+
+See `docs/AMPLIFY_FUNCTIONS_FIX.md` for detailed migration guide.
+
 ### Environment Variables Required
 
 These variables are accessed via `context.env` in the serverless functions:
