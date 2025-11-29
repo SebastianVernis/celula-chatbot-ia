@@ -10,9 +10,9 @@
   },
   "build": {
     "env": {
-      "GEMINI_API_KEY": "@gemini_api_key",
-      "RESEND_API_KEY": "@resend_api_key",
-      "CONTACT_EMAIL": "@contact_email"
+      "GEMINI_API_KEY": "@GEMINI_API_KEY",
+      "RESEND_API_KEY": "@RESEND_API_KEY",
+      "CONTACT_EMAIL": "@CONTACT_EMAIL"
     }
   },
   "functions": {
