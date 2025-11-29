@@ -28,8 +28,9 @@ Se ha reorganizado completamente la estructura del proyecto para mantener una je
 ### 2. Documentación Organizada
 
 **Movidos a `/docs/`:**
-- Todos los archivos `.md` de la raíz
+- Todos los archivos `.md` de la raíz (excepto README.md)
 - `PARALELO.md`, `PARALELO-COMPLETADO.md`, `SERVIDOR-ACTIVO.md`
+- `AGENTS.md`, `DEPLOYMENT.md`, `STRUCTURE.md`, `CHANGELOG_VIDEO_SECRETOS.md`, `REORGANIZATION_COMPLETE.md`
 - Documentación dispersa consolidada
 
 **Nuevos archivos creados:**
@@ -188,11 +189,11 @@ tree -L 2 -d
 ## 📝 Archivos Importantes
 
 ### Documentación Clave
-1. **[README.md](README.md)** - Punto de entrada
-2. **[docs/AGENTS.md](docs/AGENTS.md)** - Para AI assistants
-3. **[docs/ESTRUCTURA-DIRECTORIOS.md](docs/ESTRUCTURA-DIRECTORIOS.md)** - Estructura
-4. **[docs/MANTENIMIENTO.md](docs/MANTENIMIENTO.md)** - Mantenimiento
-5. **[docs/INDICE-DOCUMENTACION.md](docs/INDICE-DOCUMENTACION.md)** - Índice completo
+1. **[README.md](../README.md)** - Punto de entrada
+2. **[AGENTS.md](AGENTS.md)** - Para AI assistants
+3. **[ESTRUCTURA-DIRECTORIOS.md](ESTRUCTURA-DIRECTORIOS.md)** - Estructura
+4. **[MANTENIMIENTO.md](MANTENIMIENTO.md)** - Mantenimiento
+5. **[INDICE-DOCUMENTACION.md](INDICE-DOCUMENTACION.md)** - Índice completo
 
 ### Scripts Útiles
 1. **`scripts/cleanup.sh`** - Limpieza del proyecto
@@ -240,9 +241,9 @@ El proyecto ahora tiene:
 ## 📞 Soporte
 
 Para más información, consulta:
-- [docs/INDICE-DOCUMENTACION.md](docs/INDICE-DOCUMENTACION.md) - Índice completo
-- [docs/MANTENIMIENTO.md](docs/MANTENIMIENTO.md) - Guía de mantenimiento
-- [docs/AGENTS.md](docs/AGENTS.md) - Guía para AI assistants
+- [INDICE-DOCUMENTACION.md](INDICE-DOCUMENTACION.md) - Índice completo
+- [MANTENIMIENTO.md](MANTENIMIENTO.md) - Guía de mantenimiento
+- [AGENTS.md](AGENTS.md) - Guía para AI assistants
 
 ---
 

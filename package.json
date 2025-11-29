@@ -4,11 +4,11 @@
   "description": "Sitio web de Grupo Musical Versátil La Célula",
   "type": "module",
   "scripts": {
-    "dev": "node dev.js",
-    "build": "node build.js && npm run build:functions",
+    "dev": "node tools/dev.js",
+    "build": "node tools/build.js && npm run build:functions",
     "build:functions": "cd functions && npm install && cd ..",
-    "validate": "node validate.js",
-    "lint": "npx eslint src/js/**/*.js --fix || echo 'ESLint completed with warnings'",
+    "validate": "node tools/validate.js",
+    "lint": "npx eslint --config config/eslint.config.js src/js/**/*.js --fix || echo 'ESLint completed with warnings'",
     "prebuild": "npm run validate"
   },
   "dependencies": {

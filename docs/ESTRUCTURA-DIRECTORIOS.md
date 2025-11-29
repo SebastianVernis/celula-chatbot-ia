@@ -79,11 +79,17 @@ post/
 ```
 docs/
 ├── AGENTS.md               # Guía para AI assistants
-├── DEPLOY.md               # Guía de deployment
+├── DEPLOYMENT.md           # Guía de deployment a AWS Amplify
+├── DEPLOY.md               # Guía de deployment legacy
 ├── ESTRUCTURA-PROYECTO.md  # Estructura del proyecto
+├── ESTRUCTURA-DIRECTORIOS.md # Este archivo
 ├── API-EMAIL-DOCUMENTATION.md
 ├── CLOUDFLARE_PAGES_SETUP.md
 ├── REPORTE-FINAL-OPTIMIZACIONES.md
+├── PARALELO.md             # Documentación de trabajo paralelo
+├── STRUCTURE.md            # Estructura completa del proyecto
+├── CHANGELOG_VIDEO_SECRETOS.md
+├── REORGANIZATION_COMPLETE.md
 └── ...                     # Otros documentos
 ```
 

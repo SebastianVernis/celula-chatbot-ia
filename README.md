@@ -91,7 +91,8 @@ Ver [`docs/ESTRUCTURA-DIRECTORIOS.md`](docs/ESTRUCTURA-DIRECTORIOS.md) para más
 ## 📚 Documentación
 
 ### Despliegue y Configuración
-- [**AMPLIFY_DEPLOYMENT.md**](docs/AMPLIFY_DEPLOYMENT.md) - Guía completa de AWS Amplify
+- [**DEPLOYMENT.md**](docs/DEPLOYMENT.md) - Guía completa de AWS Amplify (recomendado)
+- [**AMPLIFY_DEPLOYMENT.md**](docs/AMPLIFY_DEPLOYMENT.md) - Guía detallada de AWS Amplify (legacy)
 - [**CONFIGURACION_SECRETOS_AMPLIFY.md**](docs/CONFIGURACION_SECRETOS_AMPLIFY.md) - 🔐 Configuración de API Keys (IMPORTANTE)
 - [**SECRETS_MIGRATION.md**](docs/SECRETS_MIGRATION.md) - Migración de secretos
 - [**DEPLOY.md**](docs/DEPLOY.md) - Guía de deployment (Legacy)

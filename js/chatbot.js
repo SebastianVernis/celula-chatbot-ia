@@ -330,13 +330,9 @@ class CelulaChatbotManager {
             // Mensaje de saludo personalizado para La Célula con enfoque SPIN
             const greeting = `¡Hola ${this.leadData.name}! 👋 Soy el **Asistente Musical** de Grupo Musical La Célula 🎵
 
-Estoy aquí para ayudarte a encontrar la **solución musical perfecta** para tu ${this.leadData.eventType || 'evento'}. Nuestro grupo versátil puede adaptarse a cualquier:
+Estoy aquí para ayudarte con tu ${this.leadData.eventType || 'evento'}. Somos un grupo versátil que toca todos los géneros musicales y nos adaptamos a cualquier celebración.
 
-• Tipo de celebración (bodas, XV años, corporativos)
-• Estilo musical (desde cumbia y salsa hasta rock y pop)
-• Tamaño de evento (desde íntimos hasta masivos)
-
-¿Podrías contarme más detalles sobre el evento que estás planeando? 🎉`;
+¿Cuándo es tu evento y cuántos invitados esperas? 🎉`;
 
             // Añadir al historial y mostrar al usuario
             this.chatHistory.push({
@@ -444,6 +440,8 @@ FORMATO CONSISTENTE PARA RESPUESTAS:
 • Usa guiones (-) para detallar características bajo una categoría
 • Incluye emojis relevantes al contexto (🎵 🎸 🎉 🎊 💍 🎓 🎤 🏢 🎂)
 • Mantén párrafos cortos y directos (máximo 2-3 líneas)
+• **IMPORTANTE: Sé CONCISO y DIRECTO. Respuestas máximo 4-5 líneas cuando sea posible**
+• Evita listas largas innecesarias, ve al punto rápidamente
 • Cierra SIEMPRE con una pregunta para mantener la conversación
 
 TÉCNICAS DE VENTA AVANZADAS:

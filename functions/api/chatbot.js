@@ -1,6 +1,7 @@
 /**
- * Chatbot API para Grupo Musical La Célula usando Cloudflare Pages Functions
- * Este archivo debe colocarse en /functions/api/chatbot.js para funcionar con Cloudflare Pages
+ * Chatbot API para Grupo Musical La Célula
+ * AWS Amplify Functions (compatible con Cloudflare Pages)
+ * Ruta: /functions/api/chatbot.js
  */
 
 // Función para llamar a la API de Gemini
@@ -24,7 +25,7 @@ async function callGeminiService(history, apiKey) {
       temperature: 0.7,
       topK: 1,
       topP: 1,
-      maxOutputTokens: 2048,
+      maxOutputTokens: 800,
     },
     safetySettings: [
       { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },

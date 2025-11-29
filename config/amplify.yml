@@ -1,0 +1,71 @@
+version: 1
+applications:
+  - appRoot: .
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - echo "Starting pre-build phase..."
+            - node --version
+            - npm --version
+            - echo "Installing dependencies..."
+            - npm ci
+        build:
+          commands:
+            - echo "Starting build phase..."
+            - npm run build
+        postBuild:
+          commands:
+            - echo "Post-build phase..."
+            - echo "Running final validations..."
+            - ls -la dist/
+            - echo "Deployment ready"
+      artifacts:
+        baseDirectory: dist
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+    customHeaders:
+      - pattern: '**/*'
+        headers:
+          - key: 'X-Frame-Options'
+            value: 'DENY'
+          - key: 'X-Content-Type-Options'
+            value: 'nosniff'
+          - key: 'Referrer-Policy'
+            value: 'strict-origin-when-cross-origin'
+          - key: 'Permissions-Policy'
+            value: 'geolocation=(), microphone=(), camera=()'
+      - pattern: '**/*.html'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=3600'
+      - pattern: '/assets/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '/js/**'
+        headers:
+          - key: 'Cache-control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '/css/**'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+      - pattern: '**/*.webm'
+        headers:
+          - key: 'Cache-Control'
+            value: 'public, max-age=31536000, immutable'
+          - key: 'Content-Type'
+            value: 'video/webm'
+    redirects:
+      - source: '/blog'
+        target: '/blog.html'
+        status: '301'
+        condition: null
+      - source: '/cotizador'
+        target: '/cotizador.html'
+        status: '301'
+        condition: null
