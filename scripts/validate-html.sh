@@ -95,12 +95,14 @@ validate_html_file() {
         echo -e "${GREEN}✅ Rutas relativas a CSS presentes${NC}"
     fi
 
-    # 7. Verificar estructura de navegación
-    if grep -q "nav-container\|site-header" "$file"; then
-        echo -e "${GREEN}✅ Navegación presente${NC}"
-    else
-        echo -e "${YELLOW}⚠️ Estructura de navegación no encontrada${NC}"
-        ((file_warnings++))
+    # 7. Verificar estructura de navegación (excluyendo archivos específicos)
+    if [[ "$filename" != "offline.html" && "$filename" != "script-embed.html" ]]; then
+        if grep -q "nav-container\|site-header" "$file"; then
+            echo -e "${GREEN}✅ Navegación presente${NC}"
+        else
+            echo -e "${YELLOW}⚠️ Estructura de navegación no encontrada${NC}"
+            ((file_warnings++))
+        fi
     fi
 
     # Mostrar resumen del archivo

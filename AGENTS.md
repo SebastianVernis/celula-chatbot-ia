@@ -11,7 +11,7 @@
 - Quote request system
 - Various performance optimizations
 
-The site is deployed on Cloudflare Pages, which handles both the static site hosting and serverless functions.
+The site is deployed on **AWS Amplify**, which handles both the static site hosting and serverless functions.
 
 ## Repository Structure
 
@@ -22,10 +22,9 @@ celula-site/
 ├── js/                   # JavaScript files (both .js and minified .min.js versions)
 ├── css/                  # CSS stylesheets
 ├── assets/               # Images, videos, icons, etc.
-├── functions/            # Cloudflare Pages Functions (serverless)
+├── functions/            # Serverless functions (Amplify Functions)
 ├── scripts/              # Shell scripts for optimization and maintenance
-├── docs/                 # Documentation files
-└── public/forms/         # Form handling scripts
+└── docs/                 # Documentation files
 ```
 
 ## Essential Commands
@@ -36,32 +35,29 @@ celula-site/
 # Install dependencies
 npm install
 
-# Run development server with Cloudflare Functions support
-npm run dev  # Starts server at http://localhost:8788
+# Run development server
+npm run dev
 ```
 
 ### Build & Optimization
 
 ```bash
-# Install Function dependencies
-npm run build  # Runs: cd functions && npm install && cd ..
+# Build the site for Amplify
+npm run build
 
 # Minify JS and CSS files
-npm run minify  # Runs: bash scripts/minify-all.sh
+npm run minify
 
 # Optimize images
-npm run optimize:images  # Runs: bash scripts/convert-images-to-webp.sh
+npm run optimize:images
 
 # Optimize videos
-npm run optimize:video  # Runs: bash scripts/optimize-video.sh
+npm run optimize:video
 ```
 
 ### Deployment
 
-```bash
-# Deploy to Cloudflare Pages
-npm run deploy  # Runs: wrangler pages deploy .
-```
+Deployment is handled automatically by AWS Amplify upon pushing to the main branch.
 
 ## Code Conventions
 
@@ -105,30 +101,13 @@ Email functionality is handled by:
 - Form validation and rate limiting
 - Security measures against spam
 
-### 3. Blog System
+## AWS Amplify Configuration
 
-The blog system consists of:
-- Individual HTML files in `/post/` directory
-- JSON data store in `assets/data/blog-posts.json`
-- Pagination handled by `js/blog-pagination.js`
-- Image optimization workflows in `scripts/`
-
-### 4. Media Gallery
-
-The gallery system includes:
-- Dynamic image loading via `js/gallery-dynamic.js`
-- YouTube video carousel via `js/youtube-carousel.js`
-- Optimized WebP images in `assets/gallery/`
-- Responsive sizing based on device
-
-## Cloudflare Pages Configuration
-
-The site is deployed on Cloudflare Pages with the following configuration:
+The site is deployed on AWS Amplify with the following configuration:
 
 - **Build command**: `npm run build`
-- **Build output directory**: `.` (current directory)
+- **Build output directory**: `dist`
 - **Node version**: 18+
-- **Functions directory**: `functions/`
 
 ### Environment Variables Required
 
@@ -136,96 +115,23 @@ The site is deployed on Cloudflare Pages with the following configuration:
 - `CONTACT_EMAIL`: Target email for form submissions
 - `GEMINI_API_KEY`: API key for Google Gemini (chatbot)
 
-## Common Tasks
-
-### Adding a New Blog Post
-
-1. Create a new file in `/post/` directory following the naming pattern (`post-XX.html`)
-2. Add entry to `assets/data/blog-posts.json`
-3. Create optimized images using `scripts/generate-blog-images.sh`
-4. Update any references if needed
-
-### Updating JS/CSS
-
-1. Make changes to the source files (e.g., `js/chatbot.js` or `css/styles.css`)
-2. Run `npm run minify` to generate minified versions
-3. Verify changes work correctly using `npm run dev`
-
-### Deploying Updates
-
-1. Commit your changes to git
-2. Run `npm run deploy` to deploy to Cloudflare Pages
-3. Verify the deployment in Cloudflare Pages dashboard
-
-## Performance Optimization
-
-The site implements various performance optimizations:
-
-- WebP image format for smaller file sizes
-- Responsive images with multiple resolution variants
-- Video optimizations (multiple qualities, WebM format)
-- Critical CSS inlining for faster first contentful paint
-- Deferred loading of non-critical JavaScript
-- Font optimizations (self-hosting, subset loading)
+These variables must be configured in the AWS Amplify console.
 
 ## Troubleshooting
 
+### Build Failures
+
+1.  Check the Amplify build logs for errors.
+2.  Ensure all dependencies are correctly listed in `package.json`.
+3.  Verify that the `npm run build` command runs successfully locally.
+
 ### Email Not Working
 
-1. Check Resend API key in environment variables
-2. Verify `CONTACT_EMAIL` is set correctly
-3. Look for errors in Function logs in Cloudflare Dashboard
-4. Check rate limiting restrictions
+1.  Check that the `RESEND_API_KEY` and `CONTACT_EMAIL` environment variables are set correctly in the Amplify console.
+2.  Review the Amplify Function logs for errors.
 
 ### Chatbot Issues
 
-1. Verify Gemini API key is set correctly
-2. Check for JS console errors
-3. Review chatbot initialization in `js/chatbot.js`
-4. Verify chatbot API endpoint is working
-
-### CSS/JS Not Updating
-
-1. Make sure you've minified the files after changes
-2. Verify the HTML is referencing the correct files
-3. Clear browser cache and CDN cache if needed
-
-## Documentation Resources
-
-Refer to these files for more detailed documentation:
-
-- `docs/DEPLOY.md`: Detailed deployment guide
-- `docs/ESTRUCTURA-PROYECTO.md`: Project structure documentation
-- `docs/REPORTE-FINAL-OPTIMIZACIONES.md`: Performance optimization report
-- `CLOUDFLARE_PAGES_SETUP.md`: Cloudflare Pages setup details
-
-## Scripts Reference
-
-The `/scripts/` directory contains various bash scripts for maintenance:
-
-- `minify-all.sh`: Minifies all JS and CSS files
-- `convert-images-to-webp.sh`: Converts images to WebP format
-- `optimize-video.sh`: Optimizes video files
-- `download-fonts.sh`: Downloads and optimizes fonts for self-hosting
-- `generate-blog-images.sh`: Generates optimized images for blog posts
-- `update-minified-references.sh`: Updates HTML to reference minified files
-
-## Testing Strategy
-
-- Manual testing for UI/UX flow
-- Local testing with Wrangler CLI for Cloudflare Functions
-- Lighthouse audits for performance metrics
-- Mobile responsiveness testing across devices
-- Cross-browser compatibility testing
-
-## Security Considerations
-
-- Form validation to prevent abuse
-- Rate limiting on API endpoints
-- Input sanitization to prevent XSS
-- Content Security Policy implementation
-- HTTPS-only with modern TLS
-
----
-
-This document is intended to help AI assistants understand and work with the Grupo Musical Versátil La Célula website codebase. Always verify configurations and keep this document updated as the project evolves.
+1.  Verify the `GEMINI_API_KEY` is set correctly in the Amplify console.
+2.  Check for JS console errors in the browser.
+3.  Review the Amplify Function logs for the chatbot endpoint.
