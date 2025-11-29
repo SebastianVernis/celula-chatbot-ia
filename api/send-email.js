@@ -41,15 +41,15 @@ export default async function handler(req, res) {
             <h2>Resumen de Conversación con Cliente</h2>
             <h3>Información del Lead:</h3>
             <ul>
-              <li><strong>Nombre:</strong> ${conversationData.leadData?.name || 'No proporcionado'}</li>
-              <li><strong>Email:</strong> ${conversationData.leadData?.email || 'No proporcionado'}</li>
-              <li><strong>Teléfono:</strong> ${conversationData.leadData?.phone || 'No proporcionado'}</li>
+              <li><strong>Nombre:</strong> ${conversationData?.leadData?.name || 'No proporcionado'}</li>
+              <li><strong>Email:</strong> ${conversationData?.leadData?.email || 'No proporcionado'}</li>
+              <li><strong>Teléfono:</strong> ${conversationData?.leadData?.phone || 'No proporcionado'}</li>
             </ul>
             <h3>Conversación:</h3>
             <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
-              ${conversationData.messages.map(msg => `
+              ${conversationData?.messages?.map(msg => `
                 <p><strong>${msg.role === 'user' ? 'Cliente' : 'Bot'}:</strong> ${msg.text}</p>
-              `).join('')}
+              `).join('') || '<p>No hay mensajes</p>'}
             </div>
           `
         };
