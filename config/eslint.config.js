@@ -58,7 +58,7 @@ export default [
         ignores: [
             'node_modules/**',
             'dist/**',
-            '*.min.js',
+            '**/*.min.js',
             'functions/node_modules/**'
         ]
     }
