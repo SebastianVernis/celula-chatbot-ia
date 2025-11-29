@@ -502,7 +502,7 @@ http://localhost:8080
 **Producción:**
 
 ```
-https://grupomusicalcelula.pages.dev
+https://grupomusicalcelula.com
 ```
 
 **Documentación:**

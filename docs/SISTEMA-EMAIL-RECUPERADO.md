@@ -23,7 +23,7 @@ Cloudflare Worker que funciona como endpoint unificado para envío de emails.
 - ✅ Soporte para chatbot y cotizador
 - ✅ Plantillas HTML profesionales
 - ✅ CORS configurado para:
-  - `https://grupolacelula.com`
+  - `https://grupomusicalcelula.com`
   - `https://www.grupolacelula.com`  
   - `https://grupomusicalcelula.pages.dev`
   - `http://localhost:8788`
@@ -195,7 +195,7 @@ https://grupomusicalcelula.pages.dev/cotizador.html
 ### Test en Producción:
 
 ```
-https://grupolacelula.com/cotizador.html
+https://grupomusicalcelula.com/cotizador.html
 ```
 
 ---

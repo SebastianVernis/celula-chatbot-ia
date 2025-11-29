@@ -1,7 +1,7 @@
 # Resultados Lighthouse Audit - Grupo Musical La Célula
 
 **Fecha:** 20 de noviembre de 2025  
-**URL:** https://grupomusicalcelula.pages.dev/  
+**URL:** https://grupomusicalcelula.com/  
 **Dispositivo:** Emulated Moto G Power (Mobile)
 
 ---

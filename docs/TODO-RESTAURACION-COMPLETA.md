@@ -101,7 +101,7 @@
   - [ ] Troubleshooting
   - [ ] Testing con cURL
   - [ ] Dominios autorizados:
-    - `https://grupolacelula.com`
+    - `https://grupomusicalcelula.com`
     - `https://www.grupolacelula.com`
     - `https://grupomusicalcelula.pages.dev`
     - `http://localhost:8788`

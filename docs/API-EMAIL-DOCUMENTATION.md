@@ -210,7 +210,7 @@ npm run dev
 ### Pruebas en Producción
 ```bash
 # Editar test-email-api.sh:
-# BASE_URL="https://grupomusicalcelula.pages.dev"
+# BASE_URL="https://grupomusicalcelula.com"
 
 ./test-email-api.sh
 ```

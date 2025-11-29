@@ -4,7 +4,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://grupomusicalcelula.pages.dev/sitemap.xml
+Sitemap: https://grupomusicalcelula.com/sitemap.xml
 
 # Disallow archivos temporales y de desarrollo
 Disallow: /test-*.html

@@ -8,7 +8,7 @@
 **Tipo:** Sitio web estático con funciones serverless  
 **Plataforma:** Vercel  
 **Repositorio:** https://github.com/SebastianVernis/celula-chatbot-ia  
-**URL Producción:** https://celula-chatbot-ia-wjvl.vercel.app  
+**URL Producción:** https://grupomusicalcelula.com  
 **Versión:** 3.0.0
 
 ## Descripción
