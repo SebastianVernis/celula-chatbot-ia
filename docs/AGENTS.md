@@ -141,7 +141,16 @@ deploymentcelula/
 │   ├── post-1.html
 │   └── ... (up to post-32.html)
 │
-├── functions/              # AWS Amplify serverless functions
+├── amplify/                # AWS Lambda functions (NEW)
+│   └── functions/
+│       ├── chatbot/
+│       │   ├── handler.js  # Lambda handler for chatbot
+│       │   └── package.json
+│       └── send-email/
+│           ├── handler.js  # Lambda handler for email
+│           └── package.json
+│
+├── functions/              # Cloudflare Pages functions (legacy)
 │   ├── api/
 │   │   ├── send-email.js   # Email API endpoint
 │   │   └── chatbot.js      # Chatbot API endpoint
