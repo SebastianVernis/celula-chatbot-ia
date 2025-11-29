@@ -1,32 +1,31 @@
 {
   "name": "celula-site",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Sitio web de Grupo Musical Versátil La Célula",
   "type": "module",
   "scripts": {
-    "dev": "node tools/dev.js",
-    "build": "node tools/build.js && npm run build:functions",
-    "build:functions": "cd functions && npm install && cd ..",
+    "dev": "vercel dev",
+    "build": "node tools/build.js",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel",
     "validate": "node tools/validate.js",
     "lint": "npx eslint --config config/eslint.config.js src/js/**/*.js --fix || echo 'ESLint completed with warnings'",
     "prebuild": "npm run validate"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "node-fetch": "^3.3.2",
+    "@google/generative-ai": "^0.21.0",
     "resend": "^4.8.0"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
-    "wrangler": "^3.80.0"
+    "vercel": "^37.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "keywords": [
     "grupo-musical",
-    "aws-amplify",
+    "vercel",
     "website"
   ],
   "author": "Grupo La Célula",

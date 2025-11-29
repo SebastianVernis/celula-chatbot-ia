@@ -1,5 +1,0 @@
-node_modules/prettier
-node_modules/@types
-*.d.ts
-*.test.js
-*.spec.js
