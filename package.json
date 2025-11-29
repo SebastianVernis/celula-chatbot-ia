@@ -4,12 +4,9 @@
   "description": "Sitio web de Grupo Musical Versátil La Célula",
   "type": "module",
   "scripts": {
+    "start": "node server.js",
     "dev": "node server.js",
-    "dev:legacy": "wrangler pages dev . --port 8788",
-    "deploy": "npm run build:amplify && echo 'Ready for Amplify deployment'",
-    "deploy:legacy": "wrangler pages deploy .",
-    "build": "echo 'Build step handled by build:amplify'",
-    "build:amplify": "npm run lint:js && npm run validate:html && bash scripts/build-amplify.sh",
+    "build": "npm run lint:js && npm run validate:html && bash scripts/build-amplify.sh",
     "build:functions": "cd functions && npm install && cd ..",
     "minify": "bash scripts/minify-all.sh",
     "optimize:images": "bash scripts/convert-images-to-webp.sh",
@@ -18,9 +15,7 @@
     "cleanup:deep": "bash scripts/cleanup.sh --deep",
     "lint:js": "npx eslint js/**/*.js --fix || echo 'ESLint completed with warnings'",
     "validate:html": "bash scripts/validate-html.sh",
-    "test:video-paths": "bash scripts/test-video-paths.sh",
-    "deploy:amplify": "npm run build:amplify && echo 'Ready for Amplify deployment'",
-    "start": "node server.js"
+    "test:video-paths": "bash scripts/test-video-paths.sh"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -37,7 +32,7 @@
   },
   "keywords": [
     "grupo-musical",
-    "cloudflare-pages",
+    "aws-amplify",
     "website"
   ],
   "author": "Grupo La Célula",

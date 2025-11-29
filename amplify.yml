@@ -10,36 +10,15 @@ applications:
             - npm --version
             - echo "Installing dependencies..."
             - npm ci
-            - echo "Installing functions dependencies..."
-
-            - echo "Pre-build validation..."
-            - npm run validate:html || echo "HTML validation skipped - no script found"
-            - npm run lint:js || echo "Linting skipped - no script found"
         build:
           commands:
             - echo "Starting build phase..."
-            - echo "Environment check..."
-            - echo "RESEND_API_KEY is set:" $(if [ -n "$RESEND_API_KEY" ]; then echo "YES"; else echo "NO"; fi)
-            - echo "GEMINI_API_KEY is set:" $(if [ -n "$GEMINI_API_KEY" ]; then echo "YES"; else echo "NO"; fi)
-            - echo "Copying static assets..."
-            - mkdir -p dist
-            - cp -r assets dist/
-            - cp -r css dist/
-            - cp -r js dist/
-            - cp -r post dist/
-            - cp -r widgets dist/
-            - cp *.html dist/
-            - cp *.json dist/
-            - cp *.xml dist/
-            - cp *.txt dist/
-            - cp _headers dist/
-            - echo "Build completed successfully"
+            - npm run build
         postBuild:
           commands:
             - echo "Post-build phase..."
             - echo "Running final validations..."
             - ls -la dist/
-            - ls -la dist/functions/
             - echo "Deployment ready"
       artifacts:
         baseDirectory: dist
@@ -48,7 +27,6 @@ applications:
       cache:
         paths:
           - node_modules/**/*
-
     customHeaders:
       - pattern: '**/*'
         headers:
@@ -70,7 +48,7 @@ applications:
             value: 'public, max-age=31536000, immutable'
       - pattern: '/js/**'
         headers:
-          - key: 'Cache-Control'
+          - key: 'Cache-control'
             value: 'public, max-age=31536000, immutable'
       - pattern: '/css/**'
         headers:
@@ -83,14 +61,6 @@ applications:
           - key: 'Content-Type'
             value: 'video/webm'
     redirects:
-      - source: '/functions/send-email'
-        target: '/.netlify/functions/send-email'
-        status: '200'
-        condition: null
-      - source: '/functions/chat'
-        target: '/.netlify/functions/chat'
-        status: '200'
-        condition: null
       - source: '/blog'
         target: '/blog.html'
         status: '301'
