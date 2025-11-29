@@ -108,14 +108,69 @@ The site is deployed on AWS Amplify with the following configuration:
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
 - **Node version**: 18+
+- **Build spec file**: `config/amplify.yml`
 
 ### Environment Variables Required
 
-- `RESEND_API_KEY`: API key for Resend (email service)
-- `CONTACT_EMAIL`: Target email for form submissions
-- `GEMINI_API_KEY`: API key for Google Gemini (chatbot)
+These variables are accessed via `context.env` in the serverless functions:
 
-These variables must be configured in the AWS Amplify console.
+- `GEMINI_API_KEY`: API key for Google Gemini (chatbot)
+  - Used in: `functions/api/chatbot.js`
+  - Get it from: https://makersuite.google.com/app/apikey
+  
+- `RESEND_API_KEY`: API key for Resend (email service)
+  - Used in: `functions/api/send-email.js`
+  - Get it from: https://resend.com/api-keys
+  
+- `CONTACT_EMAIL`: Target email for form submissions
+  - Used in: `functions/api/send-email.js`
+  - Example: `contacto@grupomusicalcelula.com`
+
+**⚠️ Important:** These variables must be configured in the AWS Amplify Console under "Environment variables". See `docs/AWS_SECRETS_SETUP.md` for detailed setup instructions.
+
+## Serverless Functions
+
+### Function Structure
+```
+functions/
+├── api/
+│   ├── chatbot.js      # Chatbot endpoint using Gemini API
+│   └── send-email.js   # Email endpoint using Resend API
+├── package.json        # Functions dependencies
+└── package-lock.json
+```
+
+### Function Endpoints
+
+**Chatbot:** `/api/chatbot`
+- Method: POST
+- Body: `{ history: Array<{ role: string, parts: Array<{ text: string }> }> }`
+- Returns: Gemini API response format
+- Environment: `GEMINI_API_KEY`
+
+**Send Email:** `/api/send-email`
+- Method: POST
+- Body: `{ type: string, leadData?: object, conversationData?: object, formData?: object }`
+- Types: `chatbot_summary`, `chatbot_lead`, `form_cotizador`
+- Returns: `{ success: boolean, emailId?: string, error?: string }`
+- Environment: `RESEND_API_KEY`, `CONTACT_EMAIL`
+
+### Testing Functions
+
+See `docs/FUNCTIONS_TESTING.md` for comprehensive testing guide.
+
+Quick test:
+```bash
+# Test chatbot
+curl -X POST https://your-domain.amplifyapp.com/api/chatbot \
+  -H "Content-Type: application/json" \
+  -d '{"history":[{"role":"user","parts":[{"text":"Hola"}]}]}'
+
+# Test email
+curl -X POST https://your-domain.amplifyapp.com/api/send-email \
+  -H "Content-Type: application/json" \
+  -d '{"type":"chatbot_lead","leadData":{"name":"Test","email":"test@test.com","phone":"123"}}'
+```
 
 ## Troubleshooting
 
@@ -124,14 +179,26 @@ These variables must be configured in the AWS Amplify console.
 1.  Check the Amplify build logs for errors.
 2.  Ensure all dependencies are correctly listed in `package.json`.
 3.  Verify that the `npm run build` command runs successfully locally.
+4.  Check that `functions/package.json` has correct dependencies.
 
 ### Email Not Working
 
 1.  Check that the `RESEND_API_KEY` and `CONTACT_EMAIL` environment variables are set correctly in the Amplify console.
 2.  Review the Amplify Function logs for errors.
+3.  Verify Resend API key is active and not expired.
+4.  Check that the sender domain is verified in Resend.
 
 ### Chatbot Issues
 
 1.  Verify the `GEMINI_API_KEY` is set correctly in the Amplify console.
 2.  Check for JS console errors in the browser.
 3.  Review the Amplify Function logs for the chatbot endpoint.
+4.  Test the Gemini API key directly using curl.
+5.  Ensure the API key has not exceeded usage limits.
+
+### Functions Not Found (404)
+
+1.  Verify functions are in `functions/api/` directory.
+2.  Check that files are named `chatbot.js` and `send-email.js` (exact names).
+3.  Redeploy the application.
+4.  Check build logs for function deployment confirmations.
