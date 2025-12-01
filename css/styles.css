@@ -938,7 +938,7 @@ img.loaded {
 /* Optimización de renderizado */
 .gallery-item,
 .service-card,
-blog-post-card {
+.blog-post-card {
     content-visibility: auto;
     contain-intrinsic-size: 300px;
 }
