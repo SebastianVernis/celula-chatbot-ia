@@ -183,7 +183,7 @@ wrangler pages deploy .
 
 ### 6.1 Test del Chatbot
 
-1. Ve a tu sitio: `https://grupolacelula.com`
+1. Ve a tu sitio: `https://grupomusicalcelula.com`
 2. Abre el chatbot
 3. Completa el formulario inicial
 4. Mantén una conversación de al menos 3 mensajes
@@ -194,7 +194,7 @@ wrangler pages deploy .
 
 ### 6.2 Test del Cotizador
 
-1. Ve a: `https://grupolacelula.com/cotizador.html`
+1. Ve a: `https://grupomusicalcelula.com/cotizador.html`
 2. Completa el formulario con datos válidos:
    - Nombre completo
    - Email válido
@@ -272,7 +272,7 @@ Las plantillas HTML están en `generateEmailContent()` en `functions/api/send-em
 ```javascript
 CORS: {
   ALLOWED_ORIGINS: [
-    'https://grupolacelula.com',
+    'https://grupomusicalcelula.com',
     'https://www.grupolacelula.com',
     'https://tu-otro-dominio.com', // ← Añadir aquí
     'http://localhost:8788',

@@ -99,8 +99,8 @@ Since functions already work on Cloudflare Pages:
 3. **Update frontend to call Cloudflare endpoints:**
    ```javascript
    // In js/chatbot.js and js/form-handler.js
-   const CHATBOT_API = 'https://celula-site.pages.dev/api/chatbot';
-   const EMAIL_API = 'https://celula-site.pages.dev/api/send-email';
+   const CHATBOT_API = 'https://grupomusicalcelula.com/api/chatbot';
+   const EMAIL_API = 'https://grupomusicalcelula.com/api/send-email';
    ```
 
 **Pros:**
@@ -176,12 +176,12 @@ Visit: `https://your-app-id.amplifyapp.com`
 ### Test Functions (Cloudflare)
 ```bash
 # Test chatbot
-curl -X POST https://celula-site.pages.dev/api/chatbot \
+curl -X POST https://grupomusicalcelula.com/api/chatbot \
   -H "Content-Type: application/json" \
   -d '{"history":[{"role":"user","parts":[{"text":"Hola"}]}]}'
 
 # Test email
-curl -X POST https://celula-site.pages.dev/api/send-email \
+curl -X POST https://grupomusicalcelula.com/api/send-email \
   -H "Content-Type: application/json" \
   -d '{"type":"chatbot_lead","leadData":{"name":"Test","email":"test@test.com","phone":"123"}}'
 ```

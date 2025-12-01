@@ -430,7 +430,7 @@ INFORMACIÓN CLAVE SOBRE GRUPO MUSICAL LA CÉLULA:
 
 5. **Información de Contacto**
 • WhatsApp: 55 3541 2631 (atención inmediata)
-• Sitio Web: https://grupomusicalcelula.pages.dev (información detallada)
+• Sitio Web: https://grupomusicalcelula.com (información detallada)
 • Redes: Facebook, YouTube, Twitter (@grupocelula)
 
 FORMATO CONSISTENTE PARA RESPUESTAS:

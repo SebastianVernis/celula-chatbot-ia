@@ -264,7 +264,7 @@ Ver [`docs/REPORTE-FINAL-OPTIMIZACIONES.md`](docs/REPORTE-FINAL-OPTIMIZACIONES.m
 
 ## 📞 Contacto
 
-- **Web**: https://grupomusicalcelula.pages.dev
+- **Web**: https://grupomusicalcelula.com
 - **Email**: contacto@grupomusicalcelula.com
 - **WhatsApp**: [Contactar](https://wa.me/...)
 

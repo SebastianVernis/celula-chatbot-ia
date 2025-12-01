@@ -221,7 +221,7 @@ npx wrangler pages secret put RESEND_API_KEY
 
 3. **Verificar funciones:**
 ```bash
-curl https://celula-site.pages.dev/api/chatbot -X POST \
+curl https://grupomusicalcelula.com/api/chatbot -X POST \
   -H "Content-Type: application/json" \
   -d '{"history":[{"role":"user","parts":[{"text":"test"}]}]}'
 ```

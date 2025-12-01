@@ -43,7 +43,7 @@ POST /api/send-email
 
 ### URL Completa
 
-- **Producción**: `https://grupolacelula.com/api/send-email`
+- **Producción**: `https://grupomusicalcelula.com/api/send-email`
 - **Desarrollo (Cloudflare Pages)**: `https://grupomusicalcelula.pages.dev/api/send-email`
 - **Desarrollo local**: `http://localhost:8788/api/send-email`
 
@@ -309,7 +309,7 @@ console.log(`Solicitudes restantes: ${result.remaining}`);
 ### 1. CORS Restrictivo
 
 Solo se permiten solicitudes desde:
-- `https://grupolacelula.com`
+- `https://grupomusicalcelula.com`
 - `https://www.grupolacelula.com`
 - `https://grupomusicalcelula.pages.dev` (desarrollo en Cloudflare)
 - `http://localhost:8788` (desarrollo local)
@@ -339,7 +339,7 @@ Todos los strings se sanitizan para prevenir XSS:
 ### 5. Headers de Seguridad
 
 ```
-Access-Control-Allow-Origin: https://grupolacelula.com
+Access-Control-Allow-Origin: https://grupomusicalcelula.com
 Access-Control-Allow-Methods: POST, OPTIONS
 Access-Control-Allow-Headers: Content-Type
 Access-Control-Max-Age: 86400
@@ -427,7 +427,7 @@ if (!result.success && result.errors) {
 
 ```bash
 # Test endpoint chatbot
-curl -X POST https://grupolacelula.com/api/send-email \
+curl -X POST https://grupomusicalcelula.com/api/send-email \
   -H "Content-Type: application/json" \
   -d '{
     "type": "chatbot",
@@ -438,7 +438,7 @@ curl -X POST https://grupolacelula.com/api/send-email \
   }'
 
 # Test endpoint cotizador
-curl -X POST https://grupolacelula.com/api/send-email \
+curl -X POST https://grupomusicalcelula.com/api/send-email \
   -H "Content-Type: application/json" \
   -d '{
     "type": "cotizador",
