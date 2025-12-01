@@ -11,6 +11,7 @@ dist/
 
 # Documentation
 docs/
+notes/
 *.md
 !README.md
 
