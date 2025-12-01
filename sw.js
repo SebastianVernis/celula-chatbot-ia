@@ -4,6 +4,9 @@
  * Versión: 3.0 - Optimizado para rendimiento y offline
  */
 
+// Google Analytics
+importScripts('https://www.googletagmanager.com/gtag/js?id=G-VKRHM9YWLY');
+
 const CACHE_NAME = 'celula-cache-v3';
 const RUNTIME_CACHE = 'celula-runtime-v3';
 const IMAGES_CACHE = 'celula-images-v3';
