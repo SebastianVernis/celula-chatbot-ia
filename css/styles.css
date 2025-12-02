@@ -9,7 +9,7 @@
 html, body {
     height: 100%;
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-    background: transparent;
+    background: url('../assets/images/background.webp') center/cover no-repeat fixed, #000000;
     color: #fff;
     overflow-x: hidden;
     scroll-behavior: smooth;
