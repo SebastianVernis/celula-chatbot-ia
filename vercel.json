@@ -5,11 +5,11 @@
   "framework": null,
   "installCommand": "npm install",
   "devCommand": "npm run dev",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "env": {
     "NODE_VERSION": "18"
   },
-
-
   "headers": [
     {
       "source": "/(.*)",
@@ -46,14 +46,6 @@
     {
       "source": "/api/send-email",
       "destination": "/api/send-email.js"
-    },
-    {
-      "source": "/cotizador",
-      "destination": "/cotizador.html"
-    },
-    {
-      "source": "/blog",
-      "destination": "/blog.html"
     },
     {
       "source": "/post/:id",
