@@ -5,11 +5,11 @@
   "framework": null,
   "installCommand": "npm install",
   "devCommand": "npm run dev",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "env": {
     "NODE_VERSION": "18"
   },
-
-
   "headers": [
     {
       "source": "/(.*)",
@@ -46,6 +46,27 @@
     {
       "source": "/api/send-email",
       "destination": "/api/send-email.js"
+    },
+    {
+      "source": "/post/:id",
+      "destination": "/post/post-:id.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/cotizador.html",
+      "destination": "/cotizador",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/post/post-:id.html",
+      "destination": "/post/:id",
+      "permanent": true
     }
   ]
 }
