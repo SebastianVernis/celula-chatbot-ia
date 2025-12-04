@@ -33,23 +33,46 @@ export default async function handler(req, res) {
 
     switch (type) {
       case 'chatbot_summary':
+        // Validate conversation data exists
+        const hasConversation = conversationData?.full_conversation && conversationData.full_conversation.trim().length > 0;
+        const conversationHtml = hasConversation 
+          ? conversationData.full_conversation
+              .split('\n\n')
+              .map(line => {
+                if (line.startsWith('Cliente:')) {
+                  return `<p style="margin: 10px 0;"><strong style="color: #2563eb;">Cliente:</strong> ${line.replace('Cliente:', '').trim()}</p>`;
+                } else if (line.startsWith('Asistente:')) {
+                  return `<p style="margin: 10px 0;"><strong style="color: #059669;">Asistente:</strong> ${line.replace('Asistente:', '').trim()}</p>`;
+                }
+                return line ? `<p style="margin: 10px 0;">${line}</p>` : '';
+              })
+              .join('')
+          : '<p style="color: #dc2626;">No se registró conversación</p>';
+
         emailData = {
           from: 'Chatbot La Célula <onboarding@resend.dev>',
           to: contactEmail,
           subject: '📊 Resumen de Conversación - Chatbot',
           html: `
-            <h2>Resumen de Conversación con Cliente</h2>
-            <h3>Información del Lead:</h3>
-            <ul>
-              <li><strong>Nombre:</strong> ${conversationData?.leadData?.name || 'No proporcionado'}</li>
-              <li><strong>Email:</strong> ${conversationData?.leadData?.email || 'No proporcionado'}</li>
-              <li><strong>Teléfono:</strong> ${conversationData?.leadData?.phone || 'No proporcionado'}</li>
-            </ul>
-            <h3>Conversación:</h3>
-            <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
-              ${conversationData?.messages?.map(msg => `
-                <p><strong>${msg.role === 'user' ? 'Cliente' : 'Bot'}:</strong> ${msg.text}</p>
-              `).join('') || '<p>No hay mensajes</p>'}
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #1f2937; border-bottom: 2px solid #3b82f6; padding-bottom: 10px;">Resumen de Conversación con Cliente</h2>
+              
+              <h3 style="color: #374151; margin-top: 20px;">📋 Información del Lead:</h3>
+              <ul style="background: #f9fafb; padding: 15px; border-radius: 5px; list-style: none;">
+                <li style="margin: 8px 0;"><strong>Nombre:</strong> ${leadData?.name || 'No proporcionado'}</li>
+                <li style="margin: 8px 0;"><strong>Email:</strong> ${leadData?.email || 'No proporcionado'}</li>
+                <li style="margin: 8px 0;"><strong>Teléfono:</strong> ${leadData?.phone || 'No proporcionado'}</li>
+                <li style="margin: 8px 0;"><strong>Tipo de Evento:</strong> ${leadData?.eventType || 'No especificado'}</li>
+              </ul>
+
+              <h3 style="color: #374151; margin-top: 20px;">💬 Conversación (${conversationData?.conversation_length || 0} mensajes):</h3>
+              <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; border-left: 4px solid #3b82f6;">
+                ${conversationHtml}
+              </div>
+
+              <div style="margin-top: 20px; padding: 10px; background: #eff6ff; border-radius: 5px; font-size: 12px; color: #1e40af;">
+                <strong>📅 Sesión iniciada:</strong> ${conversationData?.session_start ? new Date(conversationData.session_start).toLocaleString('es-MX') : 'No disponible'}
+              </div>
             </div>
           `
         };
