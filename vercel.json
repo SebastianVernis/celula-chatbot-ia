@@ -64,6 +64,11 @@
       "permanent": true
     },
     {
+      "source": "/testimonios.html",
+      "destination": "/testimonios",
+      "permanent": true
+    },
+    {
       "source": "/post/post-:id.html",
       "destination": "/post/:id",
       "permanent": true

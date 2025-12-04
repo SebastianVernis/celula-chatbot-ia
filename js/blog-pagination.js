@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Embedded fallback posts (small)
     let blogPosts = [
-        { id: 'post-32', title: 'Tu Tranquilidad no Tiene Precio', excerpt: 'Firmar un contrato...', date: '14 nov 2025', image: 'assets/gallery/banda-1.webp', url: 'post-32.html' },
-        { id: 'post-29', title: 'No es solo tocar: Así es el Montaje', excerpt: 'Descubre el proceso...', date: '11 nov 2025', image: 'assets/gallery/banda-2.webp', url: 'post-29.html' },
-        { id: 'post-28', title: 'Celebrando el Amor Duradero', excerpt: 'Música para aniversarios...', date: '08 nov 2025', image: 'assets/gallery/banda-3.webp', url: 'post-28.html' }
+        { id: 'post-31', title: 'Grupo Musical Célula se presenta en Santa Moto', excerpt: '¡7 diciembre 5 PM!...', date: '3 dic 2025', image: 'assets/gallery/post-31.webp', url: 'post-31.html' },
+        { id: 'post-30', title: 'Tu Tranquilidad no Tiene Precio', excerpt: 'Firmar un contrato...', date: '14 nov 2025', image: 'assets/gallery/banda-1.webp', url: 'post-30.html' },
+        { id: 'post-29', title: 'No es solo tocar: Así es el Montaje', excerpt: 'Descubre el proceso...', date: '11 nov 2025', image: 'assets/gallery/banda-2.webp', url: 'post-29.html' }
     ];
 
     // Try to load external posts, otherwise keep the fallback
