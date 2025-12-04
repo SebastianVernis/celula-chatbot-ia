@@ -77,6 +77,37 @@
         @font-face{font-family:'Raleway';font-style:normal;font-weight:600;font-display:swap;src:url('assets/fonts/raleway-v28-latin-600.woff2') format('woff2')}
     </style>
 
+    <style>
+        /* Testimonial Widget Styles */
+        .testimonial-card-link {
+            display: block;
+            max-width: 32rem;
+            margin: 2rem auto;
+            text-decoration: none;
+        }
+        .testimonial-card {
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: all 300ms;
+            text-align: left;
+        }
+        .testimonial-card:hover {
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);
+            border-color: rgba(156, 163, 175, 0.5);
+            transform: translateY(-0.25rem);
+        }
+        .t-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .t-title { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; line-height: 1.4; }
+        .t-rating { display: flex; align-items: center; font-size: 0.875rem; color: #d1d5db; flex-wrap: wrap;}
+        .t-stars { color: #facc15; margin: 0 0.5rem; letter-spacing: 2px; }
+        .t-quote { margin: 1.25rem 0; border-left: 4px solid #4b5563; padding-left: 1rem; color: #d1d5db; font-style: italic; font-size: 1rem; line-height: 1.6; }
+        .t-footer { margin-top: 1.25rem; text-align: center; background-color: #1f2937; border-radius: 0.5rem; padding: 0.75rem; color: #facc15; font-weight: 700; }
+        .t-footer:hover { text-decoration: underline; }
+    </style>
+
     <!-- Async CSS Loading -->
     <link rel="preload" href="css/styles.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="css/styles.min.css"></noscript>
@@ -367,7 +398,36 @@
                     Lo que dicen nuestros clientes sobre nuestra música y servicio
                 </p>
                 
-                <div id="featurable-f3bee3c7-41c8-4a69-b4a7-40dafacbf9a6" data-featurable-async data-location-code="es"></div>
+                <a href="testimonios.html" class="testimonial-card-link">
+                    <div class="testimonial-card">
+                        <div class="t-header">
+                            <div>
+                                <h3 class="t-title">Grupo Musical Versátil La Célula</h3>
+                                <div class="t-rating">
+                                    <span style="font-weight: bold; font-size: 1rem;">4.9</span>
+                                    <div class="t-stars">
+                                        ★★★★★
+                                    </div>
+                                    <span>(17 opiniones)</span>
+                                </div>
+                            </div>
+                            <svg style="height: 1.5rem; width: 1.5rem;" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M48 24C48 22.0427 47.8438 20.125 47.5469 18.25H24.375V28.8281H37.8281C17.2656 31.8281 35.6562 34.3594 32.9062 36.1719V42.1406H41.5781C45.6562 38.25 48 31.6406 48 24Z" fill="#4285F4"></path>
+                                <path d="M24.375 48C30.9375 48 36.4688 45.8906 40.4062 42.1406L32.9062 36.1719C30.7969 37.6406 27.8906 38.5312 24.375 38.5312C17.9062 38.5312 12.3281 34.0781 10.4531 28.3125H1.5V34.4531C5.48438 42.5156 14.1562 48 24.375 48Z" fill="#34A853"></path>
+                                <path d="M10.4531 28.3125C10.0312 27.0938 9.79688 25.7812 9.79688 24.5C9.79688 23.2188 10.0312 21.9062 10.4531 20.6875V14.5469H1.5C0.515625 16.6562 0 19.0312 0 21.5C0 23.9688 0.515625 26.3438 1.5 28.4531L10.4531 28.3125V18.3125Z" fill="#FBBC05"></path>
+                                <path d="M24.375 9.46875C28.2188 9.46875 31.3594 10.8906 33.9844 13.2656L40.6406 6.60938C36.4219 2.85938 30.8906 0 24.375 0C14.1562 0 5.48438 5.48437 1.5 13.5469L10.4531 19.6875C12.3281 13.9219 17.9062 9.46875 24.375 9.46875Z" fill="#EA4335"></path>
+                            </svg>
+                        </div>
+                        <blockquote class="t-quote">
+                            "¡La mejor decisión para nuestra boda! Grupo Célula puso
+                            un ambientazo increíble, todos nuestros invitados no pararon de bailar..."
+                            <footer style="margin-top: 0.5rem; font-size: 0.875rem; color: #9ca3af; font-weight: 600;">- Ana Sofía R.</footer>
+                        </blockquote>
+                        <div class="t-footer">
+                            Leer todas las opiniones <span style="font-size: 1.2em;">→</span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -1154,9 +1214,6 @@
 
     <!-- Script de inicialización del chatbot -->
     <script src="js/chatbot.min.js" defer></script>
-
-    <!-- Script de Featurable para testimonios -->
-    <script src="https://featurable.com/assets/v2/carousel_default.min.js" defer charset="UTF-8"></script>
 
 </body>
 </html>

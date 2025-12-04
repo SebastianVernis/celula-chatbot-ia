@@ -1,11 +1,19 @@
 [
     {
-        "id": "post-32",
+        "id": "post-31",
+        "title": "Grupo Musical Célula se presenta en Santa Moto este 7 de diciembre",
+        "excerpt": "¡7 diciembre 5 PM! Grupo Musical Célula enciende Santa Moto. Música en vivo, ambiente biker y energía pura. Evento imperdible.",
+        "date": "3 Diciembre 2025",
+        "image": "assets/gallery/post-31.webp",
+        "url": "post/post-31.html"
+    },
+    {
+        "id": "post-30",
         "title": "Tu Tranquilidad no Tiene Precio: Por Qué Siempre Debes Firmar un Contrato",
         "excerpt": "Firmar un contrato al contratar una banda asegura tranquilidad y evita problemas. Grupo Musical Versátil La Célula explica su importancia.",
         "date": "14 Nov 2025",
         "image": "assets/gallery/banda-25.webp",
-        "url": "post/post-32.html"
+        "url": "post/post-30.html"
     },
     {
         "id": "post-29",
