@@ -8,6 +8,24 @@ class CelulaChatbotManager {
     constructor() {
         console.log('🔧 Construyendo CelulaChatbotManager...');
 
+        // GA helper for chatbot
+        window.__gaChatTrack = function(eventName, params = {}) {
+            try {
+                if (typeof gtag === 'function') {
+                    gtag('event', eventName, Object.assign({
+                        flow: 'chatbot',
+                        source: 'web',
+                        page_location: location.href,
+                        page_referrer: document.referrer
+                    }, params));
+                } else {
+                    console.debug('[GA chat debug]', eventName, params);
+                }
+            } catch (err) {
+                console.warn('GA emit error:', err);
+            }
+        };
+
         this.chatWindow = document.getElementById('chat-window');
         this.userInput = document.getElementById('user-input');
         this.sendBtn = document.getElementById('send-btn');
@@ -172,6 +190,9 @@ class CelulaChatbotManager {
                     leadDataKeys: Object.keys(this.leadData || {}).length
                 });
 
+                // event: chatbot_open
+                window.__gaChatTrack('chatbot_open', { step: 'open', open_method: 'click' });
+
                 if (this.chatHistory && this.chatHistory.length > 3) {
                     console.log('📝 Abriendo ventana de chat (historial > 3)');
                     this.leadForm.classList.remove('active');
@@ -255,6 +276,7 @@ class CelulaChatbotManager {
             .getElementById('chatbot-lead-form')
             ?.addEventListener('submit', (e) => {
                 e.preventDefault();
+                window.__gaChatTrack('chatbot_request_contact', { step: 'request_contact', requested_fields: 'name,email,phone,eventType' });
                 this.handleFormSubmission();
             });
 
@@ -289,6 +311,14 @@ class CelulaChatbotManager {
         this.leadData.eventType = eventTypeInput.value.trim();
 
         if (this.leadData.name && this.leadData.email && this.leadData.phone) {
+            // GA: collected contact
+            window.__gaChatTrack('chatbot_collect_contact', {
+                step: 'collect',
+                collected_fields_count: ['name','email','phone','eventType'].filter(k=>this.leadData[k] && this.leadData[k].length).length,
+                contact_method: 'chatbot',
+                lead_type: this.leadData.eventType || undefined
+            });
+
             // Enviar lead directamente a la API
             try {
                 const response = await fetch('/api/send-email', {
@@ -305,11 +335,23 @@ class CelulaChatbotManager {
                 const result = await response.json();
                 if (result.success) {
                     console.log('✅ Lead capturado enviado:', result.emailId);
+                    // Conversion
+                    window.__gaChatTrack('generate_lead', {
+                        step: 'success',
+                        lead_type: this.leadData.eventType || undefined,
+                        value: undefined,
+                        currency: 'MXN',
+                        contact_method: 'chatbot',
+                        conversation_length: (this.getVisibleMessages() || []).length,
+                        resolution: 'automated'
+                    });
                 } else {
                     console.warn('⚠️ No se pudo enviar el lead:', result.error);
+                    window.__gaChatTrack('chatbot_submit_error', { step: 'error', error_type: 'server', error_message: String(result.error || 'unknown') });
                 }
             } catch (error) {
                 console.error('❌ Error enviando lead:', error);
+                window.__gaChatTrack('chatbot_submit_error', { step: 'error', error_type: 'exception', error_message: String(error?.message || error) });
             }
 
             this.leadForm.classList.remove('active');
@@ -324,6 +366,7 @@ class CelulaChatbotManager {
     async startChat() {
     // loadInitialContext ahora devuelve true si necesita añadir saludo
         const needsGreeting = await this.loadInitialContext();
+        window.__gaChatTrack('chatbot_start', { step: 'start', first_intent: this.leadData?.eventType || undefined });
 
         // Solo añadir el saludo si es necesario (no existe ya en el historial)
         if (needsGreeting) {
@@ -513,6 +556,18 @@ Tipo de evento: ${this.leadData.eventType || '[Sin especificar]'}`;
             role: 'user',
             parts: [{ text: message }]
         });
+
+        // Simple heuristic to detect intent
+        const lower = (message || '').toLowerCase();
+        const intents = [
+            { name: 'cotizacion', keys: ['cotiza', 'cotización', 'cotizacion', 'precio', 'costo', 'presupuesto'] },
+            { name: 'disponibilidad', keys: ['fecha', 'disponible', 'agenda'] },
+            { name: 'contacto', keys: ['whatsapp', 'llamar', 'contacto'] }
+        ];
+        const hit = intents.find(it => it.keys.some(k => lower.includes(k)));
+        if (hit) {
+            window.__gaChatTrack('chatbot_intent_detected', { step: 'intent', intent_name: hit.name, confidence: 0.6 });
+        }
 
         const payload = {
             history: this.chatHistory
@@ -824,6 +879,9 @@ Tipo de evento: ${this.leadData.eventType || '[Sin especificar]'}`;
         this.sendBtn.disabled = false;
         this.userInput.focus();
         this.saveState();
+
+        // track message sent to get conversation length dynamics
+        window.__gaChatTrack('chatbot_message_sent', { step: 'message', conversation_length: (this.getVisibleMessages() || []).length });
 
         // Enviar resumen por email después de cada mensaje (SIN condiciones)
         console.log('📧 Intentando enviar resumen del chatbot...');

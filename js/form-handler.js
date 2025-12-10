@@ -1,4 +1,28 @@
-/*! Manejador del Formulario de Cotización - Grupo Musical La Célula */document.addEventListener('DOMContentLoaded',function(){const form=document.querySelector('.cotizador-form');if(form){let isSubmitting=false;form.addEventListener('submit',async function(e){e.preventDefault();
+/*! Manejador del Formulario de Cotización - Grupo Musical La Célula */document.addEventListener('DOMContentLoaded',function(){
+// GA helper
+window.__gaLeadTrack = function(eventName, params = {}) {
+    try {
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, Object.assign({
+                flow: 'cotizador',
+                source: 'web',
+                page_location: location.href,
+                page_referrer: document.referrer
+            }, params));
+        } else {
+            console.debug('[GA debug]', eventName, params);
+        }
+    } catch (err) {
+        console.warn('GA emit error:', err);
+    }
+};
+
+const form=document.querySelector('.cotizador-form');
+if(form){
+// fire cotizador_open when form is present
+window.__gaLeadTrack('cotizador_open', { step: 'open' });
+
+let isSubmitting=false;form.addEventListener('submit',async function(e){e.preventDefault();
 
     if (isSubmitting) {
         console.log('Formulario ya está siendo procesado...');
@@ -9,6 +33,9 @@
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn ? submitBtn.textContent : '';
 
+    // mark start on first submit attempt
+    window.__gaLeadTrack('cotizador_start', { step: 'start' });
+
     try {
         if (submitBtn) {
             submitBtn.disabled = true;
@@ -18,17 +45,29 @@
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
 
+        // select service/type updates
+        if (data.evento) {
+            window.__gaLeadTrack('cotizador_select_service', {
+                step: 'select',
+                service_name: data.evento,
+                lead_type: data.evento
+            });
+        }
+
         if (!data.nombre || !data.email || !data.telefono || !data.evento || !data.fecha || !data.ubicacion || !data.invitados) {
+            window.__gaLeadTrack('cotizador_submit_error', { step: 'error', error_type: 'validation', error_message: 'Campos requeridos faltantes' });
             throw new Error('Por favor completa todos los campos requeridos');
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(data.email)) {
+            window.__gaLeadTrack('cotizador_submit_error', { step: 'error', error_type: 'validation', error_message: 'Email inválido' });
             throw new Error('Por favor ingresa un email válido');
         }
 
         const phoneDigits = data.telefono.replace(/\D/g, '');
         if (phoneDigits.length !== 10) {
+            window.__gaLeadTrack('cotizador_submit_error', { step: 'error', error_type: 'validation', error_message: 'Teléfono inválido' });
             throw new Error('El teléfono debe tener 10 dígitos');
         }
 
@@ -36,6 +75,7 @@
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         if (eventDate < today) {
+            window.__gaLeadTrack('cotizador_submit_error', { step: 'error', error_type: 'validation', error_message: 'Fecha pasada' });
             throw new Error('La fecha del evento debe ser futura');
         }
 
@@ -57,6 +97,13 @@
             }
         };
 
+        // Pre-summary view event
+        window.__gaLeadTrack('cotizador_view_summary', {
+            step: 'summary',
+            value: undefined,
+            currency: 'MXN'
+        });
+
         const response = await fetch('/api/send-email', {
             method: 'POST',
             headers: {
@@ -69,9 +116,19 @@
 
         if (result.success) {
             console.log('✅ Cotización enviada por email exitosamente');
+            // generate_lead conversion
+            window.__gaLeadTrack('generate_lead', {
+                step: 'success',
+                lead_type: data.evento,
+                contact_method: 'form',
+                value: undefined,
+                currency: 'MXN',
+                form_fields_filled: Object.keys(data).length
+            });
             showNotification('✅ Tu solicitud ha sido enviada. Te contactaremos pronto.', 'success');
         } else {
             console.warn('No se pudo enviar el email:', result.error);
+            window.__gaLeadTrack('cotizador_submit_error', { step: 'error', error_type: 'server', error_message: String(result.error || 'unknown') });
             showNotification(`⚠️ ${result.error || 'No se pudo enviar el email'}. Te redirigiremos a WhatsApp.`, 'warning');
         }
 
@@ -89,6 +146,7 @@
 
     } catch (error) {
         console.error('Error al procesar el formulario:', error);
+        window.__gaLeadTrack('cotizador_submit_error', { step: 'error', error_type: 'exception', error_message: String(error?.message || error) });
         showNotification(`❌ ${error.message}. Por favor intenta de nuevo.`, 'error');
     } finally {
         if (submitBtn) {
@@ -123,6 +181,19 @@ if (phoneInput) {
     });
 }
 }
+
+// Track field interactions for updates
+try {
+    const trackUpdate = () => window.__gaLeadTrack('cotizador_update_quote', {
+        step: 'update',
+        attendees: (form.querySelector('#invitados')||{}).value || undefined,
+        date_selected: (form.querySelector('#fecha')||{}).value || undefined
+    });
+    ['#evento','#fecha','#invitados','#ubicacion','#comentarios'].forEach(sel=>{
+        const el = form.querySelector(sel);
+        if (el) el.addEventListener('change', trackUpdate);
+    });
+} catch(_){}
 
 console.log('✅ Cotizador cargado correctamente');
 });
