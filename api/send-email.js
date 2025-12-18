@@ -20,15 +20,23 @@ export default async function handler(req, res) {
   try {
     const { type, leadData, conversationData, formData } = req.body;
 
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const contactEmail = process.env.CONTACT_EMAIL;
+    // Configuración para el primer destino (La Célula)
+    const resendApiKey1 = process.env.RESEND_API_KEY_1;
+    const contactEmail1 = process.env.CONTACT_EMAIL_1;
 
-    if (!resendApiKey || !contactEmail) {
-      console.error('Missing environment variables');
+    // Configuración para el segundo destino
+    const resendApiKey2 = process.env.RESEND_API_KEY_2;
+    const contactEmail2 = process.env.CONTACT_EMAIL_2;
+
+    // Validar que al menos una configuración esté completa
+    const hasConfig1 = resendApiKey1 && contactEmail1;
+    const hasConfig2 = resendApiKey2 && contactEmail2;
+
+    if (!hasConfig1 && !hasConfig2) {
+      console.error('Missing environment variables for both configurations');
       return res.status(500).json({ error: 'Configuration error' });
     }
 
-    const resend = new Resend(resendApiKey);
     let emailData;
 
     switch (type) {
@@ -51,7 +59,6 @@ export default async function handler(req, res) {
 
         emailData = {
           from: 'Chatbot La Célula <onboarding@resend.dev>',
-          to: contactEmail,
           subject: '📊 Resumen de Conversación - Chatbot',
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -81,7 +88,6 @@ export default async function handler(req, res) {
       case 'chatbot_lead':
         emailData = {
           from: 'Chatbot La Célula <onboarding@resend.dev>',
-          to: contactEmail,
           subject: '🎯 Nuevo Lead Capturado - Chatbot',
           html: `
             <h2>Nuevo Lead desde el Chatbot</h2>
@@ -99,7 +105,6 @@ export default async function handler(req, res) {
       case 'form_cotizador':
         emailData = {
           from: 'Formulario La Célula <onboarding@resend.dev>',
-          to: contactEmail,
           subject: '💰 Nueva Solicitud de Cotización',
           html: `
             <h2>Solicitud de Cotización</h2>
@@ -126,11 +131,38 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Invalid email type' });
     }
 
-    const result = await resend.emails.send(emailData);
+    // Enviar a ambos destinos de forma paralela
+    const sendPromises = [];
+    const results = [];
+
+    if (hasConfig1) {
+      const resend1 = new Resend(resendApiKey1);
+      sendPromises.push(
+        resend1.emails.send({ ...emailData, to: contactEmail1 })
+          .then(result => ({ success: true, emailId: result.data?.id, destination: 1 }))
+          .catch(error => ({ success: false, error: error.message, destination: 1 }))
+      );
+    }
+
+    if (hasConfig2) {
+      const resend2 = new Resend(resendApiKey2);
+      sendPromises.push(
+        resend2.emails.send({ ...emailData, to: contactEmail2 })
+          .then(result => ({ success: true, emailId: result.data?.id, destination: 2 }))
+          .catch(error => ({ success: false, error: error.message, destination: 2 }))
+      );
+    }
+
+    const sendResults = await Promise.all(sendPromises);
+
+    // Verificar si al menos uno fue exitoso
+    const anySuccess = sendResults.some(r => r.success);
+    const allSuccess = sendResults.every(r => r.success);
 
     return res.status(200).json({ 
-      success: true, 
-      emailId: result.data?.id 
+      success: anySuccess,
+      allSuccess,
+      results: sendResults
     });
 
   } catch (error) {
