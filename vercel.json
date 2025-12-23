@@ -50,6 +50,18 @@
     {
       "source": "/post/:id",
       "destination": "/post/post-:id.html"
+    },
+    {
+      "source": "/bodas",
+      "destination": "https://marketing-celula.vercel.app/bodas"
+    },
+    {
+      "source": "/xv",
+      "destination": "https://marketing-celula.vercel.app/xv"
+    },
+    {
+      "source": "/privada",
+      "destination": "https://marketing-celula.vercel.app/privada"
     }
   ],
   "redirects": [
