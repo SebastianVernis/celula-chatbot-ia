@@ -19,7 +19,6 @@ El CSS crítico incluye solo los estilos necesarios para renderizar el hero sect
 }
 
 html, body {
-    height: 100%;
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     background: transparent;
     color: #fff;
