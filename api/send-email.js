@@ -20,20 +20,25 @@ export default async function handler(req, res) {
   try {
     const { type, leadData, conversationData, formData } = req.body;
 
-    // Validar configuración de Resend
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const contactEmail = process.env.CONTACT_EMAIL;
+    // Configuración para el primer destino (La Célula)
+    const resendApiKey1 = process.env.RESEND_API_KEY_1;
+    const contactEmail1 = process.env.CONTACT_EMAIL_1;
 
-    if (!resendApiKey || !contactEmail) {
-      console.error('Missing RESEND_API_KEY or CONTACT_EMAIL environment variables');
+    // Configuración para el segundo destino
+    const resendApiKey2 = process.env.RESEND_API_KEY_2;
+    const contactEmail2 = process.env.CONTACT_EMAIL_2;
+
+    // Validar que al menos una configuración esté completa
+    const hasConfig1 = resendApiKey1 && contactEmail1;
+    const hasConfig2 = resendApiKey2 && contactEmail2;
+
+    if (!hasConfig1 && !hasConfig2) {
+      console.error('Missing environment variables for both configurations');
       return res.status(500).json({ 
         error: 'Email configuration error',
-        message: 'Missing required environment variables'
+        message: 'At least one complete email configuration is required'
       });
     }
-
-    // Inicializar Resend
-    const resend = new Resend(resendApiKey);
 
     let emailData;
 
@@ -59,7 +64,6 @@ export default async function handler(req, res) {
 
         emailData = {
           from: 'Chatbot La Célula <onboarding@resend.dev>',
-          to: contactEmail,
           subject: '📊 Resumen de Conversación - Chatbot La Célula',
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -120,7 +124,6 @@ export default async function handler(req, res) {
       case 'chatbot_lead': {
         emailData = {
           from: 'Chatbot La Célula <onboarding@resend.dev>',
-          to: contactEmail,
           subject: '🎯 Nuevo Lead Capturado - Chatbot La Célula',
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -177,7 +180,6 @@ export default async function handler(req, res) {
       case 'form_cotizador': {
         emailData = {
           from: 'Formulario La Célula <onboarding@resend.dev>',
-          to: contactEmail,
           subject: '💰 Nueva Solicitud de Cotización - La Célula',
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -263,24 +265,64 @@ export default async function handler(req, res) {
         });
     }
 
-    // Enviar email con Resend
-    const result = await resend.emails.send(emailData);
+    // Enviar a ambos destinos de forma paralela
+    const sendPromises = [];
 
-    if (result.error) {
-      console.error('Resend API error:', result.error);
-      return res.status(500).json({ 
-        success: false,
-        error: 'Failed to send email',
-        message: result.error.message 
-      });
+    if (hasConfig1) {
+      const resend1 = new Resend(resendApiKey1);
+      sendPromises.push(
+        resend1.emails.send({ ...emailData, to: contactEmail1 })
+          .then(result => ({ 
+            success: true, 
+            emailId: result.data?.id, 
+            destination: 1,
+            email: contactEmail1 
+          }))
+          .catch(error => ({ 
+            success: false, 
+            error: error.message, 
+            destination: 1,
+            email: contactEmail1 
+          }))
+      );
     }
 
-    console.log('Email sent successfully:', result.data?.id);
-    
+    if (hasConfig2) {
+      const resend2 = new Resend(resendApiKey2);
+      sendPromises.push(
+        resend2.emails.send({ ...emailData, to: contactEmail2 })
+          .then(result => ({ 
+            success: true, 
+            emailId: result.data?.id, 
+            destination: 2,
+            email: contactEmail2 
+          }))
+          .catch(error => ({ 
+            success: false, 
+            error: error.message, 
+            destination: 2,
+            email: contactEmail2 
+          }))
+      );
+    }
+
+    const sendResults = await Promise.all(sendPromises);
+
+    // Verificar si al menos uno fue exitoso
+    const anySuccess = sendResults.some(r => r.success);
+    const allSuccess = sendResults.every(r => r.success);
+
+    console.log('Email send results:', sendResults);
+
     return res.status(200).json({ 
-      success: true,
-      emailId: result.data?.id,
-      message: 'Email sent successfully'
+      success: anySuccess,
+      allSuccess,
+      results: sendResults,
+      message: allSuccess 
+        ? 'All emails sent successfully' 
+        : anySuccess 
+          ? 'Some emails sent successfully' 
+          : 'Failed to send emails'
     });
 
   } catch (error) {
