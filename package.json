@@ -9,8 +9,9 @@
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
     "validate": "node tools/validate.js",
+    "minify": "node tools/minify.js",
     "lint": "npx eslint --config config/eslint.config.js src/js/**/*.js --fix || echo 'ESLint completed with warnings'",
-    "prebuild": "npm run validate",
+    "prebuild": "npm run validate && npm run minify",
     "test:multi-provider": "node tests/test-multi-provider.js",
     "test:gemini": "node tests/test-gemini-api.js",
     "test:email": "node tests/test-chatbot-email.js",
@@ -31,6 +32,7 @@
     "eslint": "^8.57.1",
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1",
+    "terser": "^5.44.1",
     "vercel": "^37.0.0"
   },
   "engines": {
