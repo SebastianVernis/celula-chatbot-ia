@@ -116,7 +116,20 @@ let isSubmitting=false;form.addEventListener('submit',async function(e){e.preven
 
         if (result.success) {
             console.log('✅ Cotización enviada por email exitosamente');
-            // generate_lead conversion
+            
+            // Push al dataLayer para GTM (evento de conversión)
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'cotizador_completed',
+                cotizadorData: {
+                    tipoEvento: data.evento,
+                    numeroInvitados: numeroInvitados,
+                    fechaEvento: data.fecha,
+                    ubicacion: data.ubicacion
+                }
+            });
+            
+            // generate_lead conversion (GA4 legacy)
             window.__gaLeadTrack('generate_lead', {
                 step: 'success',
                 lead_type: data.evento,
