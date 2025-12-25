@@ -163,3 +163,5 @@ tmp/
 .history/public/forms/resend-handler_20251120033830.js
 .history/public/forms/resend-handler_20251120033834.js
 .history/public/forms/resend-handler_20251120033836.js
+.vercel
+.env*.local
