@@ -13,7 +13,6 @@ package-lock.json
 wrangler.toml.backup
 
 # Build artifacts
-dist/
 build/
 *.tar.gz
 celula-site.tar.gz
