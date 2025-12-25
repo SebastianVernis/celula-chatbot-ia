@@ -4,20 +4,20 @@ import fetch from 'node-fetch';
 
 async function testGeminiAPI() {
     const apiKey = process.env.GEMINI_API_KEY;
-    
+
     if (!apiKey) {
         console.error('❌ GEMINI_API_KEY no está configurada');
         return;
     }
 
     console.log('✅ API Key encontrada (longitud:', apiKey.length, ')');
-    
+
     // Test 1: Verificar modelos disponibles
     console.log('\n🔍 Verificando modelos disponibles...');
     try {
         const modelsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
         const modelsData = await modelsResponse.json();
-        
+
         if (modelsResponse.ok) {
             console.log('✅ Conexión a API exitosa');
             console.log('📋 Modelos disponibles:');
@@ -35,7 +35,7 @@ async function testGeminiAPI() {
     console.log('\n🔍 Probando generación de contenido...');
     try {
         const generateResponse = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
             {
                 method: 'POST',
                 headers: {
@@ -48,9 +48,9 @@ async function testGeminiAPI() {
                 })
             }
         );
-        
+
         const generateData = await generateResponse.json();
-        
+
         if (generateResponse.ok) {
             console.log('✅ Generación exitosa');
             console.log('📝 Respuesta:', generateData.candidates?.[0]?.content?.parts?.[0]?.text);
@@ -58,7 +58,7 @@ async function testGeminiAPI() {
             console.error('❌ Error en generación:');
             console.error('Status:', generateResponse.status, generateResponse.statusText);
             console.error('Detalles:', JSON.stringify(generateData, null, 2));
-            
+
             if (generateResponse.status === 429) {
                 console.log('\n⚠️  ERROR 429: Rate limit excedido');
                 console.log('🕐 Posibles causas:');
@@ -88,9 +88,9 @@ async function testGeminiAPI() {
                 })
             }
         );
-        
+
         const altData = await altResponse.json();
-        
+
         if (altResponse.ok) {
             console.log('✅ Modelo alternativo funciona');
         } else {

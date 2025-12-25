@@ -31,8 +31,8 @@ export default async function handler(req, res) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash-lite",
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash-lite",
       generationConfig: {
         temperature: 0.7,
         topK: 40,
@@ -64,9 +64,9 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Chatbot error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Internal server error',
-      message: error.message 
+      message: error.message
     });
   }
 }
