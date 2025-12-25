@@ -102,7 +102,7 @@ celula-site/
 ## APIs y Servicios
 
 ### Google Gemini AI
-- **Modelo:** gemini-2.0-flash-lite
+- **Modelo:** gemini-2.5-flash-lite
 - **Uso:** Chatbot conversacional
 - **Endpoint:** `/api/chatbot`
 - **Variables:** `GEMINI_API_KEY`
