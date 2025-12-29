@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Embedded fallback posts (small)
     let blogPosts = [
-        { id: 'post-31', title: 'Grupo Musical Célula se presenta en Santa Moto', excerpt: '¡7 diciembre 5 PM!...', date: '3 dic 2025', image: 'assets/gallery/post-31.webp', url: 'post-31.html' },
-        { id: 'post-30', title: 'Tu Tranquilidad no Tiene Precio', excerpt: 'Firmar un contrato...', date: '14 nov 2025', image: 'assets/gallery/banda-1.webp', url: 'post-30.html' },
-        { id: 'post-29', title: 'No es solo tocar: Así es el Montaje', excerpt: 'Descubre el proceso...', date: '11 nov 2025', image: 'assets/gallery/banda-2.webp', url: 'post-29.html' }
+        { id: 'post-46', title: 'Errores Comunes en la Música de unos XV Años', excerpt: 'Guía de errores comunes que afectan la música en XV años en CDMX. Checklist preventivo y soluciones profesionales.', date: '29 dic 2025', image: 'assets/images/cartoon_blog/xv-2.webp', url: 'post/post-46.html' },
+        { id: 'post-45', title: 'Tendencias Musicales para XV Años Actuales', excerpt: 'Análisis de tendencias musicales en XV años en CDMX. Cambios en el vals, música para fiesta y tendencias consolidadas y emergentes.', date: '29 dic 2025', image: 'assets/images/cartoon_blog/xv-1.webp', url: 'post/post-45.html' },
+        { id: 'post-44', title: 'Música en Vivo para XV Años: Qué Considerar al Contratar un Grupo Musical', excerpt: 'Guía profesional para contratar música en vivo para XV años en CDMX. Aspectos técnicos, logísticos y artísticos a considerar.', date: '29 dic 2025', image: 'assets/images/cartoon_blog/xv-3.webp', url: 'post/post-44.html' }
     ];
 
     // Try to load external posts, otherwise keep the fallback
