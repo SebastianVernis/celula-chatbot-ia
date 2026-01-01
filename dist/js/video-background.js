@@ -507,6 +507,13 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🎬 Inicializando video background...');
     console.log('📍 Ruta actual:', window.location.pathname);
 
+    // Skip video background for marketing pages
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/marketing/')) {
+        console.log('⏭️ Página de marketing detectada, omitiendo video background');
+        return;
+    }
+
     const videoBgConfig = {
         videoBaseName: 'assets/video/background', // Base name for the video files
         fallbackImage: 'assets/images/hero-background.webp',
@@ -530,6 +537,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Also initialize when the page is loaded to ensure all resources are available
 window.addEventListener('load', function() {
+    // Skip for marketing pages
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/marketing/')) {
+        return;
+    }
+
     if (window.CelulaVideoBackground) {
         // Try to play the video again once everything is loaded
         setTimeout(() => {

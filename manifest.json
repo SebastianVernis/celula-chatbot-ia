@@ -46,5 +46,19 @@
       "sizes": "1280x720",
       "type": "image/webp"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Marketing",
+      "short_name": "Marketing",
+      "description": "Ver página de marketing",
+      "url": "/marketing/",
+      "icons": [
+        {
+          "src": "/assets/logo/logo.webp",
+          "sizes": "96x96"
+        }
+      ]
+    }
   ]
 }

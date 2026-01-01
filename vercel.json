@@ -55,17 +55,17 @@
   "redirects": [
     {
       "source": "/bodas",
-      "destination": "https://marketing-celula.vercel.app/bodas",
+      "destination": "/marketing/bodas",
       "permanent": true
     },
     {
       "source": "/xv",
-      "destination": "https://marketing-celula.vercel.app/xv",
+      "destination": "/marketing/xv",
       "permanent": true
     },
     {
       "source": "/privada",
-      "destination": "https://marketing-celula.vercel.app/privada",
+      "destination": "/marketing/privada",
       "permanent": true
     },
     {

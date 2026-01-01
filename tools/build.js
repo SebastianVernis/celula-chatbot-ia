@@ -44,6 +44,15 @@ if (existsSync(postSrc)) {
     console.log('  ✓ post/');
 }
 
+// Copy marketing directory
+console.log('\n📢 Copying marketing pages...');
+const marketingSrc = join(PROJECT_ROOT, 'marketing');
+const marketingDest = join(DIST_DIR, 'marketing');
+if (existsSync(marketingSrc)) {
+    cpSync(marketingSrc, marketingDest, { recursive: true });
+    console.log('  ✓ marketing/');
+}
+
 // Copy assets directory
 console.log('\n🖼️  Copying assets...');
 const assetsSrc = join(PROJECT_ROOT, 'assets');
@@ -103,6 +112,7 @@ console.log('\n✅ Build complete! Output in dist/\n');
 console.log('📊 Build summary:');
 console.log(`   - HTML pages: ${htmlFiles.length}`);
 console.log('   - Blog posts: ✓');
+console.log('   - Marketing pages: ✓');
 console.log('   - Assets: ✓');
 console.log('   - CSS & JS: ✓');
 console.log('   - Functions: ✓');

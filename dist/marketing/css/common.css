@@ -1,0 +1,189 @@
+/* Fonts */
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/assets/fonts/open-sans-v34-latin-regular.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/assets/fonts/open-sans-v34-latin-600.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/assets/fonts/open-sans-v34-latin-700.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'Lobster';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/assets/fonts/lobster-v28-latin-regular.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/assets/fonts/raleway-v28-latin-regular.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/assets/fonts/raleway-v28-latin-600.woff2') format('woff2')
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+body,
+html {
+    height: 100%;
+    font-family: 'Open Sans', Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden
+}
+
+/* Header & Navigation */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 55px;
+    background: rgba(0, 0, 0, .4);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.nav-container {
+    width: 100%;
+    max-width: 980px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    position: relative
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 40px;
+    align-items: center
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font: normal normal bold 15px/1.4em 'Open Sans', sans-serif;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all .3s ease;
+    display: block
+}
+
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10001
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    margin: 3px 0;
+    transition: .3s;
+    display: block
+}
+
+/* Footer */
+.site-footer {
+    padding: 40px 20px;
+    background: #111;
+    text-align: center
+}
+
+.footer-social {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px
+}
+
+.social-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    transition: transform .3s ease;
+    filter: brightness(0) invert(1)
+}
+
+.social-icon:hover {
+    transform: scale(1.1)
+}
+
+.footer-text {
+    font-size: 14px;
+    color: #888
+}
+
+/* Responsive */
+@media (max-width:768px) {
+    .mobile-menu-toggle {
+        display: flex
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, .95);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        padding: 20px;
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        transition: all .3s ease;
+        z-index: 9999
+    }
+
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        max-height: 500px
+    }
+}
