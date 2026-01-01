@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = Object.fromEntries(formData);
 
                 // Basic validation
-                if (!data.nombre || !data.telefono || !data.evento || !data.fecha) {
+                if (!data.nombre || !data.telefono || !data.fecha) {
                     throw new Error('Por favor completa todos los campos requeridos');
                 }
 
@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         body: JSON.stringify({
                             nombre: data.nombre,
                             telefono: phoneDigits,
-                            evento: data.evento,
                             fecha: data.fecha,
                             comentarios: data.comentarios || '',
                             campaignTitle: campaignTitle,
@@ -82,14 +81,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Continuar aunque falle el email
                 }
 
-                const mensaje = `Hola, me interesa cotizar un evento desde la *${campaignTitle}*:\n\n🎵 *Cotización de Evento Musical*\n👤 *Nombre:* ${data.nombre}\n📞 *Teléfono:* ${phoneDigits}\n🎉 *Tipo de evento:* ${data.evento}\n📅 *Fecha:* ${formattedDate}\n💬 *Comentarios:* ${data.comentarios || 'Ninguno'}\n\n¡Espero su respuesta!`;
+                const mensaje = `Hola, me interesa cotizar mi evento con 10% de descuento:\n\n🎵 *Cotización de Evento Musical*\n👤 *Nombre:* ${data.nombre}\n📞 *Teléfono:* ${phoneDigits}\n🎉 *Tipo de evento:* ${campaignName}\n📅 *Fecha:* ${formattedDate}\n💬 *Comentarios:* ${data.comentarios || 'Ninguno'}\n\n¡Espero su respuesta!`;
 
                 // Push event to GTM dataLayer - GTM handles all tracking
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
                     event: 'form_submission',
                     formName: campaignName,
-                    eventType: data.evento,
                     eventDate: data.fecha,
                     formValue: 5.0
                 });
