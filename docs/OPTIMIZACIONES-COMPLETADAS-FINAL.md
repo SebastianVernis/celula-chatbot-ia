@@ -156,7 +156,7 @@ ffmpeg -i background-1080p.webm \
 - `css/styles.min.css` - Regenerado (37% reducción)
 
 ### **Assets:**
-- `assets/images/logo-blanco.webp` - NUEVO
+- `assets/gallery/logo-blanco.webp` - NUEVO
 - `assets/icons/*.webp` - 4 nuevos archivos
 - `assets/video/background-720p.webm` - PROCESANDO
 
@@ -235,7 +235,7 @@ git push origin main
 
 ### **Verificar tamaños:**
 ```bash
-du -sh assets/images/logo-blanco.*
+du -sh assets/gallery/logo-blanco.*
 du -sh assets/icons/*
 du -sh assets/video/*
 ```

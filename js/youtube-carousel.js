@@ -20,7 +20,9 @@ async init() {
 
 async loadVideoData() {
     try {
-        const response = await fetch('assets/data/youtube-videos.json');
+        // Agregar timestamp para evitar caché
+        const timestamp = new Date().getTime();
+        const response = await fetch(`/assets/data/youtube-videos.json?v=${timestamp}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -28,6 +30,7 @@ async loadVideoData() {
         this.videos = data.videos;
         this.settings = data.settings;
         console.log('✅ Datos de videos de YouTube cargados:', this.videos.length, 'videos');
+        console.log('📊 Configuración:', this.settings);
     } catch (error) {
         console.error('Error cargando datos de videos:', error);
         throw error;
@@ -58,21 +61,20 @@ setupCarousel() {
 
 generateVideoGroups() {
     const videosPerGroup = this.settings.videosPerGroup || 3;
-    const totalGroups = Math.ceil(this.videos.length / videosPerGroup);
+    const totalGroups = this.settings.totalGroups || Math.ceil(this.videos.length / videosPerGroup);
 
     for (let groupIndex = 0; groupIndex < totalGroups; groupIndex++) {
         const groupDiv = document.createElement('div');
         groupDiv.className = 'youtube-video-group';
         groupDiv.style.display = groupIndex === 0 ? 'flex' : 'none';
 
-        const startIndex = groupIndex * videosPerGroup;
-        const endIndex = Math.min(startIndex + videosPerGroup, this.videos.length);
+        // Filtrar videos por grupo
+        const groupVideos = this.videos.filter(v => v.group === (groupIndex + 1));
 
-        for (let i = startIndex; i < endIndex; i++) {
-            const video = this.videos[i];
+        groupVideos.forEach(video => {
             const videoDiv = this.createLiteEmbed(video);
             groupDiv.appendChild(videoDiv);
-        }
+        });
 
         // Insertar antes de los botones de control
         const firstButton = this.container.querySelector('.carousel-btn');

@@ -26,10 +26,10 @@ const urlsToCache = [
     '/js/youtube-carousel.min.js',
     '/js/gallery-dynamic.min.js',
     '/js/chatbot.min.js',
-    '/assets/images/logo-blanco.webp',
-    '/assets/images/hero-background-480w.webp',
-    '/assets/images/hero-background-768w.webp',
-    '/assets/images/hero-background-1024w.webp',
+    '/assets/gallery/logo-blanco.webp',
+    '/assets/gallery/hero-background-480w.webp',
+    '/assets/gallery/hero-background-768w.webp',
+    '/assets/gallery/hero-background-1024w.webp',
     '/manifest.json',
     '/offline.html'
 ];
@@ -55,7 +55,7 @@ const RUNTIME_CACHE_URLS = [
 
 // Recursos de imágenes para cache separado
 const IMAGES_CACHE_URLS = [
-    '/assets/images/',
+    '/assets/gallery/',
     '/assets/icons/',
     '/assets/logo/',
     '/assets/gallery/'
@@ -70,18 +70,18 @@ self.addEventListener('install', event => {
                 console.log('✅ Cache principal abierto');
                 return cache.addAll(urlsToCache);
             }),
-            
+
             // Cache de fuentes
             caches.open(FONTS_CACHE).then(cache => {
                 console.log('✅ Cache de fuentes abierto');
                 return cache.addAll(FONTS_TO_CACHE);
             }),
-            
+
             // Crear caché de imágenes (se llenará bajo demanda)
             caches.open(IMAGES_CACHE).then(cache => {
                 console.log('✅ Cache de imágenes creado');
             }),
-            
+
             // Crear caché de runtime (se llenará bajo demanda)
             caches.open(RUNTIME_CACHE).then(cache => {
                 console.log('✅ Cache de runtime creado');
@@ -101,7 +101,7 @@ self.addEventListener('activate', event => {
         IMAGES_CACHE,
         FONTS_CACHE
     ];
-    
+
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
@@ -134,7 +134,7 @@ self.addEventListener('fetch', event => {
     // Estrategia: Cache First para fuentes (alta prioridad de rendimiento)
     if (request.destination === 'font' || url.pathname.includes('/assets/fonts/')) {
         event.respondWith(
-            caches.open(FONTS_CACHE).then(cache => 
+            caches.open(FONTS_CACHE).then(cache =>
                 cache.match(request).then(cachedResponse => {
                     if (cachedResponse) {
                         return cachedResponse;
@@ -156,13 +156,13 @@ self.addEventListener('fetch', event => {
         );
         return;
     }
-    
+
     // Estrategia: Cache First para imágenes con fallback específico
-    if (request.destination === 'image' || 
+    if (request.destination === 'image' ||
         IMAGES_CACHE_URLS.some(path => url.pathname.startsWith(path))) {
-        
+
         event.respondWith(
-            caches.open(IMAGES_CACHE).then(cache => 
+            caches.open(IMAGES_CACHE).then(cache =>
                 cache.match(request).then(cachedResponse => {
                     if (cachedResponse) {
                         return cachedResponse;
@@ -177,14 +177,14 @@ self.addEventListener('fetch', event => {
                     }).catch(() => {
                         // Fallback inteligente para imágenes
                         if (url.pathname.includes('logo')) {
-                            return caches.match('/assets/images/logo-blanco.webp');
+                            return caches.match('/assets/gallery/logo-blanco.webp');
                         } else if (url.pathname.includes('gallery')) {
-                            return caches.match('/assets/images/hero-background-480w.webp');
+                            return caches.match('/assets/gallery/hero-background-480w.webp');
                         } else if (url.pathname.includes('icons')) {
-                            return caches.match('/assets/images/logo-blanco.webp');
+                            return caches.match('/assets/gallery/logo-blanco.webp');
                         } else {
                             // Fallback genérico para cualquier imagen
-                            return caches.match('/assets/images/hero-background-480w.webp');
+                            return caches.match('/assets/gallery/hero-background-480w.webp');
                         }
                     });
                 })
@@ -194,11 +194,11 @@ self.addEventListener('fetch', event => {
     }
 
     // Estrategia: Cache First para assets estáticos (JS, CSS)
-    if (request.destination === 'style' || 
+    if (request.destination === 'style' ||
         request.destination === 'script' ||
         url.pathname.endsWith('.css') ||
         url.pathname.endsWith('.js')) {
-        
+
         event.respondWith(
             caches.match(request).then(cachedResponse => {
                 if (cachedResponse) {
@@ -223,11 +223,11 @@ self.addEventListener('fetch', event => {
     }
 
     // Estrategia: Network First para HTML con fallback offline
-    if (request.destination === 'document' || 
+    if (request.destination === 'document' ||
         url.pathname.endsWith('.html') ||
         url.pathname === '/' ||
         url.pathname.endsWith('/')) {
-        
+
         event.respondWith(
             fetch(request)
                 .then(response => {

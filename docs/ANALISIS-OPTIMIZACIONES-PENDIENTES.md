@@ -61,7 +61,7 @@ cwebp -q 90 assets/icons/whatsapp-icon.png -o assets/icons/whatsapp-icon.webp
 
 **Archivo crítico:**
 ```
-assets/images/logo-blanco.png    (16K) - Usado en hero section
+assets/gallery/logo-blanco.png    (16K) - Usado en hero section
 ```
 
 **Otros logos grandes (no críticos):**
@@ -138,8 +138,8 @@ assets/logo/android-chrome-512x512.png    (111K)
 
 **Archivos:**
 ```
-assets/images/hero-background.webp
-assets/images/mobile-background.webp
+assets/gallery/hero-.background.webp
+assets/gallery/mobile-.background.webp
 ```
 
 **Problema:**
@@ -154,7 +154,7 @@ assets/images/mobile-background.webp
 
 **Script disponible:**
 ```bash
-bash scripts/optimize-images-responsive.sh assets/images assets/images/optim "480,768,1024,1920"
+bash scripts/optimize-images-responsive.sh assets/images assets/gallery/optim "480,768,1024,1920"
 ```
 
 ---
@@ -269,7 +269,7 @@ for file in *.png; do
 done
 
 # 2. Convertir logo principal
-cwebp -q 90 assets/images/logo-blanco.png -o assets/images/logo-blanco.webp
+cwebp -q 90 assets/gallery/logo-blanco.png -o assets/gallery/logo-blanco.webp
 
 # 3. Actualizar referencias en HTML
 # Buscar y reemplazar .png por .webp en archivos relevantes

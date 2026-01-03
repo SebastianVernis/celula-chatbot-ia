@@ -181,7 +181,7 @@ document.addEventListener('click', function(e) {
 ### 3. Click en el botón WhatsApp
 
 **✅ Esperado:**
-- Console log: `🔗 WhatsApp Click: https://wa.me/...`
+- Console log: `🔗 WhatsApp Click: https://wa.me/..`
 - Click funciona correctamente
 
 **Nota:** El tracking del click se configurará en GTM Dashboard con el activador.

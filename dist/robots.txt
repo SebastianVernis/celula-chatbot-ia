@@ -1,10 +1,13 @@
 # robots.txt para Grupo Musical La Célula
 
 User-agent: *
-Allow: /
 
-# Sitemap
-Sitemap: https://grupomusicalcelula.com/sitemap.xml
+# Permitir crawling de recursos importantes (antes de Disallow)
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+Allow: /post/
+Allow: /marketing/
 
 # Disallow archivos temporales y de desarrollo
 Disallow: /test-*.html
@@ -14,13 +17,6 @@ Disallow: /*.md
 Disallow: /.git/
 Disallow: /.blackbox/
 Disallow: /node_modules/
-Disallow: /dist/
 
-# Permitir crawling de recursos importantes
-Allow: /css/
-Allow: /js/
-Allow: /assets/
-Allow: /post/
-
-# Crawl-delay (opcional, para ser amable con los bots)
-Crawl-delay: 1
+# Sitemap
+Sitemap: https://grupomusicalcelula.com/sitemap.xml

@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Embedded fallback posts (small)
     let blogPosts = [
-        { id: 'post-46', title: 'Errores Comunes en la Música de unos XV Años', excerpt: 'Guía de errores comunes que afectan la música en XV años en CDMX. Checklist preventivo y soluciones profesionales.', date: '29 dic 2025', image: 'assets/images/cartoon_blog/xv-2.webp', url: 'post/post-46.html' },
-        { id: 'post-45', title: 'Tendencias Musicales para XV Años Actuales', excerpt: 'Análisis de tendencias musicales en XV años en CDMX. Cambios en el vals, música para fiesta y tendencias consolidadas y emergentes.', date: '29 dic 2025', image: 'assets/images/cartoon_blog/xv-1.webp', url: 'post/post-45.html' },
-        { id: 'post-44', title: 'Música en Vivo para XV Años: Qué Considerar al Contratar un Grupo Musical', excerpt: 'Guía profesional para contratar música en vivo para XV años en CDMX. Aspectos técnicos, logísticos y artísticos a considerar.', date: '29 dic 2025', image: 'assets/images/cartoon_blog/xv-3.webp', url: 'post/post-44.html' }
+        { id: 'post-46', title: 'Errores Comunes en la Música de unos XV Años', excerpt: 'Guía de errores comunes que afectan la música en XV años en CDMX. Checklist preventivo y soluciones profesionales.', date: '29 dic 2025', image: 'assets/blog/xv-2.webp', url: 'post/post-46.html' },
+        { id: 'post-45', title: 'Tendencias Musicales para XV Años Actuales', excerpt: 'Análisis de tendencias musicales en XV años en CDMX. Cambios en el vals, música para fiesta y tendencias consolidadas y emergentes.', date: '29 dic 2025', image: 'assets/blog/xv-1.webp', url: 'post/post-45.html' },
+        { id: 'post-44', title: 'Música en Vivo para XV Años: Qué Considerar al Contratar un Grupo Musical', excerpt: 'Guía profesional para contratar música en vivo para XV años en CDMX. Aspectos técnicos, logísticos y artísticos a considerar.', date: '29 dic 2025', image: 'assets/blog/xv-3.webp', url: 'post/post-44.html' }
     ];
 
     // Try to load external posts, otherwise keep the fallback

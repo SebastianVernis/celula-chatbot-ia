@@ -111,7 +111,7 @@ URL visible: grupomusicalcelula.com/bodas ✨
 
 **Causa:** Los assets del proyecto Marketing usan rutas relativas que no se resuelven correctamente.
 
-**Solución:** Ya está configurado en el proyecto Marketing con rutas absolutas (`/assets/...`, `/css/...`, `/js/...`)
+**Solución:** Ya está configurado en el proyecto Marketing con rutas absolutas (`/assets/..`, `/css/..`, `/js/..`)
 
 ### Problema: Analytics duplicados
 

@@ -21,7 +21,7 @@ rm -rf node_modules/prettier
 ```
 
 ### 2. Crear archivo `.wranglerignore`
-Se creó el archivo `functions/.wranglerignore` para evitar que Wrangler procese archivos innecesarios:
+Se creó el archivo `functions/wranglerignore` para evitar que Wrangler procese archivos innecesarios:
 
 ```
 node_modules/prettier
@@ -77,7 +77,7 @@ python3 -m http.server 8080
 
 ## Archivos Modificados
 
-1. `/functions/.wranglerignore` - Creado
+1. `/functions/wranglerignore` - Creado
 2. `/wrangler.toml` - Actualizado (compatibility_date)
 3. `/functions/node_modules/prettier` - Eliminado
 

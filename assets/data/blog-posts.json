@@ -4,127 +4,127 @@
         "title": "Errores Comunes en la Música de unos XV Años",
         "excerpt": "Guía de errores comunes que afectan la música en XV años en CDMX. Checklist preventivo y soluciones profesionales.",
         "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/xv-2.webp",
+        "image": "assets/blog/xv-2.webp",
         "url": "post/post-46.html"
-    },
-    {
-        "id": "post-45",
-        "title": "Tendencias Musicales para XV Años Actuales",
-        "excerpt": "Análisis de tendencias musicales en XV años en CDMX. Cambios en el vals, música para fiesta y tendencias consolidadas y emergentes.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/xv-1.webp",
-        "url": "post/post-45.html"
-    },
-    {
-        "id": "post-44",
-        "title": "Música en Vivo para XV Años: Qué Considerar al Contratar un Grupo Musical",
-        "excerpt": "Guía profesional para contratar música en vivo para XV años en CDMX. Aspectos técnicos, logísticos y artísticos a considerar.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/xv-3.webp",
-        "url": "post/post-44.html"
-    },
-    {
-        "id": "post-43",
-        "title": "Playlist Ideal para XV Años: Entrada, Vals y Fiesta",
-        "excerpt": "Guía completa de selección musical para XV años en CDMX. Canciones para entrada, vals y fiesta con criterios profesionales.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/xv-2.webp",
-        "url": "post/post-43.html"
-    },
-    {
-        "id": "post-42",
-        "title": "Grupo Musical para XV Años: Cómo Planear Cada Momento del Evento",
-        "excerpt": "Guía completa para planear la música en cada momento de unos XV años en CDMX. Recepción, entrada, vals, fiesta y coordinación profesional.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/xv-1.webp",
-        "url": "post/post-42.html"
-    },
-    {
-        "id": "post-41",
-        "title": "Errores que Afectan la Música en un Evento Privado",
-        "excerpt": "Guía de errores comunes que comprometen la música en eventos privados en CDMX. Checklist preventivo y soluciones profesionales.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/evento-5.webp",
-        "url": "post/post-41.html"
-    },
-    {
-        "id": "post-40",
-        "title": "Checklist Técnico para un Grupo Musical en Eventos Privados",
-        "excerpt": "Guía técnica completa para coordinar un grupo musical en eventos privados en CDMX. Espacio, sonido, electricidad y logística profesional.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/evento-4.webp",
-        "url": "post/post-40.html"
-    },
-    {
-        "id": "post-39",
-        "title": "Grupo Musical vs DJ para Eventos Privados: Diferencias Reales",
-        "excerpt": "Comparativa técnica entre grupo musical y DJ para eventos privados en CDMX. Ventajas, desventajas y criterios de selección profesionales.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/evento-3.webp",
-        "url": "post/post-39.html"
-    },
-    {
-        "id": "post-38",
-        "title": "Cómo Elegir Música Según el Tipo de Evento Privado",
-        "excerpt": "Guía para seleccionar música adecuada según el tipo de evento privado en CDMX. Criterios profesionales para eventos sociales y corporativos.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/evento-2.webp",
-        "url": "post/post-38.html"
-    },
-    {
-        "id": "post-37",
-        "title": "Grupo Musical para Eventos Privados: Guía Práctica",
-        "excerpt": "Guía completa para contratar un grupo musical en eventos privados en CDMX. Formatos, factores de elección y checklist profesional.",
-        "date": "29 dic 2025",
-        "image": "assets/images/cartoon_blog/evento-1.webp",
-        "url": "post/post-37.html"
     },
     {
         "id": "post-36",
         "title": "Errores Comunes al Elegir Música para una Boda",
         "excerpt": "Evita los errores más frecuentes al elegir música para tu boda: problemas de planeación, técnicos y coordinación. Consejos prácticos para una experiencia perfecta.",
         "date": "12 dic 2025",
-        "image": "assets/images/cartoon_blog/boda-1.webp",
+        "image": "assets/blog/boda-1.webp",
         "url": "post/post-36.html"
+    },
+    {
+        "id": "post-45",
+        "title": "Tendencias Musicales para XV Años Actuales",
+        "excerpt": "Análisis de tendencias musicales en XV años en CDMX. Cambios en el vals, música para fiesta y tendencias consolidadas y emergentes.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/xv-1.webp",
+        "url": "post/post-45.html"
+    },
+    {
+        "id": "post-41",
+        "title": "Errores que Afectan la Música en un Evento Privado",
+        "excerpt": "Guía de errores comunes que comprometen la música en eventos privados en CDMX. Checklist preventivo y soluciones profesionales.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/evento-5.webp",
+        "url": "post/post-41.html"
     },
     {
         "id": "post-35",
         "title": "Cuánto Cuesta Contratar un Grupo Musical para una Boda en México",
         "excerpt": "Factores que influyen en el costo de contratar música para bodas en México: duración, músicos, ubicación y equipamiento. Guía de presupuesto.",
         "date": "12 dic 2025",
-        "image": "assets/images/cartoon_blog/boda-4.webp",
+        "image": "assets/blog/boda-4.webp",
         "url": "post/post-35.html"
+    },
+    {
+        "id": "post-44",
+        "title": "Música en Vivo para XV Años: Qué Considerar al Contratar un Grupo Musical",
+        "excerpt": "Guía profesional para contratar música en vivo para XV años en CDMX. Aspectos técnicos, logísticos y artísticos a considerar.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/xv-3.webp",
+        "url": "post/post-44.html"
+    },
+    {
+        "id": "post-40",
+        "title": "Checklist Técnico para un Grupo Musical en Eventos Privados",
+        "excerpt": "Guía técnica completa para coordinar un grupo musical en eventos privados en CDMX. Espacio, sonido, electricidad y logística profesional.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/evento-4.webp",
+        "url": "post/post-40.html"
     },
     {
         "id": "post-34",
         "title": "Canciones Clave para Cada Momento de una Boda",
         "excerpt": "Estructura musical por momentos: ceremonia, recepción, banquete y fiesta. Guía para planear la música de tu boda en CDMX.",
         "date": "12 dic 2025",
-        "image": "assets/images/cartoon_blog/boda-3.webp",
+        "image": "assets/blog/boda-3.webp",
         "url": "post/post-34.html"
+    },
+    {
+        "id": "post-43",
+        "title": "Playlist Ideal para XV Años: Entrada, Vals y Fiesta",
+        "excerpt": "Guía completa de selección musical para XV años en CDMX. Canciones para entrada, vals y fiesta con criterios profesionales.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/xv-2.webp",
+        "url": "post/post-43.html"
+    },
+    {
+        "id": "post-39",
+        "title": "Grupo Musical vs DJ para Eventos Privados: Diferencias Reales",
+        "excerpt": "Comparativa técnica entre grupo musical y DJ para eventos privados en CDMX. Ventajas, desventajas y criterios de selección profesionales.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/evento-3.webp",
+        "url": "post/post-39.html"
     },
     {
         "id": "post-33",
         "title": "Música en Vivo para Bodas: Qué Considerar Antes de Contratar",
         "excerpt": "Aspectos clave antes de contratar música en vivo para bodas: alcance del servicio, requisitos técnicos y coordinación. Guía práctica CDMX.",
         "date": "12 dic 2025",
-        "image": "assets/images/cartoon_blog/boda-2.webp",
+        "image": "assets/blog/boda-2.webp",
         "url": "post/post-33.html"
+    },
+    {
+        "id": "post-42",
+        "title": "Grupo Musical para XV Años: Cómo Planear Cada Momento del Evento",
+        "excerpt": "Guía completa para planear la música en cada momento de unos XV años en CDMX. Recepción, entrada, vals, fiesta y coordinación profesional.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/xv-1.webp",
+        "url": "post/post-42.html"
+    },
+    {
+        "id": "post-38",
+        "title": "Cómo Elegir Música Según el Tipo de Evento Privado",
+        "excerpt": "Guía para seleccionar música adecuada según el tipo de evento privado en CDMX. Criterios profesionales para eventos sociales y corporativos.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/evento-2.webp",
+        "url": "post/post-38.html"
     },
     {
         "id": "post-32",
         "title": "Grupo Musical para Bodas: Cómo Elegir el Formato Ideal",
         "excerpt": "Guía para seleccionar el formato musical ideal en la Ciudad de México. Ventajas del modelo universal liderado por tecladista experto y solista.",
         "date": "12 dic 2025",
-        "image": "assets/images/cartoon_blog/boda-1.webp",
+        "image": "assets/blog/boda-1.webp",
         "url": "post/post-32.html"
+    },
+    {
+        "id": "post-37",
+        "title": "Grupo Musical para Eventos Privados: Guía Práctica",
+        "excerpt": "Guía completa para contratar un grupo musical en eventos privados en CDMX. Formatos, factores de elección y checklist profesional.",
+        "date": "29 dic 2025",
+        "image": "assets/blog/evento-1.webp",
+        "url": "post/post-37.html"
     },
     {
         "id": "post-31",
         "title": "Grupo Musical Célula se presenta en Santa Moto este 7 de diciembre",
         "excerpt": "¡7 diciembre 5 PM! Grupo Musical Célula enciende Santa Moto. Música en vivo, ambiente biker y energía pura. Evento imperdible.",
         "date": "3 Diciembre 2025",
-        "image": "assets/gallery/post-31.webp",
+        "image": "assets/blog/post-31.webp",
         "url": "post/post-31.html"
     },
     {
@@ -136,84 +136,20 @@
         "url": "post/post-30.html"
     },
     {
+        "id": "post-16",
+        "title": "La Mejor Música para una Fiesta de XV Años Moderna y Divertida",
+        "excerpt": "Descubre cómo combinar géneros modernos y clásicos para que tu fiesta de XV años sea divertida para todas las generaciones con Grupo Musical Versátil La Célula.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-23.webp",
+        "url": "post/post-16.html"
+    },
+    {
         "id": "post-29",
         "title": "No es solo tocar: Así es el Montaje de Grupo Musical Versátil La Célula para un Evento",
         "excerpt": "Descubre el trabajo detrás del montaje de Grupo Musical Versátil La Célula y cómo garantizan un show impecable para tu evento.",
         "date": "14 Nov 2025",
         "image": "assets/gallery/banda-7.webp",
         "url": "post/post-29.html"
-    },
-    {
-        "id": "post-28",
-        "title": "Celebrando el Amor Duradero: La Mejor Música para Aniversarios y Bodas de Plata/Oro",
-        "excerpt": "Celebra tu aniversario con música en vivo que revive recuerdos. Grupo Musical Versátil La Célula ofrece el repertorio ideal para bodas de plata y oro.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-10.webp",
-        "url": "post/post-28.html"
-    },
-    {
-        "id": "post-27",
-        "title": "10 Preguntas Clave que Debes Hacerle a una Banda Antes de Contratarla",
-        "excerpt": "Antes de contratar una banda, haz estas 10 preguntas clave. Grupo Musical Versátil La Célula responde a cada una para tu tranquilidad.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-26.webp",
-        "url": "post/post-27.html"
-    },
-    {
-        "id": "post-26",
-        "title": "¿Por qué la Cumbia nos Hace Bailar a Todos? La Psicología de la Música para Fiestas",
-        "excerpt": "Descubre por qué la cumbia tiene el poder de hacer bailar a todos. Grupo Musical Versátil La Célula explica la psicología detrás de este ritmo irresistible.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-17.webp",
-        "url": "post/post-26.html"
-    },
-    {
-        "id": "post-25",
-        "title": "Elegancia y Sofisticación: La Música Perfecta para una Cena de Gala",
-        "excerpt": "Haz que tu cena de gala sea elegante con música en vivo. Grupo Musical Versátil La Célula crea la atmósfera perfecta con jazz, bossa nova y boleros.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-11.webp",
-        "url": "post/post-25.html"
-    },
-    {
-        "id": "post-24",
-        "title": "Guía de Proveedores: Planeando una Boda en el Área Metropolitana",
-        "excerpt": "Descubre proveedores clave para organizar tu boda en el Área Metropolitana y cómo Grupo Musical Versátil La Célula aporta la música perfecta.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-8.webp",
-        "url": "post/post-24.html"
-    },
-    {
-        "id": "post-23",
-        "title": "Propósitos para 2026: ¡Hacer Eventos Más Memorables!",
-        "excerpt": "Comienza el 2026 con el propósito de crear eventos inolvidables. Grupo Musical Versátil La Célula te ayuda a lograrlo con música en vivo.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-7.webp",
-        "url": "post/post-23.html"
-    },
-    {
-        "id": "post-22",
-        "title": "Grupo Musical vs. Rockola Digital: ¿Cuál es Mejor para tu Fiesta?",
-        "excerpt": "¿Grupo musical o rockola digital? Descubre cuál es mejor para tu fiesta y por qué Grupo Musical Versátil La Célula ofrece una experiencia insuperable.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-7.webp",
-        "url": "post/post-22.html"
-    },
-    {
-        "id": "post-21",
-        "title": "3 Maneras de Romper el Hielo y Animar tu Evento Corporativo con Música",
-        "excerpt": "Descubre 3 maneras efectivas de animar tu evento corporativo con música en vivo. Grupo Musical Versátil La Célula sabe cómo crear el ambiente ideal.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-15.webp",
-        "url": "post/post-21.html"
-    },
-    {
-        "id": "post-20",
-        "title": "Dale un Toque Especial a tu Posada: El Poder de la Música en Vivo",
-        "excerpt": "Convierte tu posada en un evento inolvidable con música en vivo. Grupo Musical Versátil La Célula ofrece el repertorio perfecto para celebrar.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-2.webp",
-        "url": "post/post-20.html"
     },
     {
         "id": "post-19",
@@ -224,12 +160,76 @@
         "url": "post/post-19.html"
     },
     {
+        "id": "post-28",
+        "title": "Celebrando el Amor Duradero: La Mejor Música para Aniversarios y Bodas de Plata/Oro",
+        "excerpt": "Celebra tu aniversario con música en vivo que revive recuerdos. Grupo Musical Versátil La Célula ofrece el repertorio ideal para bodas de plata y oro.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-10.webp",
+        "url": "post/post-28.html"
+    },
+    {
+        "id": "post-21",
+        "title": "3 Maneras de Romper el Hielo y Animar tu Evento Corporativo con Música",
+        "excerpt": "Descubre 3 maneras efectivas de animar tu evento corporativo con música en vivo. Grupo Musical Versátil La Célula sabe cómo crear el ambiente ideal.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-15.webp",
+        "url": "post/post-21.html"
+    },
+    {
+        "id": "post-27",
+        "title": "10 Preguntas Clave que Debes Hacerle a una Banda Antes de Contratarla",
+        "excerpt": "Antes de contratar una banda, haz estas 10 preguntas clave. Grupo Musical Versátil La Célula responde a cada una para tu tranquilidad.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-26.webp",
+        "url": "post/post-27.html"
+    },
+    {
+        "id": "post-9",
+        "title": "Creando el Ambiente Perfecto: La Mejor Música para la Recepción de tu Boda",
+        "excerpt": "Descubre la mejor música para la recepción de tu boda y cómo Grupo Musical Versátil La Célula puede crear el ambiente perfecto para tu gran día.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-16.webp",
+        "url": "post/post-9.html"
+    },
+    {
+        "id": "post-26",
+        "title": "¿Por qué la Cumbia nos Hace Bailar a Todos? La Psicología de la Música para Fiestas",
+        "excerpt": "Descubre por qué la cumbia tiene el poder de hacer bailar a todos. Grupo Musical Versátil La Célula explica la psicología detrás de este ritmo irresistible.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-17.webp",
+        "url": "post/post-26.html"
+    },
+    {
+        "id": "post-20",
+        "title": "Dale un Toque Especial a tu Posada: El Poder de la Música en Vivo",
+        "excerpt": "Convierte tu posada en un evento inolvidable con música en vivo. Grupo Musical Versátil La Célula ofrece el repertorio perfecto para celebrar.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-2.webp",
+        "url": "post/post-20.html"
+    },
+    {
+        "id": "post-25",
+        "title": "Elegancia y Sofisticación: La Música Perfecta para una Cena de Gala",
+        "excerpt": "Haz que tu cena de gala sea elegante con música en vivo. Grupo Musical Versátil La Célula crea la atmósfera perfecta con jazz, bossa nova y boleros.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-11.webp",
+        "url": "post/post-25.html"
+    },
+    {
         "id": "post-18",
         "title": "La Imagen También Suena: La Importancia del Vestuario en una Banda de Eventos",
         "excerpt": "Descubre cómo el vestuario influye en la presentación de una banda y cómo Grupo Musical Versátil La Célula cuida cada detalle para tu evento.",
         "date": "14 Nov 2025",
         "image": "assets/gallery/banda-21.webp",
         "url": "post/post-18.html"
+    },
+    {
+        "id": "post-24",
+        "title": "Guía de Proveedores: Planeando una Boda en el Área Metropolitana",
+        "excerpt": "Descubre proveedores clave para organizar tu boda en el Área Metropolitana y cómo Grupo Musical Versátil La Célula aporta la música perfecta.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-8.webp",
+        "url": "post/post-24.html"
     },
     {
         "id": "post-17",
@@ -240,12 +240,12 @@
         "url": "post/post-17.html"
     },
     {
-        "id": "post-16",
-        "title": "La Mejor Música para una Fiesta de XV Años Moderna y Divertida",
-        "excerpt": "Descubre cómo combinar géneros modernos y clásicos para que tu fiesta de XV años sea divertida para todas las generaciones con Grupo Musical Versátil La Célula.",
+        "id": "post-23",
+        "title": "Propósitos para 2026: ¡Hacer Eventos Más Memorables!",
+        "excerpt": "Comienza el 2026 con el propósito de crear eventos inolvidables. Grupo Musical Versátil La Célula te ayuda a lograrlo con música en vivo.",
         "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-23.webp",
-        "url": "post/post-16.html"
+        "image": "assets/gallery/banda-7.webp",
+        "url": "post/post-23.html"
     },
     {
         "id": "post-15",
@@ -254,6 +254,14 @@
         "date": "14 Nov 2025",
         "image": "assets/gallery/banda-18.webp",
         "url": "post/post-15.html"
+    },
+    {
+        "id": "post-22",
+        "title": "Grupo Musical vs. Rockola Digital: ¿Cuál es Mejor para tu Fiesta?",
+        "excerpt": "¿Grupo musical o rockola digital? Descubre cuál es mejor para tu fiesta y por qué Grupo Musical Versátil La Célula ofrece una experiencia insuperable.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-7.webp",
+        "url": "post/post-22.html"
     },
     {
         "id": "post-14",
@@ -272,6 +280,14 @@
         "url": "post/post-13.html"
     },
     {
+        "id": "post-4",
+        "title": "5 Géneros Musicales que no Pueden Faltar en tu Boda para que Todos Bailen",
+        "excerpt": "Descubre los 5 géneros musicales que harán de tu boda un evento inolvidable. ¡Deja que Grupo Musical Versátil La Célula ponga a todos a bailar en tu gran día!",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-17.webp",
+        "url": "post/post-4.html"
+    },
+    {
         "id": "post-12",
         "title": "¿Qué Equipo de Sonido Necesita una Banda para un Evento? Lo que Debes Saber",
         "excerpt": "Descubre qué equipo de sonido utiliza una banda profesional y por qué Grupo Musical Versátil La Célula garantiza un audio impecable en cada evento.",
@@ -288,28 +304,20 @@
         "url": "post/post-11.html"
     },
     {
-        "id": "post-10",
-        "title": "Más que Canciones: Los Beneficios Psicológicos de la Música en Vivo en tu Evento",
-        "excerpt": "Descubre los beneficios psicológicos de la música en vivo y cómo Grupo Musical Versátil La Célula transforma tu evento en una experiencia emocional única.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-24.webp",
-        "url": "post/post-10.html"
-    },
-    {
-        "id": "post-9",
-        "title": "Creando el Ambiente Perfecto: La Mejor Música para la Recepción de tu Boda",
-        "excerpt": "Descubre la mejor música para la recepción de tu boda y cómo Grupo Musical Versátil La Célula puede crear el ambiente perfecto para tu gran día.",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-16.webp",
-        "url": "post/post-9.html"
-    },
-    {
         "id": "post-8",
         "title": "5 Momentos Clave donde la Música en Vivo Cambia tu Evento por Completo",
         "excerpt": "Descubre los 5 momentos donde la música en vivo transforma cualquier evento. Haz que cada instante sea especial con Grupo Musical Versátil La Célula.",
         "date": "14 Nov 2025",
         "image": "assets/gallery/banda-20.webp",
         "url": "post/post-8.html"
+    },
+    {
+        "id": "post-10",
+        "title": "Más que Canciones: Los Beneficios Psicológicos de la Música en Vivo en tu Evento",
+        "excerpt": "Descubre los beneficios psicológicos de la música en vivo y cómo Grupo Musical Versátil La Célula transforma tu evento en una experiencia emocional única.",
+        "date": "14 Nov 2025",
+        "image": "assets/gallery/banda-24.webp",
+        "url": "post/post-10.html"
     },
     {
         "id": "post-6",
@@ -326,14 +334,6 @@
         "date": "14 Nov 2025",
         "image": "assets/gallery/banda-24.webp",
         "url": "post/post-5.html"
-    },
-    {
-        "id": "post-4",
-        "title": "5 Géneros Musicales que no Pueden Faltar en tu Boda para que Todos Bailen",
-        "excerpt": "Descubre los 5 géneros musicales que harán de tu boda un evento inolvidable. ¡Deja que Grupo Musical Versátil La Célula ponga a todos a bailar en tu gran día!",
-        "date": "14 Nov 2025",
-        "image": "assets/gallery/banda-17.webp",
-        "url": "post/post-4.html"
     },
     {
         "id": "post-3",

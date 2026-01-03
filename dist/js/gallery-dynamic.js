@@ -85,20 +85,21 @@ function initCarousel() {
         const containerWidth = carousel.parentElement.clientWidth;
 
         if (window.innerWidth > 768) {
-            // Desktop: mostrar 3 imágenes
-            const totalMargin = (itemsToShow - 1) * 20;
-            const itemWidth = (containerWidth - totalMargin) / itemsToShow;
+            // Desktop: mostrar 3 imágenes a la vez, avanzar de 3 en 3
+            const gap = 20;
+            const totalGaps = (itemsToShow - 1) * gap;
+            const itemWidth = (containerWidth - totalGaps) / itemsToShow;
 
-            items.forEach(item => {
+            items.forEach((item, index) => {
                 item.style.flex = `0 0 ${itemWidth}px`;
-                item.style.marginRight = '20px';
+                item.style.marginRight = index < items.length - 1 ? `${gap}px` : '0';
             });
 
-            const offset = currentIndex * (itemWidth + 20);
+            // Avanzar de 3 en 3: multiplicar index por 3 items
+            const offset = currentIndex * (containerWidth + gap);
             carousel.style.transform = `translateX(-${offset}px)`;
         } else {
             // Mobile: una imagen completa a la vez
-            // Usar el ancho exacto del primer item para calcular el offset
             items.forEach((item, index) => {
                 item.style.flex = `0 0 ${containerWidth}px`;
                 item.style.marginRight = '0';
@@ -115,13 +116,14 @@ function initCarousel() {
             }
         }
 
-        carousel.style.transition = 'transform 0.3s ease';
+        carousel.style.transition = 'transform 0.5s ease';
     };
 
     const nextSlide = () => {
-        const maxIndex = Math.max(0, items.length - itemsToShow);
-
-        if (currentIndex < maxIndex) {
+        // Calcular cuántos grupos completos hay
+        const totalGroups = Math.ceil(items.length / itemsToShow);
+        
+        if (currentIndex < totalGroups - 1) {
             currentIndex++;
             updateCarousel();
         }

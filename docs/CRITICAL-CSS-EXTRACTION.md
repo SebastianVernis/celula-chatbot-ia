@@ -16,7 +16,7 @@ body,html{height:100%;font-family:'Open Sans',Arial,sans-serif;background:#000;c
 .nav-link{color:#fff;text-decoration:none;font:normal normal bold 15px/1.4em 'Open Sans',sans-serif;padding:10px 15px;border-radius:5px;transition:all .3s ease;display:block}
 
 /* Hero Section */
-.hero-section{position:relative;height:100vh;width:100vw;margin:0;padding:0;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:url('../assets/images/background.webp') center/cover no-repeat,#000;background-attachment:fixed}
+.hero-section{position:relative;height:100vh;width:100vw;margin:0;padding:0;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:url('../assets/gallery/background.webp') center/cover no-repeat,#000;background-attachment:fixed}
 .hero-video-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;overflow:hidden}
 .hero-background-video{position:absolute;top:50%;left:50%;min-width:100%;width:100vw;height:100vh;z-index:1;transform:translate(-50%,-50%);object-fit:cover;will-change:transform}
 .hero-video-container .video-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2;pointer-events:none}
