@@ -17,6 +17,7 @@
     "test:email": "node tests/test-chatbot-email.js",
     "test:groq": "node tests/test-groq-models.js",
     "test:deployment": "node tests/test-local-deployment.js",
+    "test:build": "node tools/test-build-sitemaps.js",
     "test": "npm run test:multi-provider && npm run test:gemini && npm run test:email && npm run test:groq && npm run test:deployment"
   },
   "dependencies": {

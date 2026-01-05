@@ -10,12 +10,37 @@ const __dirname = dirname(__filename);
 const PROJECT_ROOT = resolve(__dirname, '..');
 const DIST_DIR = join(PROJECT_ROOT, 'dist');
 
+// Function to check if directory is writable
+function isWritable(dir) {
+    try {
+        const testFile = join(dir, `.write-test-${Date.now()}`);
+        writeFileSync(testFile, 'test');
+        rmSync(testFile);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 console.log('🏗️  Building celula-site for Amplify...\n');
 
-// Clean dist directory
+// Clean dist directory (skip if permission issues, build will overwrite)
 if (existsSync(DIST_DIR)) {
     console.log('🧹 Cleaning dist directory...');
-    rmSync(DIST_DIR, { recursive: true, force: true });
+    
+    // Check if we have write permissions
+    if (!isWritable(DIST_DIR)) {
+        console.log('❌ Error: No write permissions to dist directory');
+        console.log('💡 Solution: Run the following command to fix permissions:');
+        console.log('   sudo chown -R $USER:$USER dist/');
+        process.exit(1);
+    }
+    
+    try {
+        rmSync(DIST_DIR, { recursive: true, force: true });
+    } catch (error) {
+        console.log('⚠️  Warning: Could not clean dist directory, files will be overwritten');
+    }
 }
 
 // Create dist directory
