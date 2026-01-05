@@ -108,6 +108,26 @@ if (existsSync(functionsSrc)) {
     console.log('  ✓ functions/');
 }
 
+// Generate sitemaps automatically
+console.log('\n🗺️  Generating sitemaps...');
+try {
+    const { execSync } = await import('child_process');
+    execSync('node tools/generate-sitemaps.js', { stdio: 'inherit', cwd: PROJECT_ROOT });
+    console.log('  ✓ Sitemaps generated');
+} catch (error) {
+    console.error('  ✗ Error generating sitemaps:', error.message);
+}
+
+// Generate meta files (manifest, robots, llms)
+console.log('\n📝 Generating meta files...');
+try {
+    const { execSync } = await import('child_process');
+    execSync('node tools/generate-meta-files.js', { stdio: 'inherit', cwd: PROJECT_ROOT });
+    console.log('  ✓ Meta files generated');
+} catch (error) {
+    console.error('  ✗ Error generating meta files:', error.message);
+}
+
 console.log('\n✅ Build complete! Output in dist/\n');
 console.log('📊 Build summary:');
 console.log(`   - HTML pages: ${htmlFiles.length}`);
@@ -116,4 +136,6 @@ console.log('   - Marketing pages: ✓');
 console.log('   - Assets: ✓');
 console.log('   - CSS & JS: ✓');
 console.log('   - Functions: ✓');
-console.log('   - Static files: ✓\n');
+console.log('   - Static files: ✓');
+console.log('   - Sitemaps: ✓');
+console.log('   - Meta files: ✓\n');
