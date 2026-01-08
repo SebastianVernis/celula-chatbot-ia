@@ -10,12 +10,37 @@ const __dirname = dirname(__filename);
 const PROJECT_ROOT = resolve(__dirname, '..');
 const DIST_DIR = join(PROJECT_ROOT, 'dist');
 
+// Function to check if directory is writable
+function isWritable(dir) {
+    try {
+        const testFile = join(dir, `.write-test-${Date.now()}`);
+        writeFileSync(testFile, 'test');
+        rmSync(testFile);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 console.log('🏗️  Building celula-site for Amplify...\n');
 
-// Clean dist directory
+// Clean dist directory (skip if permission issues, build will overwrite)
 if (existsSync(DIST_DIR)) {
     console.log('🧹 Cleaning dist directory...');
-    rmSync(DIST_DIR, { recursive: true, force: true });
+    
+    // Check if we have write permissions
+    if (!isWritable(DIST_DIR)) {
+        console.log('❌ Error: No write permissions to dist directory');
+        console.log('💡 Solution: Run the following command to fix permissions:');
+        console.log('   sudo chown -R $USER:$USER dist/');
+        process.exit(1);
+    }
+    
+    try {
+        rmSync(DIST_DIR, { recursive: true, force: true });
+    } catch (error) {
+        console.log('⚠️  Warning: Could not clean dist directory, files will be overwritten');
+    }
 }
 
 // Create dist directory
@@ -108,6 +133,26 @@ if (existsSync(functionsSrc)) {
     console.log('  ✓ functions/');
 }
 
+// Generate sitemaps automatically
+console.log('\n🗺️  Generating sitemaps...');
+try {
+    const { execSync } = await import('child_process');
+    execSync('node tools/generate-sitemaps.js', { stdio: 'inherit', cwd: PROJECT_ROOT });
+    console.log('  ✓ Sitemaps generated');
+} catch (error) {
+    console.error('  ✗ Error generating sitemaps:', error.message);
+}
+
+// Generate meta files (manifest, robots, llms)
+console.log('\n📝 Generating meta files...');
+try {
+    const { execSync } = await import('child_process');
+    execSync('node tools/generate-meta-files.js', { stdio: 'inherit', cwd: PROJECT_ROOT });
+    console.log('  ✓ Meta files generated');
+} catch (error) {
+    console.error('  ✗ Error generating meta files:', error.message);
+}
+
 console.log('\n✅ Build complete! Output in dist/\n');
 console.log('📊 Build summary:');
 console.log(`   - HTML pages: ${htmlFiles.length}`);
@@ -116,4 +161,6 @@ console.log('   - Marketing pages: ✓');
 console.log('   - Assets: ✓');
 console.log('   - CSS & JS: ✓');
 console.log('   - Functions: ✓');
-console.log('   - Static files: ✓\n');
+console.log('   - Static files: ✓');
+console.log('   - Sitemaps: ✓');
+console.log('   - Meta files: ✓\n');
