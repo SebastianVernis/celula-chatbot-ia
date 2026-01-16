@@ -182,23 +182,23 @@ const videoUrls = videoFiles.map(file => {
 
 // Crear sitemap principal (HTML)
 const mainSitemap = generateSitemap(mainUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-main.xml'), mainSitemap);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-main.xml'), mainSitemap, { mode: 0o644 });
 
 // Crear sitemap de CSS
 const cssSitemap = generateSitemap(cssUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-styles.xml'), cssSitemap);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-styles.xml'), cssSitemap, { mode: 0o644 });
 
 // Crear sitemap de JS
 const jsSitemap = generateSitemap(jsUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-scripts.xml'), jsSitemap);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-scripts.xml'), jsSitemap, { mode: 0o644 });
 
 // Crear sitemap de imágenes
 const imageSitemap = generateSitemap(imageUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-images.xml'), imageSitemap);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-images.xml'), imageSitemap, { mode: 0o644 });
 
 // Crear sitemap de videos
 const videoSitemap = generateSitemap(videoUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-videos.xml'), videoSitemap);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-videos.xml'), videoSitemap, { mode: 0o644 });
 
 // Crear sitemap index
 const sitemapIndex = generateSitemapIndex([
@@ -208,12 +208,12 @@ const sitemapIndex = generateSitemapIndex([
     { loc: `${BASE_URL}/sitemap-images.xml`, lastmod: new Date().toISOString().split('T')[0] },
     { loc: `${BASE_URL}/sitemap-videos.xml`, lastmod: new Date().toISOString().split('T')[0] }
 ]);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-index.xml'), sitemapIndex);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-index.xml'), sitemapIndex, { mode: 0o644 });
 
 // Crear sitemap principal combinado (para retrocompatibilidad)
 const allUrls = [...mainUrls, ...cssUrls, ...jsUrls, ...imageUrls, ...videoUrls];
 const combinedSitemap = generateSitemap(allUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap.xml'), combinedSitemap);
+fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap.xml'), combinedSitemap, { mode: 0o644 });
 
 console.log('Sitemaps generados exitosamente:');
 console.log('- sitemap.xml (combinado)');

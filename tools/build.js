@@ -24,27 +24,27 @@ function isWritable(dir) {
 
 console.log('🏗️  Building celula-site for Amplify...\n');
 
-// Clean dist directory (skip if permission issues, build will overwrite)
+// Clean dist directory
 if (existsSync(DIST_DIR)) {
     console.log('🧹 Cleaning dist directory...');
-    
-    // Check if we have write permissions
-    if (!isWritable(DIST_DIR)) {
-        console.log('❌ Error: No write permissions to dist directory');
-        console.log('💡 Solution: Run the following command to fix permissions:');
-        console.log('   sudo chown -R $USER:$USER dist/');
-        process.exit(1);
-    }
-    
     try {
         rmSync(DIST_DIR, { recursive: true, force: true });
+        console.log('  ✓ Cleaned successfully');
     } catch (error) {
-        console.log('⚠️  Warning: Could not clean dist directory, files will be overwritten');
+        console.error('  ✗ Could not clean dist directory:', error.message);
+        console.log('  💡 Try manually running: rm -rf dist/');
+        process.exit(1);
     }
 }
 
-// Create dist directory
-mkdirSync(DIST_DIR, { recursive: true });
+// Create dist directory with proper permissions
+try {
+    mkdirSync(DIST_DIR, { recursive: true, mode: 0o755 });
+    console.log('  ✓ Created dist directory\n');
+} catch (error) {
+    console.error('  ✗ Could not create dist directory:', error.message);
+    process.exit(1);
+}
 
 console.log('📦 Copying files to dist...\n');
 

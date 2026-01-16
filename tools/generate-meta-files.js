@@ -100,7 +100,7 @@ function generateManifest() {
     };
 
     const manifestPath = path.join(DIST_DIR, 'manifest.json');
-    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), { mode: 0o644 });
     console.log('  ✓ manifest.json generated');
 }
 
@@ -140,7 +140,7 @@ Crawl-delay: 1
 `;
 
     const robotsPath = path.join(DIST_DIR, 'robots.txt');
-    fs.writeFileSync(robotsPath, robots);
+    fs.writeFileSync(robotsPath, robots, { mode: 0o644 });
     console.log('  ✓ robots.txt generated');
 }
 
@@ -208,7 +208,7 @@ For more information, visit ${BASE_URL}
 `;
 
     const llmsPath = path.join(DIST_DIR, 'llms.txt');
-    fs.writeFileSync(llmsPath, llmsTxt);
+    fs.writeFileSync(llmsPath, llmsTxt, { mode: 0o644 });
     console.log('  ✓ llms.txt generated');
 }
 
@@ -234,7 +234,7 @@ Components: PWA, AI Chatbot, Dynamic Gallery, Blog System
 `;
 
     const humansPath = path.join(DIST_DIR, 'humans.txt');
-    fs.writeFileSync(humansPath, humans);
+    fs.writeFileSync(humansPath, humans, { mode: 0o644 });
     console.log('  ✓ humans.txt generated');
 }
 
@@ -248,11 +248,11 @@ Canonical: ${BASE_URL}/.well-known/security.txt
 
     const wellKnownDir = path.join(DIST_DIR, '.well-known');
     if (!fs.existsSync(wellKnownDir)) {
-        fs.mkdirSync(wellKnownDir, { recursive: true });
+        fs.mkdirSync(wellKnownDir, { recursive: true, mode: 0o755 });
     }
 
     const securityPath = path.join(wellKnownDir, 'security.txt');
-    fs.writeFileSync(securityPath, security);
+    fs.writeFileSync(securityPath, security, { mode: 0o644 });
     console.log('  ✓ security.txt generated');
 }
 
