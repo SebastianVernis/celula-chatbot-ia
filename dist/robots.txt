@@ -1,5 +1,5 @@
 # robots.txt para Grupo Musical La Célula
-# Generated automatically on 2026-01-16T00:29:35.919Z
+# Generated automatically on 2026-01-16T00:41:40.402Z
 
 User-agent: *
 
