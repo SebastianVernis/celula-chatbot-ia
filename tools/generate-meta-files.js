@@ -14,6 +14,17 @@ const PROJECT_ROOT = path.join(__dirname, '..');
 const DIST_DIR = path.join(PROJECT_ROOT, 'dist');
 const BASE_URL = 'https://www.grupomusicalcelula.com';
 
+// Función para escribir archivos con manejo de errores
+function safeWriteFile(filePath, content, fileName) {
+    try {
+        fs.writeFileSync(filePath, content, { mode: 0o644 });
+        console.log(`  ✓ ${fileName} generated`);
+    } catch (error) {
+        console.error(`  ✗ Failed to write ${fileName}:`, error.message);
+        throw new Error(`Meta file generation failed for ${fileName}: ${error.message}`);
+    }
+}
+
 // Función para generar manifest.json
 function generateManifest() {
     const manifest = {
@@ -100,8 +111,7 @@ function generateManifest() {
     };
 
     const manifestPath = path.join(DIST_DIR, 'manifest.json');
-    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-    console.log('  ✓ manifest.json generated');
+    safeWriteFile(manifestPath, JSON.stringify(manifest, null, 2), 'manifest.json');
 }
 
 // Función para generar robots.txt
@@ -140,8 +150,7 @@ Crawl-delay: 1
 `;
 
     const robotsPath = path.join(DIST_DIR, 'robots.txt');
-    fs.writeFileSync(robotsPath, robots);
-    console.log('  ✓ robots.txt generated');
+    safeWriteFile(robotsPath, robots, 'robots.txt');
 }
 
 // Función para generar llms.txt
@@ -208,8 +217,7 @@ For more information, visit ${BASE_URL}
 `;
 
     const llmsPath = path.join(DIST_DIR, 'llms.txt');
-    fs.writeFileSync(llmsPath, llmsTxt);
-    console.log('  ✓ llms.txt generated');
+    safeWriteFile(llmsPath, llmsTxt, 'llms.txt');
 }
 
 // Función para generar humans.txt
@@ -234,8 +242,7 @@ Components: PWA, AI Chatbot, Dynamic Gallery, Blog System
 `;
 
     const humansPath = path.join(DIST_DIR, 'humans.txt');
-    fs.writeFileSync(humansPath, humans);
-    console.log('  ✓ humans.txt generated');
+    safeWriteFile(humansPath, humans, 'humans.txt');
 }
 
 // Función para generar security.txt
@@ -248,12 +255,16 @@ Canonical: ${BASE_URL}/.well-known/security.txt
 
     const wellKnownDir = path.join(DIST_DIR, '.well-known');
     if (!fs.existsSync(wellKnownDir)) {
-        fs.mkdirSync(wellKnownDir, { recursive: true });
+        try {
+            fs.mkdirSync(wellKnownDir, { recursive: true, mode: 0o755 });
+        } catch (error) {
+            console.error('  ✗ Failed to create .well-known directory:', error.message);
+            throw new Error(`.well-known directory creation failed: ${error.message}`);
+        }
     }
 
     const securityPath = path.join(wellKnownDir, 'security.txt');
-    fs.writeFileSync(securityPath, security);
-    console.log('  ✓ security.txt generated');
+    safeWriteFile(securityPath, security, 'security.txt');
 }
 
 // Ejecutar todas las generaciones

@@ -1,8 +1,8 @@
 {
   "name": "Grupo Musical Versátil La Célula",
   "short_name": "La Célula",
-  "description": "Música profesional para bodas, fiestas y eventos corporativos",
-  "start_url": "",
+  "description": "Música profesional para bodas, fiestas y eventos corporativos en Ciudad de México",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
@@ -28,7 +28,7 @@
   ],
   "lang": "es-MX",
   "dir": "ltr",
-  "scope": "",
+  "scope": "/",
   "screenshots": [
     {
       "src": "assets/gallery/banda-1.webp",
@@ -39,24 +39,38 @@
       "src": "assets/blog/evento-1.webp",
       "sizes": "1280x720",
       "type": "image/webp"
-    },
-    {
-      "src": "assets/blog/boda-1.webp",
-      "sizes": "1280x720",
-      "type": "image/webp"
-    },
-    {
-      "src": "assets/blog/xv-1.webp",
-      "sizes": "1280x720",
-      "type": "image/webp"
     }
   ],
   "shortcuts": [
     {
-      "name": "Marketing",
-      "short_name": "Marketing",
-      "description": "Ver página de marketing",
-      "url": "marketing/",
+      "name": "Cotizador",
+      "short_name": "Cotizar",
+      "description": "Cotiza tu evento",
+      "url": "/cotizador.html",
+      "icons": [
+        {
+          "src": "assets/logo/logo.webp",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Blog",
+      "short_name": "Blog",
+      "description": "Lee nuestro blog",
+      "url": "/blog.html",
+      "icons": [
+        {
+          "src": "assets/logo/logo.webp",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Galería",
+      "short_name": "Galería",
+      "description": "Ve nuestras fotos",
+      "url": "/galeria.html",
       "icons": [
         {
           "src": "assets/logo/logo.webp",

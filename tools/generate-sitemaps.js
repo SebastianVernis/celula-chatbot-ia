@@ -97,108 +97,155 @@ function generateSitemapIndex(sitemaps) {
 }
 
 // Obtener todos los archivos HTML
-const htmlFiles = globSync('**/*.html', { cwd: DIST_DIR, absolute: true });
+const htmlFiles = globSync('**/*.html', { 
+    cwd: DIST_DIR, 
+    absolute: true,
+    ignore: ['**/node_modules/**', '**/test-*.html', '**/.git/**']
+});
 
 // Generar URLs para el sitemap principal
-const mainUrls = htmlFiles.map(file => {
-    const relPath = path.relative(DIST_DIR, file);
-    const urlPath = relPath.replace(/\\/g, '/'); // Asegurar que las rutas usen / en lugar de \
-    const fullUrl = urlPath === 'index.html' 
-        ? BASE_URL 
-        : `${BASE_URL}/${urlPath}`;
-    
-    let changefreq = 'monthly';
-    let priority = 0.7;
-    
-    // Asignar prioridades y frecuencias según la importancia
-    if (urlPath === 'index.html') {
-        changefreq = 'weekly';
-        priority = 1.0;
-    } else if (urlPath === 'blog.html') {
-        changefreq = 'weekly';
-        priority = 0.9;
-    } else if (urlPath === 'cotizador.html' || urlPath === 'galeria.html' || urlPath === 'testimonios.html') {
-        changefreq = 'monthly';
-        priority = 0.9;
-    } else if (urlPath.startsWith('marketing/')) {
-        changefreq = 'monthly';
-        priority = 0.8;
-    } else if (urlPath.startsWith('post/')) {
-        changefreq = 'monthly';
-        priority = 0.7;
-    }
-    
-    return {
-        loc: fullUrl,
-        lastmod: getLastMod(file),
-        changefreq,
-        priority
-    };
-});
+const mainUrls = htmlFiles
+    .filter(file => {
+        const relPath = path.relative(DIST_DIR, file);
+        // Excluir node_modules, archivos de test y archivos ocultos
+        return !relPath.includes('node_modules') && 
+               !relPath.includes('test-') &&
+               !relPath.startsWith('.');
+    })
+    .map(file => {
+        const relPath = path.relative(DIST_DIR, file);
+        const urlPath = relPath.replace(/\\/g, '/'); // Asegurar que las rutas usen / en lugar de \
+        const fullUrl = urlPath === 'index.html' 
+            ? BASE_URL 
+            : `${BASE_URL}/${urlPath}`;
+        
+        let changefreq = 'monthly';
+        let priority = 0.7;
+        
+        // Asignar prioridades y frecuencias según la importancia
+        if (urlPath === 'index.html') {
+            changefreq = 'weekly';
+            priority = 1.0;
+        } else if (urlPath === 'blog.html') {
+            changefreq = 'weekly';
+            priority = 0.9;
+        } else if (urlPath === 'cotizador.html' || urlPath === 'galeria.html' || urlPath === 'testimonios.html') {
+            changefreq = 'monthly';
+            priority = 0.9;
+        } else if (urlPath.startsWith('marketing/')) {
+            changefreq = 'monthly';
+            priority = 0.8;
+        } else if (urlPath.startsWith('post/')) {
+            changefreq = 'monthly';
+            priority = 0.7;
+        }
+        
+        return {
+            loc: fullUrl,
+            lastmod: getLastMod(file),
+            changefreq,
+            priority
+        };
+    });
 
 // Obtener archivos CSS
-const cssFiles = globSync('**/*.css', { cwd: DIST_DIR, absolute: true });
-const cssUrls = cssFiles.map(file => {
-    const relPath = path.relative(DIST_DIR, file);
-    const urlPath = relPath.replace(/\\/g, '/');
-    return {
-        loc: `${BASE_URL}/${urlPath}`,
-        lastmod: getLastMod(file)
-    };
+const cssFiles = globSync('**/*.css', { 
+    cwd: DIST_DIR, 
+    absolute: true,
+    ignore: ['**/node_modules/**']
 });
+const cssUrls = cssFiles
+    .filter(file => !path.relative(DIST_DIR, file).includes('node_modules'))
+    .map(file => {
+        const relPath = path.relative(DIST_DIR, file);
+        const urlPath = relPath.replace(/\\/g, '/');
+        return {
+            loc: `${BASE_URL}/${urlPath}`,
+            lastmod: getLastMod(file)
+        };
+    });
 
 // Obtener archivos JS
-const jsFiles = globSync('**/*.js', { cwd: DIST_DIR, absolute: true });
-const jsUrls = jsFiles.map(file => {
-    const relPath = path.relative(DIST_DIR, file);
-    const urlPath = relPath.replace(/\\/g, '/');
-    return {
-        loc: `${BASE_URL}/${urlPath}`,
-        lastmod: getLastMod(file)
-    };
+const jsFiles = globSync('**/*.js', { 
+    cwd: DIST_DIR, 
+    absolute: true,
+    ignore: ['**/node_modules/**']
 });
+const jsUrls = jsFiles
+    .filter(file => !path.relative(DIST_DIR, file).includes('node_modules'))
+    .map(file => {
+        const relPath = path.relative(DIST_DIR, file);
+        const urlPath = relPath.replace(/\\/g, '/');
+        return {
+            loc: `${BASE_URL}/${urlPath}`,
+            lastmod: getLastMod(file)
+        };
+    });
 
 // Obtener archivos de imagen
-const imageFiles = globSync('**/*.{jpg,jpeg,png,webp,gif}', { cwd: DIST_DIR, absolute: true });
-const imageUrls = imageFiles.map(file => {
-    const relPath = path.relative(DIST_DIR, file);
-    const urlPath = relPath.replace(/\\/g, '/').replace(/ /g, '%20'); // URL encode spaces
-    return {
-        loc: `${BASE_URL}/${urlPath}`,
-        lastmod: getLastMod(file)
-    };
+const imageFiles = globSync('**/*.{jpg,jpeg,png,webp,gif}', { 
+    cwd: DIST_DIR, 
+    absolute: true,
+    ignore: ['**/node_modules/**']
 });
+const imageUrls = imageFiles
+    .filter(file => !path.relative(DIST_DIR, file).includes('node_modules'))
+    .map(file => {
+        const relPath = path.relative(DIST_DIR, file);
+        const urlPath = relPath.replace(/\\/g, '/').replace(/ /g, '%20'); // URL encode spaces
+        return {
+            loc: `${BASE_URL}/${urlPath}`,
+            lastmod: getLastMod(file)
+        };
+    });
 
 // Obtener archivos de video
-const videoFiles = globSync('**/*.{mp4,webm,ogg,mov,avi}', { cwd: DIST_DIR, absolute: true });
-const videoUrls = videoFiles.map(file => {
-    const relPath = path.relative(DIST_DIR, file);
-    const urlPath = relPath.replace(/\\/g, '/').replace(/ /g, '%20'); // URL encode spaces
-    return {
-        loc: `${BASE_URL}/${urlPath}`,
-        lastmod: getLastMod(file)
-    };
+const videoFiles = globSync('**/*.{mp4,webm,ogg,mov,avi}', { 
+    cwd: DIST_DIR, 
+    absolute: true,
+    ignore: ['**/node_modules/**']
 });
+const videoUrls = videoFiles
+    .filter(file => !path.relative(DIST_DIR, file).includes('node_modules'))
+    .map(file => {
+        const relPath = path.relative(DIST_DIR, file);
+        const urlPath = relPath.replace(/\\/g, '/').replace(/ /g, '%20'); // URL encode spaces
+        return {
+            loc: `${BASE_URL}/${urlPath}`,
+            lastmod: getLastMod(file)
+        };
+    });
+
+// Función para escribir archivos con manejo de errores
+function safeWriteFile(filePath, content, fileName) {
+    try {
+        fs.writeFileSync(filePath, content, { mode: 0o644 });
+        console.log(`  ✓ ${fileName} generated successfully`);
+    } catch (error) {
+        console.error(`  ✗ Failed to write ${fileName}:`, error.message);
+        throw new Error(`Sitemap generation failed for ${fileName}: ${error.message}`);
+    }
+}
 
 // Crear sitemap principal (HTML)
 const mainSitemap = generateSitemap(mainUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-main.xml'), mainSitemap);
+safeWriteFile(path.join(OUTPUT_DIR, 'sitemap-main.xml'), mainSitemap, 'sitemap-main.xml');
 
 // Crear sitemap de CSS
 const cssSitemap = generateSitemap(cssUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-styles.xml'), cssSitemap);
+safeWriteFile(path.join(OUTPUT_DIR, 'sitemap-styles.xml'), cssSitemap, 'sitemap-styles.xml');
 
 // Crear sitemap de JS
 const jsSitemap = generateSitemap(jsUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-scripts.xml'), jsSitemap);
+safeWriteFile(path.join(OUTPUT_DIR, 'sitemap-scripts.xml'), jsSitemap, 'sitemap-scripts.xml');
 
 // Crear sitemap de imágenes
 const imageSitemap = generateSitemap(imageUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-images.xml'), imageSitemap);
+safeWriteFile(path.join(OUTPUT_DIR, 'sitemap-images.xml'), imageSitemap, 'sitemap-images.xml');
 
 // Crear sitemap de videos
 const videoSitemap = generateSitemap(videoUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-videos.xml'), videoSitemap);
+safeWriteFile(path.join(OUTPUT_DIR, 'sitemap-videos.xml'), videoSitemap, 'sitemap-videos.xml');
 
 // Crear sitemap index
 const sitemapIndex = generateSitemapIndex([
@@ -208,15 +255,14 @@ const sitemapIndex = generateSitemapIndex([
     { loc: `${BASE_URL}/sitemap-images.xml`, lastmod: new Date().toISOString().split('T')[0] },
     { loc: `${BASE_URL}/sitemap-videos.xml`, lastmod: new Date().toISOString().split('T')[0] }
 ]);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap-index.xml'), sitemapIndex);
+safeWriteFile(path.join(OUTPUT_DIR, 'sitemap-index.xml'), sitemapIndex, 'sitemap-index.xml');
 
-// Crear sitemap principal combinado (para retrocompatibilidad)
-const allUrls = [...mainUrls, ...cssUrls, ...jsUrls, ...imageUrls, ...videoUrls];
-const combinedSitemap = generateSitemap(allUrls);
-fs.writeFileSync(path.join(OUTPUT_DIR, 'sitemap.xml'), combinedSitemap);
+// Crear sitemap principal combinado (solo HTML para SEO)
+const combinedSitemap = generateSitemap(mainUrls);
+safeWriteFile(path.join(OUTPUT_DIR, 'sitemap.xml'), combinedSitemap, 'sitemap.xml');
 
-console.log('Sitemaps generados exitosamente:');
-console.log('- sitemap.xml (combinado)');
+console.log('\n✅ All sitemaps generated successfully:');
+console.log('- sitemap.xml (HTML pages only - SEO focused)');
 console.log('- sitemap-main.xml (HTML pages)');
 console.log('- sitemap-styles.xml (CSS files)');
 console.log('- sitemap-scripts.xml (JS files)');
