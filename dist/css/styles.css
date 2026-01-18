@@ -880,6 +880,45 @@ a {
     }
 }
 
+@media (max-width: 520px) {
+    .service-card {
+        height: 450px;
+    }
+    
+    .service-image {
+        height: 140px;
+    }
+    
+    .service-content {
+        padding: 18px 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    .service-card {
+        height: 420px;
+        max-width: calc(100vw - 30px);
+        width: calc(100vw - 30px);
+    }
+    
+    .service-image {
+        height: 120px;
+    }
+    
+    .service-content {
+        padding: 15px 10px;
+    }
+    
+    .service-title {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+    
+    .card-back {
+        padding: 25px 15px;
+    }
+}
+
 @media (max-width: 480px) {
     .hero-logo {
         width: 240px;
