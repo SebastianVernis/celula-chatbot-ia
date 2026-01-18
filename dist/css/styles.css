@@ -256,7 +256,7 @@ a {
 /* Video responsiveness for different devices */
 @media (max-width: 768px) {
     .hero-content {
-        top: 70% !important;
+        top: 60% !important;
     }
 
     .hero-background-video {
@@ -305,24 +305,26 @@ a {
 
     .hero-content {
         padding: 0 15px;
-        top: 75% !important;
+        top: 65% !important;
     }
 
     .hero-logo {
         width: 180px;
         height: 100px;
-        margin: 0 auto 15px auto;
+        margin: 0 auto 10px auto;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     
     .hero-title {
-        font-size: 12px !important;
+        font-size: 15px !important;
+        margin-bottom: 8px;
     }
     
     .hero-subtitle {
-        font-size: 11px !important;
+        font-size: 14px !important;
+        margin-top: 8px;
     }
 }
 
@@ -751,11 +753,11 @@ a {
     }
 
     .hero-title {
-        font-size: 14px;
+        font-size: 17px;
     }
     
     .hero-subtitle {
-        font-size: 13px;
+        font-size: 16px;
     }
 
     .services-grid {

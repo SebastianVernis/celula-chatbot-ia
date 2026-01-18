@@ -318,12 +318,12 @@ a {
     }
     
     .hero-title {
-        font-size: 13px !important;
+        font-size: 15px !important;
         margin-bottom: 8px;
     }
     
     .hero-subtitle {
-        font-size: 12px !important;
+        font-size: 14px !important;
         margin-top: 8px;
     }
 }
@@ -753,11 +753,11 @@ a {
     }
 
     .hero-title {
-        font-size: 15px;
+        font-size: 17px;
     }
     
     .hero-subtitle {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .services-grid {
