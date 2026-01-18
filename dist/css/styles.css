@@ -441,20 +441,20 @@ a {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 40px;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 40px;
 }
 
 .service-card {
     perspective: 1000px;
-    height: 650px;
+    height: 600px;
     position: relative;
     transition: transform 0.3s ease;
     display: block;
     visibility: visible;
     opacity: 1;
-    min-width: 380px;
+    max-width: 350px;
 }
 
 .service-card:hover {
@@ -500,7 +500,7 @@ a {
 
 .service-image {
     width: 100%;
-    height: 280px;
+    height: 220px;
     object-fit: cover;
     border: none;
     transition: transform 0.3s ease;
@@ -774,7 +774,7 @@ a {
     }
 
     .service-card {
-        height: 550px;
+        height: 480px;
         max-width: calc(100vw - 40px);
         width: calc(100vw - 40px);
         min-width: unset;
@@ -822,13 +822,14 @@ a {
     }
 
     .service-image {
-        height: 220px;
+        height: 160px;
         width: 100%;
         display: block;
+        object-fit: cover;
     }
 
     .service-content {
-        padding: 25px 20px;
+        padding: 20px 15px;
         display: block;
     }
 
