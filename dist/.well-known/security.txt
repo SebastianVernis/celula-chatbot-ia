@@ -1,4 +1,4 @@
 Contact: https://www.grupomusicalcelula.com/cotizador.html
-Expires: 2027-01-18T05:29:33.629Z
+Expires: 2027-01-18T05:34:51.991Z
 Preferred-Languages: es, en
 Canonical: https://www.grupomusicalcelula.com/.well-known/security.txt
