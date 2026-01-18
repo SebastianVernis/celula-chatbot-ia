@@ -1,6 +1,6 @@
 /**
  * Persistent Video Player Popup
- * Reproductor de video estilo video.js sin dependencias externas
+ * Dos videos lado a lado con reproducción sincronizada
  * Mantiene persistencia entre páginas usando localStorage
  */
 
@@ -8,25 +8,36 @@
     'use strict';
 
     const VIDEO_PLAYER_KEY = 'celula_video_player_state';
+    
+    // Detectar ruta base según la ubicación de la página
+    const getBasePath = () => {
+        const path = window.location.pathname;
+        if (path.includes('/post/')) return '../';
+        if (path.includes('/marketing/')) return '../';
+        return '';
+    };
+    
+    const basePath = getBasePath();
+    
     const VIDEO_SOURCES = [
         {
-            src: '/assets/video/Video_Promocional_Grupo_Musical_Celula_1.webm',
+            src: `${basePath}assets/video/Video_Promocional_Grupo_Musical_Celula_1.webm`,
             type: 'video/webm',
-            title: 'Video Promocional - Parte 1'
+            title: 'Video Promocional 1'
         },
         {
-            src: '/assets/video/Video_Promocional_Grupo_Musical_Celula_2.webm',
+            src: `${basePath}assets/video/Video_Promocional_Grupo_Musical_Celula_2.webm`,
             type: 'video/webm',
-            title: 'Video Promocional - Parte 2'
+            title: 'Video Promocional 2'
         }
     ];
 
     class VideoPlayerPopup {
         constructor() {
             this.player = null;
-            this.videoElement = null;
-            this.currentVideoIndex = 0;
-            this.isPlaying = false;
+            this.videoLeft = null;
+            this.videoRight = null;
+            this.activeVideo = 'left'; // 'left' or 'right'
             this.volume = 0.7;
             this.isMinimized = false;
             this.isDragging = false;
@@ -68,7 +79,7 @@
                 <div id="celula-video-player" class="video-player-popup hidden" role="dialog" aria-label="Reproductor de video">
                     <div class="video-player-container">
                         <div class="video-player-header">
-                            <span class="video-player-title">${VIDEO_SOURCES[0].title}</span>
+                            <span class="video-player-title">Videos Promocionales</span>
                             <div class="video-player-controls-header">
                                 <button class="video-btn-minimize" aria-label="Minimizar" title="Minimizar">
                                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -83,90 +94,140 @@
                             </div>
                         </div>
                         
-                        <div class="video-player-wrapper">
-                            <video 
-                                class="video-player-element" 
-                                preload="metadata"
-                                playsinline
-                            >
-                                <source src="${VIDEO_SOURCES[0].src}" type="${VIDEO_SOURCES[0].type}">
-                                Tu navegador no soporta la reproducción de video.
-                            </video>
-                            
-                            <div class="video-player-overlay">
-                                <button class="video-btn-play-large" aria-label="Reproducir">
-                                    <svg viewBox="0 0 24 24" width="60" height="60" fill="currentColor">
-                                        <path d="M8 5v14l11-7z"/>
-                                    </svg>
-                                </button>
-                            </div>
+                        <div class="video-player-dual-wrapper">
+                            <!-- Video Izquierdo -->
+                            <div class="video-player-item" data-video="left">
+                                <div class="video-player-wrapper">
+                                    <video 
+                                        class="video-player-element video-left" 
+                                        preload="metadata"
+                                        playsinline
+                                        loop
+                                    >
+                                        <source src="${VIDEO_SOURCES[0].src}" type="${VIDEO_SOURCES[0].type}">
+                                        Tu navegador no soporta video.
+                                    </video>
+                                    
+                                    <div class="video-player-overlay video-overlay-left">
+                                        <button class="video-btn-play-large" data-video="left" aria-label="Reproducir">
+                                            <svg viewBox="0 0 24 24" width="60" height="60" fill="currentColor">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
 
-                            <div class="video-player-loading">
-                                <div class="video-spinner"></div>
-                            </div>
-                        </div>
-
-                        <div class="video-player-controls">
-                            <button class="video-btn-play" aria-label="Reproducir/Pausar">
-                                <svg class="icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                                <svg class="icon-pause hidden" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                    <path d="M6 4h4v16H6zm8 0h4v16h-4z"/>
-                                </svg>
-                            </button>
-
-                            <button class="video-btn-next" aria-label="Siguiente video" title="Siguiente video">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                    <path d="M6 4l10 8-10 8V4zm10 0v16h2V4h-2z"/>
-                                </svg>
-                            </button>
-
-                            <div class="video-progress-container">
-                                <div class="video-progress-bar">
-                                    <div class="video-progress-played"></div>
-                                    <div class="video-progress-buffered"></div>
-                                    <div class="video-progress-handle"></div>
+                                    <div class="video-player-loading video-loading-left">
+                                        <div class="video-spinner"></div>
+                                    </div>
+                                    
+                                    <div class="video-title-overlay">${VIDEO_SOURCES[0].title}</div>
                                 </div>
-                                <div class="video-time">
-                                    <span class="video-time-current">0:00</span>
-                                    <span class="video-time-separator">/</span>
-                                    <span class="video-time-duration">0:00</span>
+
+                                <div class="video-player-controls">
+                                    <button class="video-btn-play" data-video="left" aria-label="Reproducir/Pausar">
+                                        <svg class="icon-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                        <svg class="icon-pause hidden" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M6 4h4v16H6zm8 0h4v16h-4z"/>
+                                        </svg>
+                                    </button>
+
+                                    <div class="video-progress-container">
+                                        <div class="video-progress-bar" data-video="left">
+                                            <div class="video-progress-played"></div>
+                                            <div class="video-progress-buffered"></div>
+                                        </div>
+                                        <div class="video-time">
+                                            <span class="video-time-current">0:00</span>
+                                            <span class="video-time-separator">/</span>
+                                            <span class="video-time-duration">0:00</span>
+                                        </div>
+                                    </div>
+
+                                    <button class="video-btn-mute" data-video="left" aria-label="Silenciar/Activar sonido">
+                                        <svg class="icon-volume" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                                        </svg>
+                                        <svg class="icon-mute hidden" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button class="video-btn-fullscreen" data-video="left" aria-label="Pantalla completa">
+                                        <svg class="icon-fullscreen" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
 
-                            <div class="video-volume-container">
-                                <button class="video-btn-mute" aria-label="Silenciar/Activar sonido">
-                                    <svg class="icon-volume" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-                                    </svg>
-                                    <svg class="icon-mute hidden" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                        <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
-                                    </svg>
-                                </button>
-                                <input 
-                                    type="range" 
-                                    class="video-volume-slider" 
-                                    min="0" 
-                                    max="100" 
-                                    value="70"
-                                    aria-label="Control de volumen"
-                                >
+                            <!-- Video Derecho -->
+                            <div class="video-player-item" data-video="right">
+                                <div class="video-player-wrapper">
+                                    <video 
+                                        class="video-player-element video-right" 
+                                        preload="metadata"
+                                        playsinline
+                                        loop
+                                    >
+                                        <source src="${VIDEO_SOURCES[1].src}" type="${VIDEO_SOURCES[1].type}">
+                                        Tu navegador no soporta video.
+                                    </video>
+                                    
+                                    <div class="video-player-overlay video-overlay-right">
+                                        <button class="video-btn-play-large" data-video="right" aria-label="Reproducir">
+                                            <svg viewBox="0 0 24 24" width="60" height="60" fill="currentColor">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div class="video-player-loading video-loading-right">
+                                        <div class="video-spinner"></div>
+                                    </div>
+                                    
+                                    <div class="video-title-overlay">${VIDEO_SOURCES[1].title}</div>
+                                </div>
+
+                                <div class="video-player-controls">
+                                    <button class="video-btn-play" data-video="right" aria-label="Reproducir/Pausar">
+                                        <svg class="icon-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                        <svg class="icon-pause hidden" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M6 4h4v16H6zm8 0h4v16h-4z"/>
+                                        </svg>
+                                    </button>
+
+                                    <div class="video-progress-container">
+                                        <div class="video-progress-bar" data-video="right">
+                                            <div class="video-progress-played"></div>
+                                            <div class="video-progress-buffered"></div>
+                                        </div>
+                                        <div class="video-time">
+                                            <span class="video-time-current">0:00</span>
+                                            <span class="video-time-separator">/</span>
+                                            <span class="video-time-duration">0:00</span>
+                                        </div>
+                                    </div>
+
+                                    <button class="video-btn-mute" data-video="right" aria-label="Silenciar/Activar sonido">
+                                        <svg class="icon-volume" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                                        </svg>
+                                        <svg class="icon-mute hidden" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button class="video-btn-fullscreen" data-video="right" aria-label="Pantalla completa">
+                                        <svg class="icon-fullscreen" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-
-                            <button class="video-btn-fullscreen" aria-label="Pantalla completa">
-                                <svg class="icon-fullscreen" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-                                </svg>
-                                <svg class="icon-fullscreen-exit hidden" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                                    <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="video-player-playlist">
-                            <div class="video-playlist-title">Lista de reproducción</div>
-                            <div class="video-playlist-items"></div>
                         </div>
                     </div>
                 </div>
@@ -175,63 +236,57 @@
             document.body.insertAdjacentHTML('beforeend', playerHTML);
             
             this.player = document.getElementById('celula-video-player');
-            this.videoElement = this.player.querySelector('.video-player-element');
+            this.videoLeft = this.player.querySelector('.video-left');
+            this.videoRight = this.player.querySelector('.video-right');
             
             // Configurar volumen inicial
-            this.videoElement.volume = this.volume;
+            this.videoLeft.volume = this.volume;
+            this.videoRight.volume = this.volume;
             
-            // Crear playlist
-            this.createPlaylist();
-        }
-
-        createPlaylist() {
-            const playlistContainer = this.player.querySelector('.video-playlist-items');
-            
-            VIDEO_SOURCES.forEach((video, index) => {
-                const item = document.createElement('div');
-                item.className = `video-playlist-item ${index === 0 ? 'active' : ''}`;
-                item.dataset.index = index;
-                item.innerHTML = `
-                    <div class="video-playlist-item-number">${index + 1}</div>
-                    <div class="video-playlist-item-title">${video.title}</div>
-                    <div class="video-playlist-item-duration">2:32</div>
-                `;
-                
-                item.addEventListener('click', () => this.loadVideo(index));
-                playlistContainer.appendChild(item);
-            });
+            // El video derecho empieza en mute para no solaparse
+            this.videoRight.muted = true;
         }
 
         setupEventListeners() {
-            const video = this.videoElement;
+            // Video Left events
+            this.videoLeft.addEventListener('loadedmetadata', () => this.onLoadedMetadata('left'));
+            this.videoLeft.addEventListener('timeupdate', () => this.onTimeUpdate('left'));
+            this.videoLeft.addEventListener('progress', () => this.onProgress('left'));
+            this.videoLeft.addEventListener('play', () => this.onPlay('left'));
+            this.videoLeft.addEventListener('pause', () => this.onPause('left'));
+            this.videoLeft.addEventListener('waiting', () => this.showLoading('left'));
+            this.videoLeft.addEventListener('canplay', () => this.hideLoading('left'));
+            this.videoLeft.addEventListener('error', (e) => this.onVideoError(e, 'left'));
             
-            // Video events
-            video.addEventListener('loadedmetadata', () => this.onLoadedMetadata());
-            video.addEventListener('timeupdate', () => this.onTimeUpdate());
-            video.addEventListener('progress', () => this.onProgress());
-            video.addEventListener('ended', () => this.onVideoEnded());
-            video.addEventListener('play', () => this.onPlay());
-            video.addEventListener('pause', () => this.onPause());
-            video.addEventListener('waiting', () => this.showLoading());
-            video.addEventListener('canplay', () => this.hideLoading());
-            video.addEventListener('error', (e) => this.onVideoError(e));
+            // Video Right events
+            this.videoRight.addEventListener('loadedmetadata', () => this.onLoadedMetadata('right'));
+            this.videoRight.addEventListener('timeupdate', () => this.onTimeUpdate('right'));
+            this.videoRight.addEventListener('progress', () => this.onProgress('right'));
+            this.videoRight.addEventListener('play', () => this.onPlay('right'));
+            this.videoRight.addEventListener('pause', () => this.onPause('right'));
+            this.videoRight.addEventListener('waiting', () => this.showLoading('right'));
+            this.videoRight.addEventListener('canplay', () => this.hideLoading('right'));
+            this.videoRight.addEventListener('error', (e) => this.onVideoError(e, 'right'));
 
-            // Control buttons
-            this.player.querySelector('.video-btn-play').addEventListener('click', () => this.togglePlay());
-            this.player.querySelector('.video-btn-play-large').addEventListener('click', () => this.togglePlay());
-            this.player.querySelector('.video-btn-next').addEventListener('click', () => this.nextVideo());
-            this.player.querySelector('.video-btn-mute').addEventListener('click', () => this.toggleMute());
-            this.player.querySelector('.video-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
+            // Control buttons - Left
+            const leftItem = this.player.querySelector('[data-video="left"]');
+            leftItem.querySelector('.video-btn-play').addEventListener('click', () => this.togglePlay('left'));
+            leftItem.querySelector('.video-btn-play-large').addEventListener('click', () => this.togglePlay('left'));
+            leftItem.querySelector('.video-btn-mute').addEventListener('click', () => this.toggleMute('left'));
+            leftItem.querySelector('.video-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen('left'));
+            leftItem.querySelector('.video-progress-bar').addEventListener('click', (e) => this.seek(e, 'left'));
+            
+            // Control buttons - Right
+            const rightItem = this.player.querySelector('[data-video="right"]');
+            rightItem.querySelector('.video-btn-play').addEventListener('click', () => this.togglePlay('right'));
+            rightItem.querySelector('.video-btn-play-large').addEventListener('click', () => this.togglePlay('right'));
+            rightItem.querySelector('.video-btn-mute').addEventListener('click', () => this.toggleMute('right'));
+            rightItem.querySelector('.video-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen('right'));
+            rightItem.querySelector('.video-progress-bar').addEventListener('click', (e) => this.seek(e, 'right'));
+
+            // Header controls
             this.player.querySelector('.video-btn-minimize').addEventListener('click', () => this.minimize());
             this.player.querySelector('.video-btn-close').addEventListener('click', () => this.hide());
-
-            // Progress bar
-            const progressContainer = this.player.querySelector('.video-progress-container');
-            progressContainer.addEventListener('click', (e) => this.seek(e));
-            
-            // Volume slider
-            const volumeSlider = this.player.querySelector('.video-volume-slider');
-            volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value / 100));
 
             // Dragging
             const header = this.player.querySelector('.video-player-header');
@@ -239,86 +294,69 @@
             document.addEventListener('mousemove', (e) => this.drag(e));
             document.addEventListener('mouseup', () => this.stopDrag());
 
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-
             // Guardar estado antes de cambiar de página
             window.addEventListener('beforeunload', () => this.saveState());
         }
 
         // Video control methods
-        togglePlay() {
-            if (this.videoElement.paused) {
-                this.play();
+        togglePlay(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const otherVideo = side === 'left' ? this.videoRight : this.videoLeft;
+            
+            if (video.paused) {
+                // Pausar el otro video y mutearlo
+                otherVideo.pause();
+                otherVideo.muted = true;
+                
+                // Reproducir este video y activar audio
+                video.muted = false;
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.warn('Auto-play prevented:', error);
+                    });
+                }
+                
+                this.activeVideo = side;
             } else {
-                this.pause();
-            }
-        }
-
-        play() {
-            const playPromise = this.videoElement.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.warn('Auto-play prevented:', error);
-                });
-            }
-        }
-
-        pause() {
-            this.videoElement.pause();
-        }
-
-        nextVideo() {
-            this.currentVideoIndex = (this.currentVideoIndex + 1) % VIDEO_SOURCES.length;
-            this.loadVideo(this.currentVideoIndex);
-        }
-
-        loadVideo(index) {
-            this.currentVideoIndex = index;
-            const video = VIDEO_SOURCES[index];
-            const currentTime = this.videoElement.currentTime;
-            const wasPlaying = !this.videoElement.paused;
-            
-            this.videoElement.src = video.src;
-            this.player.querySelector('.video-player-title').textContent = video.title;
-            
-            // Update playlist
-            this.player.querySelectorAll('.video-playlist-item').forEach((item, i) => {
-                item.classList.toggle('active', i === index);
-            });
-            
-            if (wasPlaying) {
-                this.videoElement.play();
+                video.pause();
             }
             
-            this.saveState();
+            this.updatePlayIcon(side);
+            this.updateMuteIcon(side);
+            this.updateMuteIcon(side === 'left' ? 'right' : 'left');
         }
 
-        toggleMute() {
-            this.videoElement.muted = !this.videoElement.muted;
-            this.updateMuteIcon();
+        toggleMute(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const otherVideo = side === 'left' ? this.videoRight : this.videoLeft;
+            
+            if (!video.muted) {
+                // Mutear este video
+                video.muted = true;
+            } else {
+                // Desmutear este video y mutear el otro
+                video.muted = false;
+                otherVideo.muted = true;
+                this.activeVideo = side;
+                this.updateMuteIcon(side === 'left' ? 'right' : 'left');
+            }
+            
+            this.updateMuteIcon(side);
         }
 
-        setVolume(value) {
-            this.volume = value;
-            this.videoElement.volume = value;
-            this.videoElement.muted = value === 0;
-            this.updateMuteIcon();
-            this.saveState();
-        }
-
-        toggleFullscreen() {
-            const container = this.player.querySelector('.video-player-container');
+        toggleFullscreen(side) {
+            const videoItem = this.player.querySelector(`[data-video="${side}"]`);
+            const wrapper = videoItem.querySelector('.video-player-wrapper');
             
             if (!document.fullscreenElement) {
-                if (container.requestFullscreen) {
-                    container.requestFullscreen();
-                } else if (container.webkitRequestFullscreen) {
-                    container.webkitRequestFullscreen();
-                } else if (container.mozRequestFullScreen) {
-                    container.mozRequestFullScreen();
+                if (wrapper.requestFullscreen) {
+                    wrapper.requestFullscreen();
+                } else if (wrapper.webkitRequestFullscreen) {
+                    wrapper.webkitRequestFullscreen();
+                } else if (wrapper.mozRequestFullScreen) {
+                    wrapper.mozRequestFullScreen();
                 }
-                this.updateFullscreenIcon(true);
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -327,60 +365,60 @@
                 } else if (document.mozCancelFullScreen) {
                     document.mozCancelFullScreen();
                 }
-                this.updateFullscreenIcon(false);
             }
         }
 
-        seek(event) {
-            const progressContainer = this.player.querySelector('.video-progress-container');
-            const rect = progressContainer.getBoundingClientRect();
+        seek(event, side) {
+            const progressBar = event.currentTarget;
+            const rect = progressBar.getBoundingClientRect();
             const pos = (event.clientX - rect.left) / rect.width;
-            this.videoElement.currentTime = pos * this.videoElement.duration;
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            video.currentTime = pos * video.duration;
         }
 
         // Event handlers
-        onLoadedMetadata() {
-            this.updateDuration();
+        onLoadedMetadata(side) {
+            this.updateDuration(side);
         }
 
-        onTimeUpdate() {
-            this.updateProgress();
-            this.updateTimeDisplay();
+        onTimeUpdate(side) {
+            this.updateProgress(side);
+            this.updateTimeDisplay(side);
         }
 
-        onProgress() {
-            this.updateBuffered();
+        onProgress(side) {
+            this.updateBuffered(side);
         }
 
-        onVideoEnded() {
-            // Auto-play next video in loop
-            this.nextVideo();
+        onPlay(side) {
+            this.updatePlayIcon(side);
+            this.hideOverlay(side);
         }
 
-        onPlay() {
-            this.isPlaying = true;
-            this.updatePlayIcon();
-            this.hideOverlay();
+        onPause(side) {
+            this.updatePlayIcon(side);
+            this.showOverlay(side);
         }
 
-        onPause() {
-            this.isPlaying = false;
-            this.updatePlayIcon();
-            this.showOverlay();
-        }
-
-        onVideoError(event) {
-            console.error('Video error:', event);
-            // Try next video on error
-            this.nextVideo();
+        onVideoError(event, side) {
+            console.error(`Video error (${side}):`, event);
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            console.error('Error details:', {
+                error: video.error,
+                networkState: video.networkState,
+                readyState: video.readyState,
+                src: video.currentSrc
+            });
         }
 
         // UI update methods
-        updatePlayIcon() {
-            const playIcon = this.player.querySelector('.icon-play');
-            const pauseIcon = this.player.querySelector('.icon-pause');
+        updatePlayIcon(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const videoItem = this.player.querySelector(`[data-video="${side}"]`);
+            const playIcon = videoItem.querySelector('.icon-play');
+            const pauseIcon = videoItem.querySelector('.icon-pause');
             
-            if (this.isPlaying) {
+            if (!video.paused) {
                 playIcon.classList.add('hidden');
                 pauseIcon.classList.remove('hidden');
             } else {
@@ -389,11 +427,13 @@
             }
         }
 
-        updateMuteIcon() {
-            const volumeIcon = this.player.querySelector('.icon-volume');
-            const muteIcon = this.player.querySelector('.icon-mute');
+        updateMuteIcon(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const videoItem = this.player.querySelector(`[data-video="${side}"]`);
+            const volumeIcon = videoItem.querySelector('.icon-volume');
+            const muteIcon = videoItem.querySelector('.icon-mute');
             
-            if (this.videoElement.muted || this.videoElement.volume === 0) {
+            if (video.muted) {
                 volumeIcon.classList.add('hidden');
                 muteIcon.classList.remove('hidden');
             } else {
@@ -402,39 +442,35 @@
             }
         }
 
-        updateFullscreenIcon(isFullscreen) {
-            const fullscreenIcon = this.player.querySelector('.icon-fullscreen');
-            const exitIcon = this.player.querySelector('.icon-fullscreen-exit');
+        updateProgress(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const videoItem = this.player.querySelector(`[data-video="${side}"]`);
+            const progress = (video.currentTime / video.duration) * 100;
+            videoItem.querySelector('.video-progress-played').style.width = progress + '%';
+        }
+
+        updateBuffered(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const videoItem = this.player.querySelector(`[data-video="${side}"]`);
             
-            if (isFullscreen) {
-                fullscreenIcon.classList.add('hidden');
-                exitIcon.classList.remove('hidden');
-            } else {
-                fullscreenIcon.classList.remove('hidden');
-                exitIcon.classList.add('hidden');
+            if (video.buffered.length > 0) {
+                const buffered = (video.buffered.end(0) / video.duration) * 100;
+                videoItem.querySelector('.video-progress-buffered').style.width = buffered + '%';
             }
         }
 
-        updateProgress() {
-            const progress = (this.videoElement.currentTime / this.videoElement.duration) * 100;
-            this.player.querySelector('.video-progress-played').style.width = progress + '%';
+        updateTimeDisplay(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const videoItem = this.player.querySelector(`[data-video="${side}"]`);
+            const current = this.formatTime(video.currentTime);
+            videoItem.querySelector('.video-time-current').textContent = current;
         }
 
-        updateBuffered() {
-            if (this.videoElement.buffered.length > 0) {
-                const buffered = (this.videoElement.buffered.end(0) / this.videoElement.duration) * 100;
-                this.player.querySelector('.video-progress-buffered').style.width = buffered + '%';
-            }
-        }
-
-        updateTimeDisplay() {
-            const current = this.formatTime(this.videoElement.currentTime);
-            this.player.querySelector('.video-time-current').textContent = current;
-        }
-
-        updateDuration() {
-            const duration = this.formatTime(this.videoElement.duration);
-            this.player.querySelector('.video-time-duration').textContent = duration;
+        updateDuration(side) {
+            const video = side === 'left' ? this.videoLeft : this.videoRight;
+            const videoItem = this.player.querySelector(`[data-video="${side}"]`);
+            const duration = this.formatTime(video.duration);
+            videoItem.querySelector('.video-time-duration').textContent = duration;
         }
 
         formatTime(seconds) {
@@ -445,20 +481,24 @@
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
-        showOverlay() {
-            this.player.querySelector('.video-player-overlay').classList.add('visible');
+        showOverlay(side) {
+            const overlay = this.player.querySelector(`.video-overlay-${side}`);
+            overlay.classList.add('visible');
         }
 
-        hideOverlay() {
-            this.player.querySelector('.video-player-overlay').classList.remove('visible');
+        hideOverlay(side) {
+            const overlay = this.player.querySelector(`.video-overlay-${side}`);
+            overlay.classList.remove('visible');
         }
 
-        showLoading() {
-            this.player.querySelector('.video-player-loading').classList.add('visible');
+        showLoading(side) {
+            const loading = this.player.querySelector(`.video-loading-${side}`);
+            loading.classList.add('visible');
         }
 
-        hideLoading() {
-            this.player.querySelector('.video-player-loading').classList.remove('visible');
+        hideLoading(side) {
+            const loading = this.player.querySelector(`.video-loading-${side}`);
+            loading.classList.remove('visible');
         }
 
         // Dragging functionality
@@ -510,64 +550,22 @@
 
         hide() {
             this.player.classList.add('hidden');
-            this.pause();
+            this.videoLeft.pause();
+            this.videoRight.pause();
             this.saveState();
-        }
-
-        // Keyboard shortcuts
-        handleKeyboard(event) {
-            if (this.player.classList.contains('hidden')) return;
-            
-            // Solo manejar shortcuts si el reproductor está visible
-            const target = event.target;
-            if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
-
-            switch(event.key.toLowerCase()) {
-                case ' ':
-                case 'k':
-                    event.preventDefault();
-                    this.togglePlay();
-                    break;
-                case 'arrowleft':
-                    event.preventDefault();
-                    this.videoElement.currentTime -= 5;
-                    break;
-                case 'arrowright':
-                    event.preventDefault();
-                    this.videoElement.currentTime += 5;
-                    break;
-                case 'arrowup':
-                    event.preventDefault();
-                    this.setVolume(Math.min(1, this.volume + 0.1));
-                    this.player.querySelector('.video-volume-slider').value = this.volume * 100;
-                    break;
-                case 'arrowdown':
-                    event.preventDefault();
-                    this.setVolume(Math.max(0, this.volume - 0.1));
-                    this.player.querySelector('.video-volume-slider').value = this.volume * 100;
-                    break;
-                case 'm':
-                    event.preventDefault();
-                    this.toggleMute();
-                    break;
-                case 'f':
-                    event.preventDefault();
-                    this.toggleFullscreen();
-                    break;
-                case 'n':
-                    event.preventDefault();
-                    this.nextVideo();
-                    break;
-            }
         }
 
         // State persistence
         saveState() {
             const state = {
-                currentVideoIndex: this.currentVideoIndex,
-                currentTime: this.videoElement.currentTime,
+                activeVideo: this.activeVideo,
+                leftTime: this.videoLeft.currentTime,
+                rightTime: this.videoRight.currentTime,
                 volume: this.volume,
-                isPlaying: !this.videoElement.paused,
+                leftPlaying: !this.videoLeft.paused,
+                rightPlaying: !this.videoRight.paused,
+                leftMuted: this.videoLeft.muted,
+                rightMuted: this.videoRight.muted,
                 isMinimized: this.isMinimized,
                 isHidden: this.player.classList.contains('hidden'),
                 position: {
@@ -585,7 +583,7 @@
             
             try {
                 const state = JSON.parse(stateStr);
-                this.currentVideoIndex = state.currentVideoIndex || 0;
+                this.activeVideo = state.activeVideo || 'left';
                 this.volume = state.volume || 0.7;
                 this.isMinimized = state.isMinimized || false;
                 

@@ -1,52 +1,36 @@
 # Video Player Popup
 
-Reproductor de video persistente estilo video.js sin dependencias externas.
+Reproductor dual de videos con reproducción lado a lado, sin dependencias externas.
 
 ## 📋 Características
 
 ### ✨ Funcionalidad Principal
-- **Reproductor popup flotante** con diseño moderno estilo video.js
+- **Dos videos simultáneos** - Video izquierdo y derecho con reproducción independiente
+- **Controles individuales** - Cada video tiene sus propios controles (play, mute, seek, fullscreen)
+- **Loop automático** - Ambos videos se reproducen continuamente
 - **Persistencia entre páginas** usando localStorage
-- **Auto-reproducción en loop** de 2 videos promocionales
-- **Sin dependencias externas** - implementación nativa
-- **Totalmente responsive** - adaptado a móviles y tablets
+- **Sin dependencias externas** - implementación nativa 100%
+- **Totalmente responsive** - En móvil se apilan verticalmente
 - **Arrastrable** - posiciona el reproductor donde quieras
 - **Minimizable** - reduce el reproductor sin cerrar
 
 ### 🎮 Controles
 
-#### Controles de Video
-- ▶️ **Play/Pause** - Reproducir o pausar el video actual
-- ⏭️ **Next** - Saltar al siguiente video en la playlist
-- 🔊 **Volume** - Control de volumen con slider
-- 🔇 **Mute** - Silenciar/activar sonido
-- ⛶ **Fullscreen** - Pantalla completa
-- 🗕 **Minimize** - Minimizar el reproductor
+#### Controles por Video (Independientes)
+- ▶️ **Play/Pause** - Control individual para cada video
+- 🔇 **Mute** - Solo un video puede tener audio activo a la vez
+- ⛶ **Fullscreen** - Pantalla completa individual
+- 📊 **Progress Bar** - Barra de progreso con seek individual
+- 🕒 **Time Display** - Tiempo actual y duración de cada video
+
+#### Controles Globales
+- 🗕 **Minimize** - Minimizar el reproductor completo
 - ✕ **Close** - Cerrar el reproductor
 
-#### Barra de Progreso
-- **Click** en la barra para saltar a cualquier momento
-- **Indicador visual** del tiempo reproducido
-- **Buffer indicator** muestra el contenido precargado
-- **Time display** muestra tiempo actual y duración total
-
-#### Playlist
-- **2 videos promocionales** en loop automático
-- **Click** en cualquier video para reproducirlo
-- **Indicador visual** del video activo
-
-### ⌨️ Atajos de Teclado
-
-| Tecla | Acción |
-|-------|--------|
-| `Espacio` o `K` | Play/Pausa |
-| `←` | Retroceder 5 segundos |
-| `→` | Avanzar 5 segundos |
-| `↑` | Subir volumen |
-| `↓` | Bajar volumen |
-| `M` | Silenciar/Activar |
-| `F` | Pantalla completa |
-| `N` | Siguiente video |
+#### Comportamiento de Audio
+- Solo un video puede tener audio activo a la vez
+- Al reproducir un video, el otro se mutea automáticamente
+- Click en mute cambia el audio activo entre videos
 
 ### 🎬 Videos
 
@@ -78,12 +62,12 @@ Los videos promocionales están optimizados para web:
 ### 📦 Archivos del Sistema
 
 #### CSS
-- `css/video-player-popup.css` (10.54KB)
-- `css/video-player-popup.min.css` (7.57KB - 28.2% reducción)
+- `css/video-player-popup.css` (7.42KB)
+- `css/video-player-popup.min.css` (5.21KB - 29.8% reducción)
 
 #### JavaScript
-- `js/video-player-popup.js` (24.81KB)
-- `js/video-player-popup.min.js` (16.38KB - 34.0% reducción)
+- `js/video-player-popup.js` (28.70KB)
+- `js/video-player-popup.min.js` (20.46KB - 28.7% reducción)
 
 #### Videos
 - `assets/video/Video_Promocional_Grupo_Musical_Celula_1.webm` (18MB)
@@ -113,23 +97,25 @@ El reproductor está integrado en todas las páginas del sitio:
 #### Primera Visita
 Al entrar al sitio por primera vez (en cualquier página), el reproductor:
 1. Se muestra automáticamente en la esquina inferior derecha
-2. Comienza con el primer video pausado
-3. El usuario puede hacer click para reproducir
+2. Muestra ambos videos lado a lado
+3. Ambos videos comienzan pausados
+4. El usuario puede reproducir cualquiera de los dos
 
 #### Navegación Entre Páginas
 El reproductor mantiene su estado:
-- ✅ Posición en el video actual
-- ✅ Volumen configurado
-- ✅ Estado de reproducción (play/pause)
-- ✅ Video actual de la playlist
+- ✅ Tiempo de reproducción de ambos videos
+- ✅ Estado de play/pause de cada video
+- ✅ Audio activo (qué video tiene sonido)
+- ✅ Estado de mute de cada video
 - ✅ Posición del popup (si fue arrastrado)
 - ✅ Estado minimizado/expandido
 - ✅ Visibilidad (abierto/cerrado)
 
-#### Auto-reproducción en Loop
-- Al finalizar un video, pasa automáticamente al siguiente
-- Al finalizar el último video, vuelve al primero
-- Loop infinito sin interrupciones
+#### Reproducción Dual
+- Ambos videos tienen loop individual activado
+- Solo un video puede tener audio a la vez
+- Al reproducir un video, el otro se mutea automáticamente
+- Cada video es completamente independiente
 
 ### 💾 Persistencia de Estado
 
@@ -137,10 +123,14 @@ El reproductor usa `localStorage` para guardar:
 
 ```javascript
 {
-  currentVideoIndex: 0,      // Índice del video actual
-  currentTime: 45.2,         // Tiempo de reproducción
+  activeVideo: 'left',       // Qué video tiene el audio activo
+  leftTime: 45.2,            // Tiempo del video izquierdo
+  rightTime: 23.5,           // Tiempo del video derecho
   volume: 0.7,               // Nivel de volumen (0-1)
-  isPlaying: true,           // Estado de reproducción
+  leftPlaying: true,         // Estado del video izquierdo
+  rightPlaying: false,       // Estado del video derecho
+  leftMuted: false,          // Mute del video izquierdo
+  rightMuted: true,          // Mute del video derecho
   isMinimized: false,        // Estado minimizado
   isHidden: false,           // Visibilidad
   position: {                // Posición del popup
@@ -159,9 +149,9 @@ El reproductor usa `localStorage` para guardar:
 - **Texto:** #ffffff con transparencias
 
 #### Responsive Breakpoints
-- **Desktop:** 480px de ancho
-- **Tablet:** calc(100vw - 20px)
-- **Mobile:** 100vw (pantalla completa en el bottom)
+- **Desktop:** 720px de ancho (360px por video)
+- **Tablet (≤768px):** Videos apilados verticalmente
+- **Mobile (≤480px):** Pantalla completa con videos verticales
 
 #### Animaciones
 - Entrada: slideInUp (0.3s ease)
@@ -219,38 +209,35 @@ El reproductor incluye:
 - **Principal:** WebM (VP9 + Opus)
 - **Fallback:** MP4 disponible si es necesario
 
-### 🔄 Actualización Futura
+### 🔄 Cambiar Videos
 
-Para agregar más videos a la playlist:
+Para cambiar los videos mostrados:
 
 ```javascript
-// En js/video-player-popup.js, línea 9-18
+// En js/video-player-popup.js, modificar VIDEO_SOURCES
 const VIDEO_SOURCES = [
     {
-        src: '/assets/video/Video_Promocional_Grupo_Musical_Celula_1.webm',
+        src: `${basePath}assets/video/nuevo_video_1.webm`,
         type: 'video/webm',
-        title: 'Video Promocional - Parte 1'
+        title: 'Nuevo Video Izquierdo'
     },
     {
-        src: '/assets/video/Video_Promocional_Grupo_Musical_Celula_2.webm',
+        src: `${basePath}assets/video/nuevo_video_2.webm`,
         type: 'video/webm',
-        title: 'Video Promocional - Parte 2'
-    },
-    // Agregar nuevos videos aquí
-    {
-        src: '/assets/video/nuevo_video.webm',
-        type: 'video/webm',
-        title: 'Nuevo Video'
+        title: 'Nuevo Video Derecho'
     }
 ];
 ```
 
+**Nota:** El reproductor está diseñado para exactamente 2 videos (izquierdo y derecho).
+
 ### 📊 Métricas de Performance
 
-- **Carga inicial:** ~24KB (CSS + JS minificados)
+- **Carga inicial:** ~26KB (CSS + JS minificados)
 - **Video streaming:** Progressive loading (no carga todo el video de golpe)
-- **Memory footprint:** ~50MB durante reproducción
+- **Memory footprint:** ~100MB durante reproducción dual
 - **CPU usage:** Bajo (gracias a VP9 hardware acceleration)
+- **Layout:** CSS Grid para distribución eficiente
 
 ### 🎯 SEO & Analytics
 
