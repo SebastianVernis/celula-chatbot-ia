@@ -287,8 +287,8 @@
             }
 
             .hero-logo {
-                width: 180px;
-                height: 100px;
+                width: 160px !important;
+                height: 90px !important;
                 margin-bottom: 10px;
             }
             
@@ -300,6 +300,20 @@
             .hero-subtitle {
                 font-size: 14px;
                 margin-top: 8px;
+            }
+        }
+        
+        @media (max-width: 520px) {
+            .hero-logo {
+                width: 150px !important;
+                height: 85px !important;
+            }
+        }
+        
+        @media (max-width: 420px) {
+            .hero-logo {
+                width: 140px !important;
+                height: 80px !important;
             }
 
             .hero-background-video {
@@ -1445,6 +1459,7 @@
             font-weight: 600;
             transition: all 0.3s ease;
             animation: pulse-widget 2s ease-in-out infinite;
+            white-space: nowrap;
         }
 
         @keyframes pulse-widget {
@@ -1552,6 +1567,54 @@
         @media (max-width: 600px) {
             .floating-event-widget {
                 top: 50px;
+            }
+            
+            .event-main-button {
+                font-size: 11px;
+                padding: 8px 14px;
+                gap: 6px;
+            }
+            
+            .event-icon {
+                font-size: 14px;
+            }
+            
+            .event-options {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .event-option {
+                font-size: 11px;
+                padding: 8px 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .event-main-button {
+                font-size: 10px;
+                padding: 7px 12px;
+            }
+            
+            .event-icon {
+                font-size: 12px;
+            }
+            
+            .event-option {
+                font-size: 10px;
+                padding: 7px 10px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .event-main-button {
+                font-size: 9px;
+                padding: 6px 10px;
+            }
+            
+            .event-option {
+                font-size: 9px;
+                padding: 6px 8px;
             }
         }
     </style>

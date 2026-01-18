@@ -327,8 +327,8 @@ a {
     }
 
     .hero-logo {
-        width: 180px;
-        height: 100px;
+        width: 160px !important;
+        height: 90px !important;
         margin: 0 auto 10px auto;
         display: flex;
         justify-content: center;
@@ -343,6 +343,20 @@ a {
     .hero-subtitle {
         font-size: 14px !important;
         margin-top: 8px;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero-logo {
+        width: 150px !important;
+        height: 85px !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .hero-logo {
+        width: 140px !important;
+        height: 80px !important;
     }
 }
 
