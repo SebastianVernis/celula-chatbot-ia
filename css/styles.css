@@ -911,6 +911,11 @@ a {
     .service-content {
         padding: 18px 12px;
     }
+    
+    .banda-section .section-description {
+        font-size: 14px;
+        line-height: 1.6;
+    }
 }
 
 @media (max-width: 420px) {
@@ -943,6 +948,11 @@ a {
     
     .footer-text p {
         font-size: 11px;
+    }
+    
+    .banda-section .section-description {
+        font-size: 13px;
+        line-height: 1.5;
     }
 }
 

@@ -39,6 +39,24 @@ a {
     max-width: fit-content;
 }
 
+.review-now a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.review-star-left,
+.review-star-right {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.review-text {
+    text-align: center;
+}
+
 /* ===== SECCIONES PRINCIPALES ===== */
 
 .hero-section {
