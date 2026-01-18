@@ -279,11 +279,11 @@
 }
 
 @media (max-width: 768px) {
-    /* En móviles, solo mostrar el reproductor derecho centrado debajo del widget */
+    /* En móviles, solo mostrar el reproductor derecho centrado */
     .video-player-single {
-        width: 280px;
-        max-width: 280px;
-        top: 180px;
+        width: 260px;
+        max-width: 260px;
+        top: 165px;
         bottom: auto;
     }
     
@@ -335,17 +335,9 @@
 
 @media (max-width: 480px) {
     .video-player-single {
-        width: 200px;
-        max-width: 200px;
-        bottom: 85px;
-    }
-    
-    .video-player-left {
-        left: 8px;
-    }
-    
-    .video-player-right {
-        right: 8px;
+        width: 220px;
+        max-width: 220px;
+        top: 155px;
     }
     
     .video-player-controls {

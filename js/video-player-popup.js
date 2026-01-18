@@ -134,6 +134,11 @@
             
             // Configurar volumen inicial
             this.videoElement.volume = this.volume;
+            
+            // En móviles, quitar el atributo loop para manejar el cambio de video
+            if (window.innerWidth <= 768 && this.side === 'right') {
+                this.videoElement.removeAttribute('loop');
+            }
         }
 
         setupEventListeners() {
@@ -319,15 +324,17 @@
             const currentSrc = this.videoElement.src;
             
             // Determinar cuál es el siguiente video
-            const nextVideoIndex = currentSrc.includes('Celula_1') ? 1 : 0;
+            // Orden: Video 2 → Video 1 → Video 2 (loop)
+            const nextVideoIndex = currentSrc.includes('Celula_2') ? 0 : 1;
             const nextVideo = VIDEO_CONFIGS[nextVideoIndex === 0 ? 'left' : 'right'];
             
             // Cambiar la fuente del video
             this.videoElement.src = nextVideo.src;
+            this.videoElement.load();
             this.config = nextVideo;
             
             // Heredar estado de mute/unmute y volumen del video anterior
-            this.videoElement.volume = currentVolume > 0 ? currentVolume : 0.7;
+            this.videoElement.volume = currentVolume > 0 ? currentVolume : 1.0;
             this.videoElement.muted = wasMuted;
             
             // Si no estaba muteado, asegurar volumen al 100%
@@ -335,9 +342,11 @@
                 this.videoElement.volume = 1.0;
             }
             
-            // Siempre reproducir el siguiente video
-            this.play();
-            this.updateMuteIcon();
+            // Reproducir el siguiente video cuando esté listo
+            this.videoElement.addEventListener('loadeddata', () => {
+                this.play();
+                this.updateMuteIcon();
+            }, { once: true });
         }
 
         onVideoError(event) {
