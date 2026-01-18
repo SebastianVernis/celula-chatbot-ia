@@ -279,11 +279,12 @@
 }
 
 @media (max-width: 768px) {
-    /* En móviles, solo mostrar el reproductor derecho centrado */
+    /* En móviles, solo mostrar el reproductor derecho centrado debajo del widget */
     .video-player-single {
         width: 280px;
         max-width: 280px;
-        bottom: 90px;
+        top: 180px;
+        bottom: auto;
     }
     
     /* Ocultar el reproductor izquierdo en móviles */
@@ -298,7 +299,7 @@
     }
     
     .video-player-right.hidden {
-        transform: translateX(-50%) translateY(20px) scale(0.95);
+        transform: translateX(-50%) translateY(-20px) scale(0.95);
     }
     
     .video-player-container {
