@@ -177,6 +177,9 @@
             this.player.querySelector('.video-btn-minimize').addEventListener('click', () => this.minimize());
             this.player.querySelector('.video-btn-close').addEventListener('click', () => this.hide());
 
+            // Click en el video para toggle play/pause
+            this.videoElement.addEventListener('click', () => this.togglePlay());
+
             // Progress bar
             this.player.querySelector('.video-progress-bar').addEventListener('click', (e) => this.seek(e));
 
@@ -223,9 +226,14 @@
             this.videoElement.muted = !this.videoElement.muted;
             this.updateMuteIcon();
             
-            // Si se desmutea este, mutear el otro
+            // Si se desmutea este, mutear el otro y reproducir este video
             if (!this.videoElement.muted) {
                 this.notifyOtherPlayer('unmute');
+                
+                // Si el video está pausado, reproducirlo
+                if (this.videoElement.paused) {
+                    this.play();
+                }
             }
         }
 
