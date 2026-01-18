@@ -56,21 +56,11 @@
             const playerHTML = `
                 <div id="${playerId}" class="video-player-single video-player-${this.side} hidden" role="dialog" aria-label="Reproductor de video">
                     <div class="video-player-container">
-                        <div class="video-player-header">
-                            <span class="video-player-title">${this.config.title}</span>
-                            <div class="video-player-controls-header">
-                                <button class="video-btn-minimize" aria-label="Minimizar" title="Minimizar">
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                                        <path d="M19 13H5v-2h14v2z"/>
-                                    </svg>
-                                </button>
-                                <button class="video-btn-close" aria-label="Cerrar" title="Cerrar">
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                        <button class="video-btn-close-compact" aria-label="Cerrar" title="Cerrar">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                            </svg>
+                        </button>
                         
                         <div class="video-player-wrapper">
                             <video 
@@ -168,14 +158,14 @@
             video.addEventListener('waiting', () => this.showLoading());
             video.addEventListener('canplay', () => this.hideLoading());
             video.addEventListener('error', (e) => this.onVideoError(e));
+            video.addEventListener('ended', () => this.onVideoEnded());
 
             // Control buttons
             this.player.querySelector('.video-btn-play').addEventListener('click', () => this.togglePlay());
             this.player.querySelector('.video-btn-play-large').addEventListener('click', () => this.togglePlay());
             this.player.querySelector('.video-btn-mute').addEventListener('click', () => this.toggleMute());
             this.player.querySelector('.video-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
-            this.player.querySelector('.video-btn-minimize').addEventListener('click', () => this.minimize());
-            this.player.querySelector('.video-btn-close').addEventListener('click', () => this.hide());
+            this.player.querySelector('.video-btn-close-compact').addEventListener('click', () => this.hide());
 
             // Click en el video para toggle play/pause
             this.videoElement.addEventListener('click', () => this.togglePlay());
@@ -183,21 +173,23 @@
             // Progress bar
             this.player.querySelector('.video-progress-bar').addEventListener('click', (e) => this.seek(e));
 
-            // Dragging
-            const header = this.player.querySelector('.video-player-header');
-            header.addEventListener('mousedown', (e) => this.startDrag(e));
+            // Dragging - usar el contenedor completo
+            const container = this.player.querySelector('.video-player-container');
+            container.addEventListener('mousedown', (e) => this.startDrag(e));
             document.addEventListener('mousemove', (e) => this.drag(e));
             document.addEventListener('mouseup', () => this.stopDrag());
         }
 
         notifyOtherPlayer(action) {
-            // Cuando este reproductor empieza a reproducir, mutear el otro
+            const otherSide = this.side === 'left' ? 'right' : 'left';
+            const otherPlayer = window.celulaVideoPlayers && window.celulaVideoPlayers[otherSide];
+            
+            if (!otherPlayer) return;
+            
             if (action === 'playing') {
-                const otherSide = this.side === 'left' ? 'right' : 'left';
-                const otherPlayer = window.celulaVideoPlayers && window.celulaVideoPlayers[otherSide];
-                if (otherPlayer && !this.videoElement.muted) {
-                    otherPlayer.mute();
-                }
+                // Pausar el otro video cuando este empiece a reproducir
+                otherPlayer.pause();
+                otherPlayer.mute();
             }
         }
 
@@ -265,6 +257,25 @@
             const rect = progressBar.getBoundingClientRect();
             const pos = (event.clientX - rect.left) / rect.width;
             this.videoElement.currentTime = pos * this.videoElement.duration;
+        }
+
+        onVideoEnded() {
+            // En móviles, reproducir el otro video al finalizar
+            if (window.innerWidth <= 768) {
+                const otherSide = this.side === 'left' ? 'right' : 'left';
+                const otherPlayer = window.celulaVideoPlayers && window.celulaVideoPlayers[otherSide];
+                
+                if (otherPlayer) {
+                    // Pausar este video
+                    this.pause();
+                    this.mute();
+                    
+                    // Reproducir el otro con audio
+                    otherPlayer.videoElement.muted = false;
+                    otherPlayer.play();
+                    otherPlayer.updateMuteIcon();
+                }
+            }
         }
 
         onVideoError(event) {
@@ -352,7 +363,10 @@
 
         // Dragging functionality
         startDrag(event) {
-            if (event.target.closest('.video-btn-minimize') || event.target.closest('.video-btn-close')) {
+            // No permitir drag si se está clickeando en botones o en el video
+            if (event.target.closest('button') || 
+                event.target.closest('video') || 
+                event.target.closest('.video-progress-bar')) {
                 return;
             }
             
