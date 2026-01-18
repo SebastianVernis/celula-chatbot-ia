@@ -1,18 +1,18 @@
 # Video Player Popup
 
-Reproductor dual de videos con reproducción lado a lado, sin dependencias externas.
+Dos reproductores de video completamente independientes, uno en cada lado de la pantalla.
 
 ## 📋 Características
 
 ### ✨ Funcionalidad Principal
-- **Dos videos simultáneos** - Video izquierdo y derecho con reproducción independiente
-- **Controles individuales** - Cada video tiene sus propios controles (play, mute, seek, fullscreen)
+- **Dos reproductores separados** - Video 1 en la izquierda, Video 2 en la derecha
+- **Completamente independientes** - Cada uno con sus propios controles y estado
 - **Loop automático** - Ambos videos se reproducen continuamente
 - **Persistencia entre páginas** usando localStorage
 - **Sin dependencias externas** - implementación nativa 100%
-- **Totalmente responsive** - En móvil se apilan verticalmente
-- **Arrastrable** - posiciona el reproductor donde quieras
-- **Minimizable** - reduce el reproductor sin cerrar
+- **Totalmente responsive** - Se adapta a diferentes tamaños de pantalla
+- **Arrastrable** - Cada reproductor se puede mover independientemente
+- **Minimizable** - Cada reproductor se minimiza por separado
 
 ### 🎮 Controles
 
@@ -62,12 +62,12 @@ Los videos promocionales están optimizados para web:
 ### 📦 Archivos del Sistema
 
 #### CSS
-- `css/video-player-popup.css` (7.42KB)
-- `css/video-player-popup.min.css` (5.21KB - 29.8% reducción)
+- `css/video-player-popup.css` (7.34KB)
+- `css/video-player-popup.min.css` (5.01KB - 31.7% reducción)
 
 #### JavaScript
-- `js/video-player-popup.js` (28.70KB)
-- `js/video-player-popup.min.js` (20.46KB - 28.7% reducción)
+- `js/video-player-popup.js` (20.67KB)
+- `js/video-player-popup.min.js` (13.46KB - 34.9% reducción)
 
 #### Videos
 - `assets/video/Video_Promocional_Grupo_Musical_Celula_1.webm` (18MB)
@@ -95,47 +95,63 @@ El reproductor está integrado en todas las páginas del sitio:
 ### 🚀 Comportamiento
 
 #### Primera Visita
-Al entrar al sitio por primera vez (en cualquier página), el reproductor:
-1. Se muestra automáticamente en la esquina inferior derecha
-2. Muestra ambos videos lado a lado
-3. Ambos videos comienzan pausados
-4. El usuario puede reproducir cualquiera de los dos
+Al entrar al sitio por primera vez (en cualquier página):
+1. Aparecen automáticamente dos reproductores
+2. **Reproductor izquierdo:** Esquina inferior izquierda
+3. **Reproductor derecho:** Esquina inferior derecha
+4. Ambos videos comienzan pausados
+5. El video derecho está en mute por defecto
 
 #### Navegación Entre Páginas
-El reproductor mantiene su estado:
-- ✅ Tiempo de reproducción de ambos videos
-- ✅ Estado de play/pause de cada video
-- ✅ Audio activo (qué video tiene sonido)
-- ✅ Estado de mute de cada video
-- ✅ Posición del popup (si fue arrastrado)
+Cada reproductor mantiene su propio estado:
+- ✅ Tiempo de reproducción individual
+- ✅ Estado de play/pause
+- ✅ Estado de mute
+- ✅ Volumen configurado
+- ✅ Posición en pantalla (si fue arrastrado)
 - ✅ Estado minimizado/expandido
 - ✅ Visibilidad (abierto/cerrado)
 
-#### Reproducción Dual
-- Ambos videos tienen loop individual activado
-- Solo un video puede tener audio a la vez
-- Al reproducir un video, el otro se mutea automáticamente
-- Cada video es completamente independiente
+#### Reproducción Independiente
+- Cada reproductor funciona completamente por separado
+- Ambos tienen loop automático activado
+- Solo un reproductor puede tener audio a la vez
+- Al activar audio en uno, el otro se mutea automáticamente
+- Cada uno se puede arrastrar y minimizar individualmente
 
 ### 💾 Persistencia de Estado
 
-El reproductor usa `localStorage` para guardar:
+Cada reproductor guarda su estado independientemente en `localStorage`:
 
 ```javascript
 {
-  activeVideo: 'left',       // Qué video tiene el audio activo
-  leftTime: 45.2,            // Tiempo del video izquierdo
-  rightTime: 23.5,           // Tiempo del video derecho
-  volume: 0.7,               // Nivel de volumen (0-1)
-  leftPlaying: true,         // Estado del video izquierdo
-  rightPlaying: false,       // Estado del video derecho
-  leftMuted: false,          // Mute del video izquierdo
-  rightMuted: true,          // Mute del video derecho
-  isMinimized: false,        // Estado minimizado
-  isHidden: false,           // Visibilidad
-  position: {                // Posición del popup
-    left: '20px',
-    top: '20px'
+  left: {
+    currentTime: 45.2,       // Tiempo de reproducción
+    volume: 0.7,             // Volumen (0-1)
+    muted: false,            // Estado de mute
+    playing: true,           // Reproduciendo o pausado
+    minimized: false,        // Minimizado
+    hidden: false,           // Visible u oculto
+    position: {              // Posición en pantalla
+      left: '20px',
+      top: 'auto',
+      right: 'auto',
+      bottom: '20px'
+    }
+  },
+  right: {
+    currentTime: 23.5,
+    volume: 0.7,
+    muted: true,             // Derecho empieza en mute
+    playing: false,
+    minimized: false,
+    hidden: false,
+    position: {
+      left: 'auto',
+      top: 'auto',
+      right: '20px',
+      bottom: '20px'
+    }
   }
 }
 ```
@@ -149,9 +165,10 @@ El reproductor usa `localStorage` para guardar:
 - **Texto:** #ffffff con transparencias
 
 #### Responsive Breakpoints
-- **Desktop:** 720px de ancho (360px por video)
-- **Tablet (≤768px):** Videos apilados verticalmente
-- **Mobile (≤480px):** Pantalla completa con videos verticales
+- **Desktop (>1024px):** 360px por reproductor
+- **Laptop (≤1024px):** 320px por reproductor
+- **Tablet (≤768px):** 280px por reproductor
+- **Mobile (≤480px):** calc(50vw - 10px) cada uno
 
 #### Animaciones
 - Entrada: slideInUp (0.3s ease)
@@ -233,11 +250,11 @@ const VIDEO_SOURCES = [
 
 ### 📊 Métricas de Performance
 
-- **Carga inicial:** ~26KB (CSS + JS minificados)
+- **Carga inicial:** ~18.5KB (CSS + JS minificados)
 - **Video streaming:** Progressive loading (no carga todo el video de golpe)
 - **Memory footprint:** ~100MB durante reproducción dual
 - **CPU usage:** Bajo (gracias a VP9 hardware acceleration)
-- **Layout:** CSS Grid para distribución eficiente
+- **Layout:** Posicionamiento absoluto independiente (sin grid)
 
 ### 🎯 SEO & Analytics
 
