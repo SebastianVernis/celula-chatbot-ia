@@ -176,7 +176,7 @@
             transform: translate(-50%, -50%);
             z-index: 10;
             max-width: 800px;
-            text-align: center
+            text-align: center;
         }
 
         .hero-logo {
@@ -261,20 +261,28 @@
                 max-height: 500px
             }
 
+            .hero-content {
+                top: 60%;
+            }
+
             .hero-logo {
                 width: 280px;
-                height: 158px
+                height: 158px;
             }
 
             .hero-title {
-                font-size: 16px
+                font-size: 16px;
             }
         }
 
         @media (max-width:480px) {
+            .hero-content {
+                top: 65%;
+            }
+
             .hero-logo {
                 width: 240px;
-                height: 135px
+                height: 135px;
             }
 
             .hero-background-video {
@@ -1420,23 +1428,14 @@
         }
 
         @keyframes pulse-widget {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: scale(1);
                 box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
             }
-
             50% {
                 transform: scale(1.05);
                 box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
             }
-        }
-
-        .floating-event-widget:hover .event-main-button {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-            animation: none;
         }
 
         .event-icon {
@@ -1445,24 +1444,15 @@
         }
 
         @keyframes rotate-icon {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: rotate(0deg);
             }
-
             25% {
                 transform: rotate(-10deg);
             }
-
             75% {
                 transform: rotate(10deg);
             }
-        }
-
-        .event-text {
-            white-space: wrap;
-            justify-content: space-evenly;
         }
 
         .event-options {
@@ -1471,24 +1461,25 @@
             left: 50%;
             transform: translateX(-50%);
             display: grid;
-            grid-template-columns: auto auto auto;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            gap: 12px;
+            column-gap: 12px;
+            width: max-content;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+            transition: all 0.3s ease;
         }
 
+        .floating-event-widget:hover .event-main-button {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
         .floating-event-widget:hover .event-options {
             opacity: 1;
             visibility: visible;
             pointer-events: all;
-        }
-        
-        .floating-event-widget:hover .event-main-button {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
         }
 
         .event-option {
@@ -1505,25 +1496,20 @@
             transition: all 0.3s ease;
             white-space: nowrap;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-            opacity: 0;
-            transform: scale(0.8);
         }
-
-        .floating-event-widget:hover .event-option {
-            opacity: 1;
-            transform: scale(1);
+        
+        .event-option:nth-child(1) {
+            grid-column: 1;
+            justify-self: end;
         }
-
-        .floating-event-widget:hover .event-option:nth-child(1) {
-            transition-delay: 0.05s;
+        
+        .event-option:nth-child(2) {
+            grid-column: 2;
         }
-
-        .floating-event-widget:hover .event-option:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-
-        .floating-event-widget:hover .event-option:nth-child(3) {
-            transition-delay: 0.15s;
+        
+        .event-option:nth-child(3) {
+            grid-column: 3;
+            justify-self: start;
         }
 
         .event-option:hover {
@@ -1541,29 +1527,6 @@
         
         .event-option[data-event="privado"]:hover {
             background: linear-gradient(135deg, #ffecd2 0%, #764ba2 100%);
-        }
-
-        .event-option[data-event="xv"]:hover {
-            background: linear-gradient(135deg, #fa709a 0%, black 100%);
-            color: white;
-        }
-
-        .event-option[data-event="boda"]:hover {
-            background: linear-gradient(135deg, #a8edea 0%, black 100%);
-            color: white;
-        }
-
-        .event-option[data-event="privado"]:hover {
-            background: linear-gradient(135deg, #ffecd2 0%, black 100%);
-            color: white;
-        }
-
-        .option-icon {
-            font-size: 16px;
-        }
-
-        .option-text {
-            font-size: 13px;
         }
 
         @media (max-width: 600px) {
