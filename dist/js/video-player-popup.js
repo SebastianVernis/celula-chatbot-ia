@@ -203,6 +203,15 @@
 
         togglePlay() {
             if (this.videoElement.paused) {
+                // Si está muteado, desmutear y activar volumen al 100%
+                if (this.videoElement.muted) {
+                    this.videoElement.muted = false;
+                    this.videoElement.volume = 1.0;
+                    this.updateMuteIcon();
+                    this.notifyOtherPlayer('playing');
+                } else if (this.videoElement.volume === 0) {
+                    this.videoElement.volume = 1.0;
+                }
                 this.play();
             } else {
                 this.pause();
@@ -210,6 +219,11 @@
         }
 
         play() {
+            // Asegurar volumen al 100% si no está muteado
+            if (!this.videoElement.muted && this.videoElement.volume < 1.0) {
+                this.videoElement.volume = 1.0;
+            }
+            
             const playPromise = this.videoElement.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
@@ -226,8 +240,9 @@
             this.videoElement.muted = !this.videoElement.muted;
             this.updateMuteIcon();
             
-            // Si se desmutea este, mutear el otro y reproducir este video
+            // Si se desmutea este, mutear el otro y reproducir este video con volumen al 100%
             if (!this.videoElement.muted) {
+                this.videoElement.volume = 1.0;
                 this.notifyOtherPlayer('unmute');
                 
                 // Si el video está pausado, reproducirlo
@@ -268,22 +283,38 @@
         }
 
         onVideoEnded() {
-            // En móviles, reproducir el otro video al finalizar
-            if (window.innerWidth <= 768) {
-                const otherSide = this.side === 'left' ? 'right' : 'left';
-                const otherPlayer = window.celulaVideoPlayers && window.celulaVideoPlayers[otherSide];
-                
-                if (otherPlayer) {
-                    // Pausar este video
-                    this.pause();
-                    this.mute();
-                    
-                    // Reproducir el otro con audio
-                    otherPlayer.videoElement.muted = false;
-                    otherPlayer.play();
-                    otherPlayer.updateMuteIcon();
-                }
+            // En móviles, cambiar al siguiente video en el mismo reproductor
+            if (window.innerWidth <= 768 && this.side === 'right') {
+                // Solo el reproductor derecho maneja el loop en móvil
+                this.switchToNextVideo();
             }
+        }
+
+        switchToNextVideo() {
+            const wasMuted = this.videoElement.muted;
+            const currentVolume = this.videoElement.volume;
+            const currentSrc = this.videoElement.src;
+            
+            // Determinar cuál es el siguiente video
+            const nextVideoIndex = currentSrc.includes('Celula_1') ? 1 : 0;
+            const nextVideo = VIDEO_CONFIGS[nextVideoIndex === 0 ? 'left' : 'right'];
+            
+            // Cambiar la fuente del video
+            this.videoElement.src = nextVideo.src;
+            this.config = nextVideo;
+            
+            // Heredar estado de mute/unmute y volumen del video anterior
+            this.videoElement.volume = currentVolume > 0 ? currentVolume : 0.7;
+            this.videoElement.muted = wasMuted;
+            
+            // Si no estaba muteado, asegurar volumen al 100%
+            if (!wasMuted) {
+                this.videoElement.volume = 1.0;
+            }
+            
+            // Siempre reproducir el siguiente video
+            this.play();
+            this.updateMuteIcon();
         }
 
         onVideoError(event) {

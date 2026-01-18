@@ -279,15 +279,16 @@
 }
 
 @media (max-width: 768px) {
-    /* En móviles, reproductores más pequeños y arrastrables */
+    /* En móviles, solo mostrar el reproductor derecho */
     .video-player-single {
         width: 280px;
         max-width: 280px;
         bottom: 90px;
     }
     
+    /* Ocultar el reproductor izquierdo en móviles */
     .video-player-left {
-        left: 10px;
+        display: none !important;
     }
     
     .video-player-right {
