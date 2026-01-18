@@ -1376,15 +1376,18 @@
 
     <!-- Icono Flotante Eventos Enero -->
     <div class="floating-event-widget">
-        <a href="marketing/bodas.html" class="event-main-button" data-event="boda">
+        <div class="event-main-button">
             <span class="event-icon">🎉</span>
             <span class="event-text">¿Tu evento es en Enero?</span>
-        </a>
+        </div>
         <div class="event-options">
-            <a href="marketing/xv.html" class="event-option event-option-left" data-event="xv">
+            <a href="marketing/xv.html" class="event-option" data-event="xv">
                 <span class="option-text">👑 XV Años</span>
             </a>
-            <a href="marketing/privada.html" class="event-option event-option-right" data-event="privado">
+            <a href="marketing/bodas.html" class="event-option" data-event="boda">
+                <span class="option-text">💍 Boda</span>
+            </a>
+            <a href="marketing/privada.html" class="event-option" data-event="privado">
                 <span class="option-text">🎊 Evento Privado</span>
             </a>
         </div>
@@ -1465,10 +1468,10 @@
         .event-options {
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
+            left: 50%;
+            transform: translateX(-50%);
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: auto auto auto;
             align-items: center;
             gap: 12px;
             opacity: 0;
@@ -1483,20 +1486,9 @@
         }
         
         .floating-event-widget:hover .event-main-button {
-            background: linear-gradient(135deg, #a8edea 0%, #764ba2 100%);
-        }
-        
-        .floating-event-widget:hover .event-main-button .event-text {
-            font-size: 0;
-        }
-        
-        .floating-event-widget:hover .event-main-button .event-text::after {
-            content: '💍 Boda';
-            font-size: 13px;
-        }
-        
-        .floating-event-widget:hover .event-main-button .event-icon {
-            display: none;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .event-option {
@@ -1516,32 +1508,39 @@
             opacity: 0;
             transform: scale(0.8);
         }
-        
-        .event-option-left {
-            grid-column: 1;
-            justify-self: end;
-        }
-        
-        .event-option-right {
-            grid-column: 3;
-            justify-self: start;
-        }
 
-        .floating-event-widget:hover .event-option-left {
+        .floating-event-widget:hover .event-option {
             opacity: 1;
             transform: scale(1);
+        }
+
+        .floating-event-widget:hover .event-option:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+
+        .floating-event-widget:hover .event-option:nth-child(2) {
             transition-delay: 0.1s;
         }
 
-        .floating-event-widget:hover .event-option-right {
-            opacity: 1;
-            transform: scale(1);
-            transition-delay: 0.1s;
+        .floating-event-widget:hover .event-option:nth-child(3) {
+            transition-delay: 0.15s;
         }
 
         .event-option:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .event-option[data-event="xv"]:hover {
+            background: linear-gradient(135deg, #fa709a 0%, #764ba2 100%);
+        }
+        
+        .event-option[data-event="boda"]:hover {
+            background: linear-gradient(135deg, #a8edea 0%, #764ba2 100%);
+        }
+        
+        .event-option[data-event="privado"]:hover {
+            background: linear-gradient(135deg, #ffecd2 0%, #764ba2 100%);
         }
 
         .event-option[data-event="xv"]:hover {
