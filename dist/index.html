@@ -1567,13 +1567,18 @@
             }
             
             .event-options {
-                width: 100%;
+                width: auto;
                 justify-content: center;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 10px;
             }
             
             .event-option {
                 font-size: 11px;
                 padding: 8px 12px;
+                min-width: 100px;
+                flex: 0 0 auto;
             }
         }
         
@@ -1587,9 +1592,14 @@
                 font-size: 12px;
             }
             
+            .event-options {
+                gap: 8px;
+            }
+            
             .event-option {
                 font-size: 10px;
                 padding: 7px 10px;
+                min-width: 90px;
             }
         }
         
@@ -1599,9 +1609,14 @@
                 padding: 6px 10px;
             }
             
+            .event-options {
+                gap: 6px;
+            }
+            
             .event-option {
                 font-size: 9px;
                 padding: 6px 8px;
+                min-width: 80px;
             }
         }
     </style>

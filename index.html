@@ -1493,8 +1493,8 @@
         .event-options {
             position: absolute;
             top: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1551,6 +1551,18 @@
             background: linear-gradient(135deg, #ffecd2 0%, #764ba2 100%);
         }
 
+        @media (max-width: 768px) {
+            .event-options {
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                gap: 10px;
+            }
+            
+            .event-option {
+                min-width: 110px;
+            }
+        }
+
         @media (max-width: 600px) {
             .floating-event-widget {
                 top: 50px;
@@ -1569,8 +1581,8 @@
             .event-options {
                 width: auto;
                 justify-content: center;
-                flex-direction: row;
-                flex-wrap: nowrap;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
                 gap: 10px;
             }
             
