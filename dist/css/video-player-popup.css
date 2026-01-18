@@ -267,12 +267,12 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     /* En móviles, solo mostrar el reproductor derecho centrado */
     .video-player-single {
         width: 260px;
         max-width: 260px;
-        top: 145px;
+        top: 95px;
         bottom: auto;
     }
     
@@ -309,7 +309,7 @@
     .video-player-single {
         width: 230px;
         max-width: 230px;
-        top: 137px;
+        top: 92px;
     }
 }
 
@@ -317,7 +317,19 @@
     .video-player-single {
         width: 220px;
         max-width: 220px;
-        top: 135px;
+        top: 90px;
+    }
+}
+
+@media (max-width: 420px) {
+    .video-player-single {
+        top: 87px;
+    }
+}
+
+@media (max-width: 380px) {
+    .video-player-single {
+        top: 85px;
     }
 }
 
