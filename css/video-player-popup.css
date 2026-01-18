@@ -5,7 +5,7 @@
 
 .video-player-single {
     position: fixed;
-    bottom: 20px;
+    bottom: 100px;
     width: 360px;
     max-width: calc(50vw - 30px);
     z-index: 9999;
@@ -283,16 +283,15 @@
     .video-player-single {
         width: 280px;
         max-width: 280px;
+        bottom: 90px;
     }
     
     .video-player-left {
         left: 10px;
-        bottom: 10px;
     }
     
     .video-player-right {
         right: 10px;
-        bottom: 10px;
     }
     
     .video-player-container {
@@ -330,16 +329,15 @@
     .video-player-single {
         width: 200px;
         max-width: 200px;
+        bottom: 85px;
     }
     
     .video-player-left {
         left: 8px;
-        bottom: 8px;
     }
     
     .video-player-right {
         right: 8px;
-        bottom: 8px;
     }
     
     .video-player-controls {
