@@ -311,6 +311,8 @@
         }
 
         onVideoEnded() {
+            console.log(`Video ended - Side: ${this.side}, Width: ${window.innerWidth}`);
+            
             // En móviles, cambiar al siguiente video en el mismo reproductor
             if (window.innerWidth <= 768 && this.side === 'right') {
                 // Solo el reproductor derecho maneja el loop en móvil
@@ -323,10 +325,17 @@
             const currentVolume = this.videoElement.volume;
             const currentSrc = this.videoElement.src;
             
+            console.log('Switching video - Current src:', currentSrc);
+            
             // Determinar cuál es el siguiente video
             // Orden: Video 2 → Video 1 → Video 2 (loop)
-            const nextVideoIndex = currentSrc.includes('Celula_2') ? 0 : 1;
-            const nextVideo = VIDEO_CONFIGS[nextVideoIndex === 0 ? 'left' : 'right'];
+            const isVideo2 = currentSrc.includes('Celula_2');
+            const nextVideo = isVideo2 ? VIDEO_CONFIGS.left : VIDEO_CONFIGS.right;
+            
+            console.log('Next video:', nextVideo.title, nextVideo.src);
+            
+            // Remover loop temporalmente para este cambio
+            this.videoElement.removeAttribute('loop');
             
             // Cambiar la fuente del video
             this.videoElement.src = nextVideo.src;
@@ -343,7 +352,8 @@
             }
             
             // Reproducir el siguiente video cuando esté listo
-            this.videoElement.addEventListener('loadeddata', () => {
+            this.videoElement.addEventListener('canplaythrough', () => {
+                console.log('Video ready, playing...');
                 this.play();
                 this.updateMuteIcon();
             }, { once: true });
