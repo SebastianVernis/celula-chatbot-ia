@@ -283,7 +283,7 @@
     .video-player-single {
         width: 260px;
         max-width: 260px;
-        top: 165px;
+        top: 145px;
         bottom: auto;
     }
     
@@ -312,6 +312,7 @@
     .video-player-single {
         width: 240px;
         max-width: 240px;
+        top: 140px;
     }
     
     .video-player-controls {
@@ -337,7 +338,7 @@
     .video-player-single {
         width: 220px;
         max-width: 220px;
-        top: 155px;
+        top: 135px;
     }
     
     .video-player-controls {
