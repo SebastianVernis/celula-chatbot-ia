@@ -101,7 +101,7 @@
             this.volume = 1.0;
             
             // En móviles, quitar el atributo loop para manejar el cambio de video
-            if (window.innerWidth <= 768 && this.side === 'right') {
+            if (window.innerWidth <= 600 && this.side === 'right') {
                 this.videoElement.removeAttribute('loop');
             }
         }
@@ -243,7 +243,7 @@
             console.log(`Video ended - Side: ${this.side}, Width: ${window.innerWidth}`);
             
             // En móviles, cambiar al siguiente video en el mismo reproductor
-            if (window.innerWidth <= 768 && this.side === 'right') {
+            if (window.innerWidth <= 600 && this.side === 'right') {
                 // Solo el reproductor derecho maneja el loop en móvil
                 this.switchToNextVideo();
             }
