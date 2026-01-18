@@ -1406,14 +1406,14 @@
         .event-main-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 14px 22px;
+            padding: 10px 18px;
             border-radius: 50px;
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 15px;
+            gap: 8px;
+            font-size: 13px;
             font-weight: 600;
             transition: all 0.3s ease;
             animation: pulse-widget 2s ease-in-out infinite;
@@ -1440,7 +1440,7 @@
         }
 
         .event-icon {
-            font-size: 22px;
+            font-size: 18px;
             animation: rotate-icon 3s ease-in-out infinite;
         }
 
@@ -1466,44 +1466,47 @@
         }
 
         .event-options {
-            position: relative;
+            position: absolute;
             display: flex;
-            flex-direction: column;
-            margin-top: 10px;
+            gap: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             opacity: 0;
-            gap: 7px;
             visibility: hidden;
-            transform: translateY(10px);
             transition: all 0.3s ease;
-            pointer-events: all;
-            justify-content: space-evenly;
+            pointer-events: none;
         }
 
         .floating-event-widget:hover .event-options {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
             pointer-events: all;
+        }
+        
+        .floating-event-widget:hover .event-main-button {
+            opacity: 0;
+            transform: scale(0.8);
         }
 
         .event-option {
-            background: linear-gradient(135deg, #8ab5d1 30%, rgba(245, 87, 108, 0.68) 70%, gray 90%);
-            color: darkslategray;
-            padding: 20px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 18px;
             border-radius: 50px;
             text-decoration: none;
             display: flex;
             align-items: center;
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 600;
             transition: all 0.3s ease;
-            transform: scale(0.95);
-            justify-content: space-evenly;
+            transform: scale(0.8);
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .floating-event-widget:hover .event-option {
             transform: scale(1);
-            opacity: 1;
         }
 
         .floating-event-widget:hover .event-option:nth-child(1) {
@@ -1519,8 +1522,8 @@
         }
 
         .event-option:hover {
-            transform: translateX(5px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
         .event-option[data-event="xv"]:hover {
@@ -1539,11 +1542,11 @@
         }
 
         .option-icon {
-            font-size: 20px;
+            font-size: 16px;
         }
 
         .option-text {
-            font-size: 14px;
+            font-size: 13px;
         }
 
         @media (max-width: 600px) {
