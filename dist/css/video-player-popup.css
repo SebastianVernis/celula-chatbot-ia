@@ -279,25 +279,32 @@
 }
 
 @media (max-width: 768px) {
-    /* En móviles, mostrar solo uno a la vez centrado */
+    /* En móviles, reproductores más pequeños y arrastrables */
     .video-player-single {
-        width: 90vw;
-        max-width: 400px;
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%);
+        width: 280px;
+        max-width: 280px;
+    }
+    
+    .video-player-left {
+        left: 10px;
         bottom: 10px;
     }
     
-    .video-player-single.hidden {
-        transform: translateX(-50%) translateY(20px) scale(0.95);
+    .video-player-right {
+        right: 10px;
+        bottom: 10px;
+    }
+    
+    .video-player-container {
+        cursor: move;
+        touch-action: none;
     }
 }
 
 @media (max-width: 640px) {
     .video-player-single {
-        width: calc(100vw - 20px);
-        max-width: calc(100vw - 20px);
+        width: 240px;
+        max-width: 240px;
     }
     
     .video-player-controls {
@@ -321,8 +328,18 @@
 
 @media (max-width: 480px) {
     .video-player-single {
-        width: calc(100vw - 16px);
-        max-width: calc(100vw - 16px);
+        width: 200px;
+        max-width: 200px;
+    }
+    
+    .video-player-left {
+        left: 8px;
+        bottom: 8px;
+    }
+    
+    .video-player-right {
+        right: 8px;
+        bottom: 8px;
     }
     
     .video-player-controls {

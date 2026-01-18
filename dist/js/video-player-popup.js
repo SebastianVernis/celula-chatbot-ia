@@ -173,11 +173,19 @@
             // Progress bar
             this.player.querySelector('.video-progress-bar').addEventListener('click', (e) => this.seek(e));
 
-            // Dragging - usar el contenedor completo
+            // Dragging - usar el contenedor completo (mouse)
             const container = this.player.querySelector('.video-player-container');
             container.addEventListener('mousedown', (e) => this.startDrag(e));
             document.addEventListener('mousemove', (e) => this.drag(e));
             document.addEventListener('mouseup', () => this.stopDrag());
+            
+            // Touch events para móviles
+            container.addEventListener('touchstart', (e) => this.startDragTouch(e), { passive: false });
+            document.addEventListener('touchmove', (e) => this.dragTouch(e), { passive: false });
+            document.addEventListener('touchend', () => this.stopDrag());
+            
+            // Monitorear cambios de volumen del sistema
+            this.monitorSystemVolume();
         }
 
         notifyOtherPlayer(action) {
@@ -398,6 +406,91 @@
                 this.player.style.transition = '';
                 this.saveState();
             }
+        }
+
+        // Touch dragging for mobile
+        startDragTouch(event) {
+            // No permitir drag si se está tocando en botones o en el video
+            if (event.target.closest('button') || 
+                event.target.closest('video') || 
+                event.target.closest('.video-progress-bar')) {
+                return;
+            }
+            
+            event.preventDefault();
+            this.isDragging = true;
+            
+            const touch = event.touches[0];
+            const rect = this.player.getBoundingClientRect();
+            
+            this.dragOffset = {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            };
+            
+            this.player.style.transition = 'none';
+        }
+
+        dragTouch(event) {
+            if (!this.isDragging) return;
+            
+            event.preventDefault();
+            const touch = event.touches[0];
+            
+            const x = touch.clientX - this.dragOffset.x;
+            const y = touch.clientY - this.dragOffset.y;
+            
+            // Limitar dentro de los bordes de la pantalla
+            const maxX = window.innerWidth - this.player.offsetWidth;
+            const maxY = window.innerHeight - this.player.offsetHeight;
+            
+            const boundedX = Math.max(0, Math.min(x, maxX));
+            const boundedY = Math.max(0, Math.min(y, maxY));
+            
+            this.player.style.left = boundedX + 'px';
+            this.player.style.top = boundedY + 'px';
+            this.player.style.right = 'auto';
+            this.player.style.bottom = 'auto';
+        }
+
+        // Monitor system volume changes
+        monitorSystemVolume() {
+            // Detectar cambios en el volumen del video (que puede ser afectado por el volumen del sistema)
+            let lastVolume = this.videoElement.volume;
+            
+            const checkVolume = () => {
+                // Si el volumen cambió y no está en mute, asumir que fue el usuario desde botones físicos
+                if (this.videoElement.volume !== lastVolume && !this.videoElement.muted) {
+                    if (this.videoElement.volume > lastVolume && this.videoElement.paused) {
+                        // Volumen subió y video está pausado -> reproducir
+                        this.videoElement.muted = false;
+                        this.play();
+                        this.updateMuteIcon();
+                        this.notifyOtherPlayer('playing');
+                    }
+                    lastVolume = this.videoElement.volume;
+                }
+            };
+            
+            // Revisar cada 500ms
+            setInterval(checkVolume, 500);
+            
+            // También escuchar evento volumechange
+            this.videoElement.addEventListener('volumechange', () => {
+                const currentVolume = this.videoElement.volume;
+                
+                // Si subió el volumen desde 0 o desde mute, activar reproducción
+                if (currentVolume > 0 && currentVolume > lastVolume && this.videoElement.muted) {
+                    this.videoElement.muted = false;
+                    if (this.videoElement.paused) {
+                        this.play();
+                    }
+                    this.updateMuteIcon();
+                    this.notifyOtherPlayer('playing');
+                }
+                
+                lastVolume = currentVolume;
+            });
         }
 
         // Window management
