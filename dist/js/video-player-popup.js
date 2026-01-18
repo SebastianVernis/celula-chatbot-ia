@@ -167,8 +167,8 @@
             this.player.querySelector('.video-btn-fullscreen').addEventListener('click', () => this.toggleFullscreen());
             this.player.querySelector('.video-btn-close-compact').addEventListener('click', () => this.hide());
 
-            // Click en el video para toggle play/pause
-            this.videoElement.addEventListener('click', () => this.togglePlay());
+            // Click y doble click en el video
+            this.setupVideoClickHandlers();
 
             // Progress bar
             this.player.querySelector('.video-progress-bar').addEventListener('click', (e) => this.seek(e));
@@ -186,6 +186,29 @@
             
             // Monitorear cambios de volumen del sistema
             this.monitorSystemVolume();
+        }
+
+        setupVideoClickHandlers() {
+            let clickCount = 0;
+            let clickTimer = null;
+            
+            this.videoElement.addEventListener('click', (e) => {
+                clickCount++;
+                
+                if (clickCount === 1) {
+                    // Esperar para ver si hay un segundo click
+                    clickTimer = setTimeout(() => {
+                        // Solo un click - toggle play/pause
+                        this.togglePlay();
+                        clickCount = 0;
+                    }, 300);
+                } else if (clickCount === 2) {
+                    // Doble click - pantalla completa
+                    clearTimeout(clickTimer);
+                    this.toggleFullscreen();
+                    clickCount = 0;
+                }
+            });
         }
 
         notifyOtherPlayer(action) {
