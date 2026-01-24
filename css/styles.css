@@ -2953,7 +2953,7 @@ img[loading="lazy"].loaded {
         position: relative;
         display: flex;
         flex-direction: column;
-        margin-top: 10px;
+        margin-top: 0;
         opacity: 0;
         gap: 7px;
         visibility: hidden;
