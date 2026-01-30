@@ -287,6 +287,12 @@
         }
     </style>
     <script>document.addEventListener('DOMContentLoaded', function () { const postTitle = document.querySelector('.blog-post-content h1, .post-title, h1')?.textContent?.trim() || 'Post sin título'; const postUrl = window.location.pathname; window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'view_blog_post', postTitle: postTitle, postUrl: postUrl, postCategory: 'Bodas' }); console.log('📊 GTM Event: view_blog_post -', postTitle); });</script>
+    <!-- Video Player Popup Styles -->
+    <link rel="stylesheet" href="../css/video-player-popup.min.css">
+
+    <!-- Video Player Popup Script -->
+    <script src="../js/video-player-popup.min.js" defer></script>
+
 </body>
 
 </html>

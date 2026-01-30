@@ -75,15 +75,22 @@ celula-site/
 ├── index.html              # Página principal
 ├── blog.html               # Blog
 ├── cotizador.html          # Cotizador
+├── testimonios.html        # Página de testimonios
+├── galeria.html            # Galería multimedia
 ├── assets/                 # Imágenes, videos, fuentes, etc.
 ├── js/                     # JavaScript (source + minified)
 ├── css/                    # Estilos (source + minified)
-├── functions/              # Serverless Functions (API endpoints)
-│   └── api/                # API routes
+├── api/                    # Serverless Functions (API endpoints)
+│   └── send-email.js       # API de envío de emails
 ├── post/                   # Artículos del blog
 ├── docs/                   # Documentación
 ├── scripts/                # Scripts de utilidad
-└── archived/               # Archivos archivados
+├── src/                    # Código fuente
+├── tests/                  # Pruebas unitarias
+├── dist/                   # Build de producción
+├── marketing/              # Recursos de marketing
+├── archived/               # Archivos archivados
+└── config/                 # Archivos de configuración
 ```
 
 Ver [`docs/ESTRUCTURA-DIRECTORIOS.md`](docs/ESTRUCTURA-DIRECTORIOS.md) para más detalles.
@@ -127,22 +134,27 @@ npm run optimize:video      # Optimizar videos
 npm run start               # Alias para npm run dev
 ```
 
-### Bash scripts (en `/scripts/`)
+### Scripts disponibles (en `/scripts/`)
+
+Los siguientes scripts están disponibles para tareas de desarrollo y mantenimiento:
 
 ```bash
-# Nuevos scripts para AWS Amplify
-bash scripts/deploy-amplify.sh          # Despliegue completo a Amplify
-bash scripts/build-amplify.sh           # Build optimizado para Amplify
-bash scripts/validate-html.sh           # Validación HTML detallada
-bash scripts/test-video-paths.sh        # Testing de video background
+# Scripts de construcción y validación
+node scripts/build.js                   # Construcción del proyecto
+node scripts/dev.js                     # Servidor de desarrollo
+node scripts/validate.js                # Validación del proyecto
+node scripts/minify.js                  # Minificación de JS y CSS
+node scripts/test-build-sitemaps.js     # Prueba de generación de sitemaps
 
-# Scripts legacy
-bash scripts/minify-all.sh              # Minificar todo
-bash scripts/convert-images-to-webp.sh  # Convertir imágenes
-bash scripts/optimize-video.sh          # Optimizar video
-bash scripts/generate-blog-images.sh    # Generar imágenes blog
-bash scripts/cleanup.sh                 # Limpiar archivos temporales
-bash scripts/cleanup.sh --deep          # Limpieza profunda
+# Scripts de generación de contenido
+node scripts/generate-meta-files.js     # Generación de archivos meta
+node scripts/generate-sitemaps.js       # Generación de sitemaps
+node scripts/add-blog-datalayer.js      # Adición de datalayer a posts
+node scripts/update-gtm-posts.js        # Actualización de GTM en posts
+
+# Scripts de validación y mantenimiento
+node scripts/validate-gtm-implementation.js # Validación de implementación GTM
+node scripts/validate-sitemap.js        # Validación de sitemap
 ```
 
 ## 🔧 Configuración

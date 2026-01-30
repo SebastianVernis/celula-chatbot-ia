@@ -39,6 +39,24 @@ a {
     max-width: fit-content;
 }
 
+.review-now a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.review-star-left,
+.review-star-right {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.review-text {
+    text-align: center;
+}
+
 /* ===== SECCIONES PRINCIPALES ===== */
 
 .hero-section {
@@ -255,6 +273,10 @@ a {
 
 /* Video responsiveness for different devices */
 @media (max-width: 768px) {
+    .hero-content {
+        top: 60% !important;
+    }
+
     .hero-background-video {
         /* Slightly reduce quality on mobile to preserve performance */
         width: 100%;
@@ -301,15 +323,40 @@ a {
 
     .hero-content {
         padding: 0 15px;
+        top: 65% !important;
     }
 
     .hero-logo {
-        width: 200px;
-        height: 112px;
-        margin: 0 auto 20px auto;
+        width: 160px !important;
+        height: 90px !important;
+        margin: 0 auto 10px auto;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    
+    .hero-title {
+        font-size: 15px !important;
+        margin-bottom: 8px;
+    }
+    
+    .hero-subtitle {
+        font-size: 14px !important;
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero-logo {
+        width: 150px !important;
+        height: 85px !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .hero-logo {
+        width: 140px !important;
+        height: 80px !important;
     }
 }
 
@@ -426,20 +473,20 @@ a {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 40px;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 40px;
 }
 
 .service-card {
     perspective: 1000px;
-    height: 650px;
+    height: 600px;
     position: relative;
     transition: transform 0.3s ease;
     display: block;
     visibility: visible;
     opacity: 1;
-    min-width: 380px;
+    max-width: 350px;
 }
 
 .service-card:hover {
@@ -485,10 +532,11 @@ a {
 
 .service-image {
     width: 100%;
-    height: 280px;
+    height: 220px !important;
     object-fit: cover;
     border: none;
     transition: transform 0.3s ease;
+    display: block;
 }
 
 .service-card:hover .service-image {
@@ -738,6 +786,10 @@ a {
     }
 
     .hero-title {
+        font-size: 17px;
+    }
+    
+    .hero-subtitle {
         font-size: 16px;
     }
 
@@ -745,17 +797,20 @@ a {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
         gap: 30px;
-        padding: 0 15px;
+        padding: 0 20px;
         width: 100%;
+        max-width: 100vw;
         display: flex;
         flex-direction: column;
         align-items: center;
+        overflow-x: hidden;
     }
 
     .service-card {
-        height: 550px;
-        max-width: 100%;
-        width: 100%;
+        height: 480px;
+        max-width: calc(100vw - 40px);
+        width: calc(100vw - 40px);
+        min-width: unset;
         margin: 0 auto;
         display: block;
         visibility: visible;
@@ -800,13 +855,14 @@ a {
     }
 
     .service-image {
-        height: 220px;
+        height: 160px !important;
         width: 100%;
         display: block;
+        object-fit: cover;
     }
 
     .service-content {
-        padding: 25px 20px;
+        padding: 20px 15px;
         display: block;
     }
 
@@ -854,6 +910,71 @@ a {
 
     .service-card.flipped::after {
         content: "👆 Toca para volver";
+    }
+}
+
+@media (max-width: 520px) {
+    .service-card {
+        height: 450px;
+    }
+    
+    .service-image {
+        height: 140px !important;
+    }
+    
+    .service-content {
+        padding: 18px 12px;
+    }
+    
+    .banda-section .section-description {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    .footer-text {
+        font-size: 11px;
+    }
+    
+    .footer-text p {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 420px) {
+    .service-card {
+        height: 420px;
+        max-width: calc(100vw - 30px);
+        width: calc(100vw - 30px);
+    }
+    
+    .service-image {
+        height: 120px !important;
+    }
+    
+    .service-content {
+        padding: 15px 10px;
+    }
+    
+    .service-title {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+    
+    .card-back {
+        padding: 25px 15px;
+    }
+    
+    .footer-text {
+        font-size: 11px;
+    }
+    
+    .footer-text p {
+        font-size: 11px;
+    }
+    
+    .banda-section .section-description {
+        font-size: 13px;
+        line-height: 1.5;
     }
 }
 
@@ -2832,7 +2953,7 @@ img[loading="lazy"].loaded {
         position: relative;
         display: flex;
         flex-direction: column;
-        margin-top: 10px;
+        margin-top: 0;
         opacity: 0;
         gap: 7px;
         visibility: hidden;

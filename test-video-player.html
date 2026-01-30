@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Video Player Popup</title>
+    
+    <!-- Video Player Popup Styles -->
+    <link rel="stylesheet" href="css/video-player-popup.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .info-box h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+        
+        .info-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .info-box li {
+            margin: 8px 0;
+        }
+        
+        .keyboard-shortcuts {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .key {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        .test-links {
+            margin-top: 30px;
+        }
+        
+        .test-links a {
+            display: inline-block;
+            margin: 10px 10px 10px 0;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎬 Test Video Player Popup</h1>
+        
+        <div class="info-box">
+            <h2>📹 Videos Promocionales</h2>
+            <ul>
+                <li><strong>Video 1:</strong> Video_Promocional_Grupo_Musical_Celula_1.webm (18MB → optimizado)</li>
+                <li><strong>Video 2:</strong> Video_Promocional_Grupo_Musical_Celula_2.webm (10MB → optimizado)</li>
+                <li><strong>Formato:</strong> WebM (VP9 + Opus)</li>
+                <li><strong>Audio:</strong> 128kbps, calidad 100%</li>
+            </ul>
+        </div>
+        
+        <div class="info-box">
+            <h2>⚡ Características del Reproductor</h2>
+            <ul>
+                <li>✅ Persistente entre páginas (usa localStorage)</li>
+                <li>✅ Auto-reproducción en loop de ambos videos</li>
+                <li>✅ Estilo video.js sin dependencias externas</li>
+                <li>✅ Arrastrable y minimizable</li>
+                <li>✅ Controles completos (play, pause, volumen, fullscreen)</li>
+                <li>✅ Playlist integrada</li>
+                <li>✅ Atajos de teclado</li>
+                <li>✅ Responsive</li>
+            </ul>
+        </div>
+        
+        <div class="info-box">
+            <h2>⌨️ Atajos de Teclado</h2>
+            <div class="keyboard-shortcuts">
+                <span class="key">Espacio / K</span>
+                <span>Play/Pausa</span>
+                
+                <span class="key">← →</span>
+                <span>Retroceder/Avanzar 5 segundos</span>
+                
+                <span class="key">↑ ↓</span>
+                <span>Subir/Bajar volumen</span>
+                
+                <span class="key">M</span>
+                <span>Silenciar/Activar sonido</span>
+                
+                <span class="key">F</span>
+                <span>Pantalla completa</span>
+                
+                <span class="key">N</span>
+                <span>Siguiente video</span>
+            </div>
+        </div>
+        
+        <div class="test-links">
+            <h2>🔗 Probar Persistencia</h2>
+            <p>Navega entre estas páginas para verificar que el reproductor se mantiene:</p>
+            <a href="index.html">Inicio</a>
+            <a href="blog.html">Blog</a>
+            <a href="galeria.html">Galería</a>
+            <a href="testimonios.html">Testimonios</a>
+            <a href="cotizador.html">Cotizador</a>
+        </div>
+        
+        <div class="info-box">
+            <h2>📊 Optimización de Videos</h2>
+            <ul>
+                <li><strong>Video 1:</strong> 25MB (MP4) → 18MB (WebM) = 28% reducción</li>
+                <li><strong>Video 2:</strong> 11MB (MP4) → 10MB (WebM) = 9% reducción</li>
+                <li><strong>CSS:</strong> 10.54KB → 7.57KB (28.2% reducción)</li>
+                <li><strong>JS:</strong> 24.81KB → 16.38KB (34.0% reducción)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Video Player Popup Script -->
+    <script src="js/video-player-popup.min.js"></script>
+</body>
+</html>

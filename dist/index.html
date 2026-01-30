@@ -176,7 +176,7 @@
             transform: translate(-50%, -50%);
             z-index: 10;
             max-width: 800px;
-            text-align: center
+            text-align: center;
         }
 
         .hero-logo {
@@ -261,20 +261,59 @@
                 max-height: 500px
             }
 
+            .hero-content {
+                top: 60%;
+            }
+
             .hero-logo {
-                width: 280px;
-                height: 158px
+                width: 260px;
+                height: 145px;
             }
 
             .hero-title {
-                font-size: 16px
+                font-size: 17px;
+                margin-bottom: 8px;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+                margin-top: 8px;
             }
         }
 
         @media (max-width:480px) {
+            .hero-content {
+                top: 65%;
+            }
+
             .hero-logo {
-                width: 240px;
-                height: 135px
+                width: 160px !important;
+                height: 90px !important;
+                margin-bottom: 10px;
+            }
+            
+            .hero-title {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            .hero-subtitle {
+                font-size: 14px;
+                margin-top: 8px;
+            }
+        }
+        
+        @media (max-width: 520px) {
+            .hero-logo {
+                width: 150px !important;
+                height: 85px !important;
+            }
+        }
+        
+        @media (max-width: 420px) {
+            .hero-logo {
+                width: 140px !important;
+                height: 80px !important;
             }
 
             .hero-background-video {
@@ -729,7 +768,10 @@
             <div class="review-now">
                 <a
                     href="https://www.google.com/search?q=grupo+musical+versatil+celula&sca_esv=933f52c1e96cf592&sxsrf=AE3TifPICNqgHTjYP9RKQxdBR0PF__eyww%3A1764803499990&ei=q8MwadiYPNCLkPIPjPTX0Aw&ved=0ahUKEwiYmtytxaKRAxXQBUQIHQz6FcoQ4dUDCBE&uact=5&oq=grupo+musical+versatil+celula&gs_lp=Egxnd3Mtd2l6LXNlcnAiHWdydXBvIG11c2ljYWwgdmVyc2F0aWwgY2VsdWxhMggQABiABBiiBDIIEAAYgAQYogQyBRAAGO8FSJ00UOUSWMQqcAR4AZABA5gBsASgAaAbqgELMC4zLjIuMi4zLjG4AQPIAQD4AQGYAgagAowGwgIKEAAYsAMY1gQYR8ICChAhGKABGMMEGArCAggQIRigARjDBJgDAIgGAZAGCJIHBzIuMy4wLjGgB88rsgcHMC4xLjAuMbgH4QPCBwkzLTEuMy4xLjHIB6QC&sclient=gws-wiz-serp&lqi=Ch1ncnVwbyBtdXNpY2FsIHZlcnNhdGlsIGNlbHVsYUjbtYz864CAgAhaLxAAEAEQAhADGAAYARgCGAMiHWdydXBvIG11c2ljYWwgdmVyc2F0aWwgY2VsdWxhkgEGYXJ0aXN0#lkt=LocalPoiReviews&rlimm=16555808952154431965&lrd=0x85d1fe64b416032d:0xe5c20c868a65a1dd,3,,,,">
-                    ⭐ ¡Si ya viviste la experiencia con La Célula, comparte el momento! ⭐</a>
+                    <span class="review-star-left">⭐</span>
+                    <span class="review-text">¡Si ya viviste la experiencia con La Célula, comparte el momento!</span>
+                    <span class="review-star-right">⭐</span>
+                </a>
             </div>
         </div>
     </section>
@@ -855,7 +897,7 @@
         </div>
 
         <div class="footer-text">
-            <p>&copy; 2024 Grupo Musical Versátil La Célula. Todos los derechos reservados.</p>
+            <p>&copy; 2026 Grupo Musical Versátil La Célula. Todos los derechos reservados.</p>
         </div>
     </footer>
 
@@ -1406,155 +1448,199 @@
         .event-main-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 14px 22px;
+            padding: 10px 18px;
             border-radius: 50px;
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 15px;
+            gap: 8px;
+            font-size: 13px;
             font-weight: 600;
             transition: all 0.3s ease;
             animation: pulse-widget 2s ease-in-out infinite;
+            white-space: nowrap;
         }
 
         @keyframes pulse-widget {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: scale(1);
                 box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
             }
-
             50% {
                 transform: scale(1.05);
                 box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
             }
         }
 
-        .floating-event-widget:hover .event-main-button {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-            animation: none;
-        }
-
         .event-icon {
-            font-size: 22px;
+            font-size: 18px;
             animation: rotate-icon 3s ease-in-out infinite;
         }
 
         @keyframes rotate-icon {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: rotate(0deg);
             }
-
             25% {
                 transform: rotate(-10deg);
             }
-
             75% {
                 transform: rotate(10deg);
             }
         }
 
-        .event-text {
-            white-space: wrap;
-            justify-content: space-evenly;
-        }
-
         .event-options {
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
             display: flex;
-            flex-direction: column;
-            margin-top: 10px;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
             opacity: 0;
-            gap: 7px;
             visibility: hidden;
-            transform: translateY(10px);
+            pointer-events: none;
             transition: all 0.3s ease;
-            pointer-events: all;
-            justify-content: space-evenly;
         }
 
+        .floating-event-widget:hover .event-main-button {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
         .floating-event-widget:hover .event-options {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
             pointer-events: all;
         }
 
         .event-option {
-            background: linear-gradient(135deg, #8ab5d1 30%, rgba(245, 87, 108, 0.68) 70%, gray 90%);
-            color: darkslategray;
-            padding: 20px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 18px;
             border-radius: 50px;
             text-decoration: none;
             display: flex;
             align-items: center;
-            font-size: 24px;
-            font-weight: 700;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
             transition: all 0.3s ease;
-            transform: scale(0.95);
-            justify-content: space-evenly;
-        }
-
-        .floating-event-widget:hover .event-option {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .floating-event-widget:hover .event-option:nth-child(1) {
-            transition-delay: 0.05s;
-        }
-
-        .floating-event-widget:hover .event-option:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-
-        .floating-event-widget:hover .event-option:nth-child(3) {
-            transition-delay: 0.15s;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            min-width: 120px;
+            text-align: center;
         }
 
         .event-option:hover {
-            transform: translateX(5px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
-
+        
         .event-option[data-event="xv"]:hover {
-            background: linear-gradient(135deg, #fa709a 0%, black 100%);
-            color: white;
+            background: linear-gradient(135deg, #fa709a 0%, #764ba2 100%);
         }
-
+        
         .event-option[data-event="boda"]:hover {
-            background: linear-gradient(135deg, #a8edea 0%, black 100%);
-            color: white;
+            background: linear-gradient(135deg, #a8edea 0%, #764ba2 100%);
         }
-
+        
         .event-option[data-event="privado"]:hover {
-            background: linear-gradient(135deg, #ffecd2 0%, black 100%);
-            color: white;
+            background: linear-gradient(135deg, #ffecd2 0%, #764ba2 100%);
         }
 
-        .option-icon {
-            font-size: 20px;
-        }
-
-        .option-text {
-            font-size: 14px;
+        @media (max-width: 768px) {
+            .event-options {
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                gap: 10px;
+            }
+            
+            .event-option {
+                min-width: 110px;
+            }
         }
 
         @media (max-width: 600px) {
             .floating-event-widget {
                 top: 50px;
             }
+            
+            .event-main-button {
+                font-size: 11px;
+                padding: 8px 14px;
+                gap: 6px;
+            }
+            
+            .event-icon {
+                font-size: 14px;
+            }
+            
+            .event-options {
+                width: auto;
+                justify-content: center;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                gap: 10px;
+            }
+            
+            .event-option {
+                font-size: 11px;
+                padding: 8px 12px;
+                min-width: 100px;
+                flex: 0 0 auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .event-main-button {
+                font-size: 10px;
+                padding: 7px 12px;
+            }
+            
+            .event-icon {
+                font-size: 12px;
+            }
+            
+            .event-options {
+                gap: 8px;
+            }
+            
+            .event-option {
+                font-size: 10px;
+                padding: 7px 10px;
+                min-width: 90px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .event-main-button {
+                font-size: 9px;
+                padding: 6px 10px;
+            }
+            
+            .event-options {
+                gap: 6px;
+            }
+            
+            .event-option {
+                font-size: 9px;
+                padding: 6px 8px;
+                min-width: 80px;
+            }
         }
     </style>
 
+    <!-- Video Player Popup Styles -->
+    <link rel="stylesheet" href="css/video-player-popup.min.css">
+
     <!-- Script de inicialización del chatbot -->
     <script src="js/chatbot.min.js" defer></script>
+
+    <!-- Video Player Popup Script -->
+    <script src="js/video-player-popup.min.js" defer></script>
 
 </body>
 
