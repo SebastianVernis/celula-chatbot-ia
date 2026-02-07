@@ -12,7 +12,7 @@
   },
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "(.*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -40,52 +40,61 @@
   ],
   "rewrites": [
     {
-      "source": "/api/chatbot",
-      "destination": "/api/chatbot.js"
+      "source": "api/chatbot",
+      "destination": "api/chatbot.js"
     },
     {
-      "source": "/api/send-email",
-      "destination": "/api/send-email.js"
+      "source": "api/send-email",
+      "destination": "api/send-email.js"
     },
     {
-      "source": "/post/:id",
-      "destination": "/post/post-:id.html"
+      "source": "api/send-form",
+      "destination": "api/send-form.js"
+    },
+    {
+      "source": "post/:id",
+      "destination": "post/post-:id.html"
     }
   ],
   "redirects": [
     {
-      "source": "/bodas",
-      "destination": "https://marketing-celula.vercel.app/bodas",
+      "source": "bodas",
+      "destination": "marketing/bodas",
       "permanent": true
     },
     {
-      "source": "/xv",
-      "destination": "https://marketing-celula.vercel.app/xv",
+      "source": "xv",
+      "destination": "marketing/xv",
       "permanent": true
     },
     {
-      "source": "/privada",
-      "destination": "https://marketing-celula.vercel.app/privada",
+      "source": "privada",
+      "destination": "marketing/privada",
       "permanent": true
     },
     {
-      "source": "/cotizador.html",
-      "destination": "/cotizador",
+      "source": "cotizador.html",
+      "destination": "cotizador",
       "permanent": true
     },
     {
-      "source": "/blog.html",
-      "destination": "/blog",
+      "source": "blog.html",
+      "destination": "blog",
       "permanent": true
     },
     {
-      "source": "/testimonios.html",
-      "destination": "/testimonios",
+      "source": "testimonios.html",
+      "destination": "testimonios",
       "permanent": true
     },
     {
-      "source": "/post/post-:id.html",
-      "destination": "/post/:id",
+      "source": "galeria.html",
+      "destination": "galeria",
+      "permanent": true
+    },
+    {
+      "source": "post/post-:id.html",
+      "destination": "post/:id",
       "permanent": true
     }
   ]

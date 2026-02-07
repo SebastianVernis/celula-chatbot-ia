@@ -176,13 +176,13 @@ Videos/Images:      1 año (immutable)
 
 ```html
 <!-- Preload LCP -->
-<link rel="preload" as="image" href="assets/images/logo-blanco.webp" />
+<link rel="preload" as="image" href="assets/gallery/logo-blanco.webp" />
 
 <!-- Logo WebP con fallback -->
 <picture>
-  <source srcset="assets/images/logo-blanco.webp" type="image/webp" />
+  <source srcset="assets/gallery/logo-blanco.webp" type="image/webp" />
   <img
-    src="assets/images/logo-blanco.png"
+    src="assets/gallery/logo-blanco.png"
     width="390"
     height="220"
     alt="Logo"
@@ -320,7 +320,7 @@ git push origin main
 # Generar tamaños
 bash scripts/optimize-images-responsive.sh \
   assets/images \
-  assets/images/responsive \
+  assets/gallery/responsive \
   "480,768,1024,1920"
 ```
 
@@ -370,7 +370,7 @@ bash scripts/optimize-images-responsive.sh \
 ### **Nuevos archivos WebP:**
 
 ```
-assets/images/logo-blanco.webp (6.5KB)
+assets/gallery/logo-blanco.webp (6.5KB)
 assets/icons/whatsapp-icon.webp (0.9KB)
 assets/icons/facebook-icon.webp (0.8KB)
 assets/icons/twitter-icon.webp (0.8KB)
@@ -414,7 +414,7 @@ lighthouse http://localhost:8080 \
 du -sh assets/
 
 # Por categoría
-du -sh assets/images/
+du -sh assets/gallery/
 du -sh assets/video/
 du -sh assets/gallery/
 ```

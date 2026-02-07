@@ -1,0 +1,31 @@
+# robots.txt para Grupo Musical La Célula
+# Generated automatically on 2026-01-24T23:10:49.564Z
+
+User-agent: *
+
+# Allow crawling of important resources
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+Allow: /post/
+Allow: /marketing/
+
+# Disallow temporary and development files
+Disallow: /test-*.html
+Disallow: /*.sh
+Disallow: /*.py
+Disallow: /*.md
+Disallow: /.git/
+Disallow: /.blackbox/
+Disallow: /node_modules/
+Disallow: /tools/
+Disallow: /tests/
+Disallow: /api/
+Disallow: /functions/
+
+# Sitemaps
+Sitemap: https://www.grupomusicalcelula.com/sitemap.xml
+Sitemap: https://www.grupomusicalcelula.com/sitemap-index.xml
+
+# Crawl-delay for polite bots
+Crawl-delay: 1

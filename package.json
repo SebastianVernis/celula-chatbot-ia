@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vercel dev",
-    "build": "node tools/build.js",
+    "build": "node scripts/build.js",
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
-    "validate": "node tools/validate.js",
-    "minify": "node tools/minify.js",
+    "validate": "node scripts/validate.js",
+    "minify": "node scripts/minify.js",
     "lint": "npx eslint --config config/eslint.config.js src/js/**/*.js --fix || echo 'ESLint completed with warnings'",
     "prebuild": "npm run validate && npm run minify",
     "test:multi-provider": "node tests/test-multi-provider.js",
@@ -17,12 +17,14 @@
     "test:email": "node tests/test-chatbot-email.js",
     "test:groq": "node tests/test-groq-models.js",
     "test:deployment": "node tests/test-local-deployment.js",
+    "test:build": "node scripts/test-build-sitemaps.js",
     "test": "npm run test:multi-provider && npm run test:gemini && npm run test:email && npm run test:groq && npm run test:deployment"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
+    "glob": "^13.0.0",
     "node-fetch": "^3.3.2",
     "openai": "^6.10.0",
     "resend": "^4.8.0"

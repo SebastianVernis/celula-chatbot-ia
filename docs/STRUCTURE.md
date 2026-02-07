@@ -169,8 +169,8 @@ celula-site/
 <script src="../js/navigation.js"></script>  <!-- desde post/ -->
 
 <!-- Assets -->
-<img src="assets/images/foto.webp">
-<img src="../assets/images/foto.webp">  <!-- desde post/ -->
+<img src="assets/gallery/foto.webp">
+<img src="../assets/gallery/foto.webp">  <!-- desde post/ -->
 ```
 
 ### Después del Build (dist/html/)
@@ -185,7 +185,7 @@ El build actualiza automáticamente las rutas:
 <script src="dist/js/navigation.min.js"></script>
 
 <!-- Assets -->
-<img src="dist/assets/images/foto.webp">
+<img src="dist/assets/gallery/foto.webp">
 ```
 
 ## 🎨 Sistema de Minificación

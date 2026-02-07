@@ -13,7 +13,7 @@
 
 ✅ **Scripts archivados**
 - archived/scripts/ - Scripts bash históricos
-- archived/.history/ - Historial de VSCode
+- archived/history/ - Historial de VSCode
 
 ✅ **Tests eliminados**
 - Archivos test-* removidos

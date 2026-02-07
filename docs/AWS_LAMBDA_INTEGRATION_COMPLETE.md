@@ -155,8 +155,8 @@ backend:
     build:
       commands:
         - echo "🔧 Building serverless functions..."
-        - cd amplify/functions/chatbot && npm install --production && cd ../../..
-        - cd amplify/functions/send-email && npm install --production && cd ../../..
+        - cd amplify/functions/chatbot && npm install --production && cd .././.
+        - cd amplify/functions/send-email && npm install --production && cd .././.
         - echo "✅ Functions built successfully"
 frontend:
   phases:

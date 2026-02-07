@@ -27,19 +27,19 @@
 
 **Archivos necesarios:**
 ```bash
-assets/images/hero-background-480w.webp   # Mobile pequeño
-assets/images/hero-background-768w.webp   # Tablet
-assets/images/hero-background-1024w.webp  # Desktop pequeño
-assets/images/hero-background-1920w.webp  # Desktop grande
+assets/gallery/hero-background-480w.webp   # Mobile pequeño
+assets/gallery/hero-background-768w.webp   # Tablet
+assets/gallery/hero-background-1024w.webp  # Desktop pequeño
+assets/gallery/hero-background-1920w.webp  # Desktop grande
 ```
 
 **Comando para generar:**
 ```bash
 # Generar imágenes responsive
 for size in 480 768 1024 1920; do
-  ffmpeg -i assets/images/hero-background.webp \
+  ffmpeg -i assets/gallery/hero-.background.webp \
     -vf "scale=${size}:-1" \
-    assets/images/hero-background-${size}w.webp
+    assets/gallery/hero-background-${size}w.webp
 done
 ```
 
@@ -47,22 +47,22 @@ done
 ```html
 <picture>
   <source 
-    srcset="assets/images/hero-background-480w.webp" 
+    srcset="assets/gallery/hero-background-480w.webp" 
     media="(max-width: 480px)" 
     type="image/webp">
   <source 
-    srcset="assets/images/hero-background-768w.webp" 
+    srcset="assets/gallery/hero-background-768w.webp" 
     media="(max-width: 768px)" 
     type="image/webp">
   <source 
-    srcset="assets/images/hero-background-1024w.webp" 
+    srcset="assets/gallery/hero-background-1024w.webp" 
     media="(max-width: 1024px)" 
     type="image/webp">
   <source 
-    srcset="assets/images/hero-background-1920w.webp" 
+    srcset="assets/gallery/hero-background-1920w.webp" 
     type="image/webp">
   <img 
-    src="assets/images/hero-background.webp" 
+    src="assets/gallery/hero-.background.webp" 
     alt="Background"
     width="1920"
     height="1080">

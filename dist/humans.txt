@@ -1,0 +1,17 @@
+/* TEAM */
+Developer: Celula Development Team
+Site: https://www.grupomusicalcelula.com
+Location: Ciudad de México, México
+
+/* THANKS */
+Technologies: Node.js, Vercel, AWS Amplify, Google Generative AI
+Design: Custom responsive design
+Performance: Optimized for Core Web Vitals
+
+/* SITE */
+Last update: 2026-01-24T23:10:49.572Z
+Language: Español / Spanish
+Doctype: HTML5
+IDE: Visual Studio Code
+Standards: W3C, Accessibility WCAG 2.1
+Components: PWA, AI Chatbot, Dynamic Gallery, Blog System

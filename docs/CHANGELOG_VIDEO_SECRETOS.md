@@ -131,7 +131,7 @@ Guía completa paso a paso para configurar secretos en AWS Amplify:
 
 ### Video Background
 - ✅ Verificado que archivos de video existen en `/assets/video/`
-- ✅ Verificado que imágenes de fallback existen en `/assets/images/`
+- ✅ Verificado que imágenes de fallback existen en `/assets/gallery/`
 - ✅ Verificado que script está incluido en posts
 - ✅ Servidor local iniciado y probado
 - ✅ Confirmado que el script se carga correctamente

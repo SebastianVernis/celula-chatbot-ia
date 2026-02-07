@@ -26,7 +26,7 @@ Sistema automatizado para generar imágenes ilustrativas para los artículos del
   - Estadísticas finales
 
 ### 3. Directorio de Salida
-- **Ubicación**: `assets/images/blog-generated/`
+- **Ubicación**: `assets/gallery/blog-generated/`
 - **Contenido**:
   - Imágenes generadas: `post-{ID}.png`
   - Logs de generación con timestamp
@@ -41,11 +41,11 @@ Necesitas configurar tu API key como variable de entorno:
 export BLACKBOX_API_KEY='tu_clave_api_aqui'
 ```
 
-**Nota**: Para hacerla permanente, agrégala a tu archivo `~/.bashrc` o `~/.zshrc`:
+**Nota**: Para hacerla permanente, agrégala a tu archivo `~/bashrc` o `~/zshrc`:
 
 ```bash
-echo 'export BLACKBOX_API_KEY="tu_clave_api_aqui"' >> ~/.bashrc
-source ~/.bashrc
+echo 'export BLACKBOX_API_KEY="tu_clave_api_aqui"' >> ~/bashrc
+source ~/bashrc
 ```
 
 ### Dependencias del Sistema
@@ -144,9 +144,9 @@ bokeh background effects. Sharp focus on instruments and musicians.
 ### Archivos de Debug
 
 En caso de error, revisa:
-- `assets/images/blog-generated/post-{ID}_error.json` - Errores HTTP
-- `assets/images/blog-generated/post-{ID}_response.json` - Respuestas sin URL
-- `assets/images/blog-generated/generation_log_*.txt` - Log completo
+- `assets/gallery/blog-generated/post-{ID}_error.json` - Errores HTTP
+- `assets/gallery/blog-generated/post-{ID}_response.json` - Respuestas sin URL
+- `assets/gallery/blog-generated/generation_log_*.txt` - Log completo
 
 ## Resumen Post-Ejecución
 
@@ -209,7 +209,7 @@ for post_id in 0 5 10 15; do  # Solo estas 4 imágenes
 
 Una vez generadas las imágenes:
 
-1. Revisa la calidad en `assets/images/blog-generated/`
+1. Revisa la calidad en `assets/gallery/blog-generated/`
 2. Copia las imágenes aprobadas al directorio de blog correspondiente
 3. Renombra si es necesario para seguir la convención del proyecto
 4. Actualiza las referencias en los archivos HTML de los posts

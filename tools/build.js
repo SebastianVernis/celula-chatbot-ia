@@ -10,22 +10,47 @@ const __dirname = dirname(__filename);
 const PROJECT_ROOT = resolve(__dirname, '..');
 const DIST_DIR = join(PROJECT_ROOT, 'dist');
 
+// Function to check if directory is writable
+function isWritable(dir) {
+    try {
+        const testFile = join(dir, `.write-test-${Date.now()}`);
+        writeFileSync(testFile, 'test');
+        rmSync(testFile);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 console.log('🏗️  Building celula-site for Amplify...\n');
 
 // Clean dist directory
 if (existsSync(DIST_DIR)) {
     console.log('🧹 Cleaning dist directory...');
-    rmSync(DIST_DIR, { recursive: true, force: true });
+    try {
+        rmSync(DIST_DIR, { recursive: true, force: true });
+        console.log('  ✓ Cleaned successfully');
+    } catch (error) {
+        console.error('  ✗ Could not clean dist directory:', error.message);
+        console.log('  💡 Try manually running: rm -rf dist/');
+        process.exit(1);
+    }
 }
 
-// Create dist directory
-mkdirSync(DIST_DIR, { recursive: true });
+// Create dist directory with proper permissions
+try {
+    mkdirSync(DIST_DIR, { recursive: true, mode: 0o755 });
+    console.log('  ✓ Created dist directory\n');
+} catch (error) {
+    console.error('  ✗ Could not create dist directory:', error.message);
+    process.exit(1);
+}
 
 console.log('📦 Copying files to dist...\n');
 
 // Copy HTML files from root
 console.log('📄 Copying HTML files...');
-const htmlFiles = ['index.html', 'blog.html', 'cotizador.html', 'testimonios.html'];
+const htmlFiles = ['index.html', 'blog.html', 'cotizador.html', 'testimonios.html', 'galeria.html'];
 htmlFiles.forEach(file => {
     const src = join(PROJECT_ROOT, file);
     const dest = join(DIST_DIR, file);
@@ -42,6 +67,15 @@ const postDest = join(DIST_DIR, 'post');
 if (existsSync(postSrc)) {
     cpSync(postSrc, postDest, { recursive: true });
     console.log('  ✓ post/');
+}
+
+// Copy marketing directory
+console.log('\n📢 Copying marketing pages...');
+const marketingSrc = join(PROJECT_ROOT, 'marketing');
+const marketingDest = join(DIST_DIR, 'marketing');
+if (existsSync(marketingSrc)) {
+    cpSync(marketingSrc, marketingDest, { recursive: true });
+    console.log('  ✓ marketing/');
 }
 
 // Copy assets directory
@@ -99,11 +133,34 @@ if (existsSync(functionsSrc)) {
     console.log('  ✓ functions/');
 }
 
+// Generate sitemaps automatically
+console.log('\n🗺️  Generating sitemaps...');
+try {
+    const { execSync } = await import('child_process');
+    execSync('node tools/generate-sitemaps.js', { stdio: 'inherit', cwd: PROJECT_ROOT });
+    console.log('  ✓ Sitemaps generated');
+} catch (error) {
+    console.error('  ✗ Error generating sitemaps:', error.message);
+}
+
+// Generate meta files (manifest, robots, llms)
+console.log('\n📝 Generating meta files...');
+try {
+    const { execSync } = await import('child_process');
+    execSync('node tools/generate-meta-files.js', { stdio: 'inherit', cwd: PROJECT_ROOT });
+    console.log('  ✓ Meta files generated');
+} catch (error) {
+    console.error('  ✗ Error generating meta files:', error.message);
+}
+
 console.log('\n✅ Build complete! Output in dist/\n');
 console.log('📊 Build summary:');
 console.log(`   - HTML pages: ${htmlFiles.length}`);
 console.log('   - Blog posts: ✓');
+console.log('   - Marketing pages: ✓');
 console.log('   - Assets: ✓');
 console.log('   - CSS & JS: ✓');
 console.log('   - Functions: ✓');
-console.log('   - Static files: ✓\n');
+console.log('   - Static files: ✓');
+console.log('   - Sitemaps: ✓');
+console.log('   - Meta files: ✓\n');

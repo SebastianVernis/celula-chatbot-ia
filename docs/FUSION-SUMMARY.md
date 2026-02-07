@@ -56,7 +56,7 @@ Fusionar dos versiones del sitio web de Grupo Musical Versátil La Célula, mant
 **Assets:**
 - ✅ assets/data/youtube-videos.json
 - ✅ assets/icons/ (iconos de redes sociales)
-- ✅ assets/images/ (imágenes principales)
+- ✅ assets/gallery/ (imágenes principales)
 - ✅ assets/logo/ (logos)
 - ✅ assets/gallery/ (galería de fotos)
 - ✅ assets/equipo/ (fotos del equipo)
